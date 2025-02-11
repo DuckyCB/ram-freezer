@@ -1,0 +1,15 @@
+[Unit]
+Description=Initialize virtual USB gadget
+After=syslog.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/opt/umkey/init-usb-gadget
+RemainAfterExit=true
+ExecStop=/opt/umkey/remove-usb-gadget
+StandardOutput=journal
+
+[Install]
+WantedBy=local-fs.target
+
