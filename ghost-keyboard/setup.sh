@@ -22,10 +22,8 @@ if ! grep --quiet '^dtoverlay=dwc2$' "${BOOT_CONFIG_PATH}" ; then
   echo 'dtoverlay=dwc2' | tee --append "${BOOT_CONFIG_PATH}"
 fi
 
-ENABLE_RPI_HID_PATH=/opt/enable-rpi-hid
-
-#cp /home/user/enable-rpi-hid "$ENABLE_RPI_HID_PATH"
-#chmod +x "$ENABLE_RPI_HID_PATH"
+chmod +x init-usb-gadget
+./init-usb-gadget
 
 # Start keyboard at boot
 cp usb-gadget.service /lib/systemd/system/usb-gadget.service
