@@ -95,72 +95,62 @@ func writeChar(char uint8, hid *os.File) error {
 }
 
 func writeSpecialKey(key string, hid *os.File) {
-	var shiftPressed bool
-	var keycode byte
+	var modKey byte = KEYCODE_NONE
+	keys := make([]byte, 0)
 
 	if strings.Contains(key, "+") {
 		parts := strings.Split(key, " + ")
 
-		var modKey byte = KEYCODE_NONE
-		keys := make([]byte, 0)
-
 		for _, part := range parts {
-			if k, ok := SpecialKey[part]; ok {
+			if k, ok := ModifierKey[part]; ok {
+				modKey |= k
+			} else if k, ok := SpecialKey[part]; ok {
 				keys = append(keys, k)
 			} else if len(part) == 1 {
 				r := rune(part[0])
 				if k, ok := Key[r]; ok {
 					keys = append(keys, k)
 				} else if k, ok := KeyShift[r]; ok {
-					modKey |= 0x02
+					modKey |= KEYCODE_LEFT_SHIFT
 					keys = append(keys, k)
 				}
 			}
-		}
 
-		_, err := hid.Write([]byte{modKey, 0x00, keys[0], 0x00, 0x00, 0x00, 0x00, 0x00})
-		if err != nil {
-			fmt.Printf("Error writing keypress: %v\n", err)
-			return
+			if len(keys) >= 6 {
+				break
+			}
 		}
-		time.Sleep(10 * time.Millisecond)
-
-		_, err = hid.Write(Empty)
-		if err != nil {
-			fmt.Printf("Error unpressing key: %v\n", err)
-			return
-		}
-
 	} else {
-		if k, ok := SpecialKey[key]; ok {
-			keycode = k
+		if k, ok := ModifierKey[key]; ok {
+			modKey |= k
+		} else if k, ok := SpecialKey[key]; ok {
+			keys = append(keys, k)
 		} else if len(key) == 1 {
 			r := rune(key[0])
 			if k, ok := Key[r]; ok {
-				keycode = k
+				keys = append(keys, k)
 			} else if k, ok := KeyShift[r]; ok {
-				shiftPressed = true
-				keycode = k
+				modKey |= KEYCODE_LEFT_SHIFT
+				keys = append(keys, k)
 			}
 		}
+	}
 
-		modifier := byte(KEYCODE_NONE)
-		if shiftPressed {
-			modifier = KEYCODE_SHIFT
-		}
+	for len(keys) < 6 {
+		keys = append(keys, KEYCODE_NONE)
+	}
 
-		_, err := hid.Write([]byte{modifier, 0x00, keycode, 0x00, 0x00, 0x00, 0x00, 0x00})
-		if err != nil {
-			fmt.Printf("Error writing keypress: %v\n", err)
-			return
-		}
-		time.Sleep(10 * time.Millisecond)
+	_, err := hid.Write([]byte{modKey, 0x00, keys[0], keys[1], keys[2], keys[3], keys[4], keys[5]})
+	if err != nil {
+		fmt.Printf("Error writing keypress: %v\n", err)
+		return
+	}
+	time.Sleep(10 * time.Millisecond)
 
-		_, err = hid.Write([]byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00})
-		if err != nil {
-			fmt.Printf("Error unpressing key: %v\n", err)
-			return
-		}
+	_, err = hid.Write(Empty)
+	if err != nil {
+		fmt.Printf("Error unpressing key: %v\n", err)
+		return
 	}
 }
 
