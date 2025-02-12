@@ -1,7 +1,7 @@
 # Variables
 APP_NAME := ghost-keyboard
 BIN_DIR := bin
-BUILD_PATH := $(wildcard *.go)
+BUILD_PATH := cmd/main.go
 
 build:
 	@echo "Building $(APP_NAME)..."

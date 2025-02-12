@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"controller/cmd/keycodes"
 	"flag"
 	"fmt"
 	"os"
@@ -64,19 +65,19 @@ func processFile(scanner bufio.Scanner) error {
 }
 
 func writeChar(char uint8, hid *os.File) error {
-	keycode, ok := Key[rune(char)]
+	keycode, ok := keycodes.Key[rune(char)]
 	shift := false
 	if !ok {
-		keycode, ok = KeyShift[rune(char)]
+		keycode, ok = keycodes.KeyShift[rune(char)]
 		shift = true
 		if !ok {
 			return fmt.Errorf("keycode not found")
 		}
 	}
 
-	modifier := byte(KEYCODE_NONE)
+	modifier := byte(keycodes.KEYCODE_NONE)
 	if shift {
-		modifier = KEYCODE_LEFT_SHIFT
+		modifier = keycodes.KEYCODE_LEFT_SHIFT
 	}
 
 	_, err := hid.Write([]byte{modifier, 0x00, keycode, 0x00, 0x00, 0x00, 0x00, 0x00})
@@ -86,7 +87,7 @@ func writeChar(char uint8, hid *os.File) error {
 
 	time.Sleep(10 * time.Millisecond)
 
-	_, err = hid.Write(Empty)
+	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
 		return fmt.Errorf("error unpressing key: %w", err)
 	}
@@ -95,23 +96,23 @@ func writeChar(char uint8, hid *os.File) error {
 }
 
 func writeSpecialKey(key string, hid *os.File) {
-	var modKey byte = KEYCODE_NONE
+	var modKey byte = keycodes.KEYCODE_NONE
 	keys := make([]byte, 0)
 
 	if strings.Contains(key, "+") {
 		parts := strings.Split(key, " + ")
 
 		for _, part := range parts {
-			if k, ok := ModifierKey[part]; ok {
+			if k, ok := keycodes.ModifierKey[part]; ok {
 				modKey |= k
-			} else if k, ok := SpecialKey[part]; ok {
+			} else if k, ok := keycodes.SpecialKey[part]; ok {
 				keys = append(keys, k)
 			} else if len(part) == 1 {
 				r := rune(part[0])
-				if k, ok := Key[r]; ok {
+				if k, ok := keycodes.Key[r]; ok {
 					keys = append(keys, k)
-				} else if k, ok := KeyShift[r]; ok {
-					modKey |= KEYCODE_LEFT_SHIFT
+				} else if k, ok := keycodes.KeyShift[r]; ok {
+					modKey |= keycodes.KEYCODE_LEFT_SHIFT
 					keys = append(keys, k)
 				}
 			}
@@ -121,23 +122,23 @@ func writeSpecialKey(key string, hid *os.File) {
 			}
 		}
 	} else {
-		if k, ok := ModifierKey[key]; ok {
+		if k, ok := keycodes.ModifierKey[key]; ok {
 			modKey |= k
-		} else if k, ok := SpecialKey[key]; ok {
+		} else if k, ok := keycodes.SpecialKey[key]; ok {
 			keys = append(keys, k)
 		} else if len(key) == 1 {
 			r := rune(key[0])
-			if k, ok := Key[r]; ok {
+			if k, ok := keycodes.Key[r]; ok {
 				keys = append(keys, k)
-			} else if k, ok := KeyShift[r]; ok {
-				modKey |= KEYCODE_LEFT_SHIFT
+			} else if k, ok := keycodes.KeyShift[r]; ok {
+				modKey |= keycodes.KEYCODE_LEFT_SHIFT
 				keys = append(keys, k)
 			}
 		}
 	}
 
 	for len(keys) < 6 {
-		keys = append(keys, KEYCODE_NONE)
+		keys = append(keys, keycodes.KEYCODE_NONE)
 	}
 
 	_, err := hid.Write([]byte{modKey, 0x00, keys[0], keys[1], keys[2], keys[3], keys[4], keys[5]})
@@ -147,7 +148,7 @@ func writeSpecialKey(key string, hid *os.File) {
 	}
 	time.Sleep(10 * time.Millisecond)
 
-	_, err = hid.Write(Empty)
+	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
 		fmt.Printf("Error unpressing key: %v\n", err)
 		return

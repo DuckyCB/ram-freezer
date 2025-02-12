@@ -1,4 +1,4 @@
-package main
+package keycodes
 
 const (
 	KEYCODE_NONE = 0x00
