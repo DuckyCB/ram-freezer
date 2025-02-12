@@ -2,6 +2,7 @@ package main
 
 const (
 	KEYCODE_NONE             = 0x00
+	KEYCODE_SHIFT            = 0x02
 	KEYCODE_A                = 0x04
 	KEYCODE_B                = 0x05
 	KEYCODE_C                = 0x06
@@ -131,6 +132,8 @@ const (
 	KEYCODE_REFRESH          = 0xfa
 )
 
+var Empty = []byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+
 var Key = map[rune]byte{
 	'a':  KEYCODE_A,
 	'b':  KEYCODE_B,
@@ -170,7 +173,6 @@ var Key = map[rune]byte{
 	0:    KEYCODE_NUMBER_0,
 	'\n': KEYCODE_ENTER,
 	//'\b': KEYCODE_ESCAPE,
-	//backspace:    KEYCODE_BACKSPACE_DELETE,
 	//'	':  KEYCODE_TAB,
 	' ':  KEYCODE_SPACEBAR,
 	'-':  KEYCODE_MINUS,
@@ -185,5 +187,84 @@ var Key = map[rune]byte{
 	',':  KEYCODE_COMMA,
 	'.':  KEYCODE_PERIOD,
 	'/':  KEYCODE_FORWARD_SLASH,
-	//capsLock:     KEYCODE_CAPS_LOCK,
+}
+
+var KeyShift = map[rune]byte{
+	'A': KEYCODE_A,
+	'B': KEYCODE_B,
+	'C': KEYCODE_C,
+	'D': KEYCODE_D,
+	'E': KEYCODE_E,
+	'F': KEYCODE_F,
+	'G': KEYCODE_G,
+	'H': KEYCODE_H,
+	'I': KEYCODE_I,
+	'J': KEYCODE_J,
+	'K': KEYCODE_K,
+	'L': KEYCODE_L,
+	'M': KEYCODE_M,
+	'N': KEYCODE_N,
+	'O': KEYCODE_O,
+	'P': KEYCODE_P,
+	'Q': KEYCODE_Q,
+	'R': KEYCODE_R,
+	'S': KEYCODE_S,
+	'T': KEYCODE_T,
+	'U': KEYCODE_U,
+	'V': KEYCODE_V,
+	'W': KEYCODE_W,
+	'X': KEYCODE_X,
+	'Y': KEYCODE_Y,
+	'Z': KEYCODE_Z,
+	'!': KEYCODE_NUMBER_1,
+	'@': KEYCODE_NUMBER_2,
+	'#': KEYCODE_NUMBER_3,
+	'$': KEYCODE_NUMBER_4,
+	'%': KEYCODE_NUMBER_5,
+	'^': KEYCODE_NUMBER_6,
+	'&': KEYCODE_NUMBER_7,
+	'*': KEYCODE_NUMBER_8,
+	'(': KEYCODE_NUMBER_9,
+	')': KEYCODE_NUMBER_0,
+	'_': KEYCODE_MINUS,
+	'+': KEYCODE_EQUAL_SIGN,
+	'{': KEYCODE_LEFT_BRACKET,
+	'}': KEYCODE_RIGHT_BRACKET,
+	'|': KEYCODE_BACKSLASH,
+	':': KEYCODE_SEMICOLON,
+	'"': KEYCODE_SINGLE_QUOTE,
+	'<': KEYCODE_COMMA,
+	'>': KEYCODE_PERIOD,
+	'?': KEYCODE_FORWARD_SLASH,
+}
+
+var SpecialKey = map[string]byte{
+	"SHIFT":       KEYCODE_SHIFT,
+	"ESC":         KEYCODE_ESCAPE,
+	"BACKSPACE":   KEYCODE_BACKSPACE,
+	"TAB":         KEYCODE_TAB,
+	"CAPS":        KEYCODE_CAPS_LOCK,
+	"F1":          KEYCODE_F1,
+	"F2":          KEYCODE_F2,
+	"F3":          KEYCODE_F3,
+	"F4":          KEYCODE_F4,
+	"F5":          KEYCODE_F5,
+	"F6":          KEYCODE_F6,
+	"F7":          KEYCODE_F7,
+	"F8":          KEYCODE_F8,
+	"F9":          KEYCODE_F9,
+	"F10":         KEYCODE_F10,
+	"F11":         KEYCODE_F11,
+	"F12":         KEYCODE_F12,
+	"PRT_SCR":     KEYCODE_PRINT_SCREEN,
+	"INS":         KEYCODE_INSERT,
+	"DEL":         KEYCODE_DELETE,
+	"RIGHT_ARROW": KEYCODE_RIGHT_ARROW,
+	"LEFT_ARROW,": KEYCODE_LEFT_ARROW,
+	"DOWN_RIGHT":  KEYCODE_DOWN_ARROW,
+	"UP_RIGHT":    KEYCODE_UP_ARROW,
+	"LEFT_CTRL":   KEYCODE_LEFT_CTRL,
+	"LEFT_SHIFT":  KEYCODE_LEFT_SHIFT,
+	"LEFT_ALT":    KEYCODE_LEFT_ALT,
+	"LEFT_META":   KEYCODE_LEFT_META,
 }
