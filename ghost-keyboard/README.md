@@ -11,7 +11,6 @@ sudo apt install golang
 
 ## HID Setup
 
-- Copiar los archivos `setup.sh`, `init-usb-gadget` y `usb-gadget.service` a algun directorio temporal en el host (raspberry)
 - Darle permisos de ejecución a `setup.sh` con `sudo chown +x setup.sh`
 - Ejecutar `setup.sh` con `./setup.sh`
 - Reiniciar dispositivo con `sudo reboot`

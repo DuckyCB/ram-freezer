@@ -2,15 +2,10 @@
 
 # Echo commands to stdout.
 set -x
-
 # Exit on first error.
 set -e
-
 # Treat undefined environment variables as errors.
 set -u
-
-mkdir /opt/umkey
-cd /opt/umkey
 
 # Enable the dwc2 kernel driver, which we need to emulate USB devices with USB OTG.
 readonly MODULES_PATH='/etc/modules'
@@ -21,6 +16,8 @@ readonly BOOT_CONFIG_PATH='/boot/config.txt'
 if ! grep --quiet '^dtoverlay=dwc2$' "${BOOT_CONFIG_PATH}" ; then
   echo 'dtoverlay=dwc2' | tee --append "${BOOT_CONFIG_PATH}"
 fi
+
+cd /opt/ram-freezer/ghost-keyboard/setup
 
 chmod +x init-usb-gadget
 ./init-usb-gadget

@@ -2,17 +2,15 @@
 
 # Exit on first error.
 set -e
-
 # Echo commands before executing them, by default to stderr.
 set -x
-
 # Treat undefined environment variables as errors.
 set -u
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 readonly SCRIPT_DIR
-# shellcheck source=lib/usb-gadget.sh
-source "${SCRIPT_DIR}/lib/usb-gadget.sh"
+# shellcheck source=utils/usb-gadget.sh
+source "${SCRIPT_DIR}/utils/usb-gadget.sh"
 
 print_help() {
   cat << EOF
@@ -48,8 +46,8 @@ echo 0x0200 > bcdUSB    # USB2
 
 mkdir -p "$USB_STRINGS_DIR"
 echo "22slun7emp6l8qzrocc4" > "${USB_STRINGS_DIR}/serialnumber"
-echo "UM" > "${USB_STRINGS_DIR}/manufacturer"
-echo "UM USB device" > "${USB_STRINGS_DIR}/product"
+echo "Ram Freezer" > "${USB_STRINGS_DIR}/manufacturer"
+echo "Ghost Keyboard" > "${USB_STRINGS_DIR}/product"
 
 # Keyboard
 mkdir -p "$USB_KEYBOARD_FUNCTIONS_DIR"

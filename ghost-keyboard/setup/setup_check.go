@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"syscall"
 )
 
 // checkModuleLoaded verifica si un módulo del kernel está cargado
@@ -68,7 +67,7 @@ func main() {
 		{" - udev ha finalizado (udevadm settle)", checkUdevSettle()},
 	}
 
-	fmt.Println("📋 System Check Results:")
+	fmt.Println("📋 Resultados de la isntalacoón de ghost keyboard:")
 	for _, check := range checks {
 		status := "✅ OK"
 		if !check.result {
@@ -77,7 +76,6 @@ func main() {
 		fmt.Printf("%s: %s\n", check.name, status)
 	}
 
-	// Verificar si todo está bien
 	allOk := true
 	for _, check := range checks {
 		if !check.result {
@@ -87,9 +85,8 @@ func main() {
 	}
 
 	if allOk {
-		fmt.Println("\n🎉 Todo está correctamente configurado.")
+		fmt.Println("\n🎉 Todo está correctamente configurado en ghost keyboard.")
 	} else {
-		fmt.Println("\n⚠️ Hay problemas en la configuración. Revisa los errores.")
-		syscall.Exit(1) // Retorna código de error
+		fmt.Println("\n⚠️ Hay problemas en la configuración de ghost keyboard. Revisa los errores.")
 	}
 }

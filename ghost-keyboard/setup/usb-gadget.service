@@ -1,13 +1,13 @@
 [Unit]
-Description=Initialize virtual USB gadget
+Description=Initialize Ghost Keyboard
 After=syslog.target
 
 [Service]
 Type=oneshot
 User=root
-ExecStart=/opt/umkey/init-usb-gadget
+ExecStart=/opt/ram-freezer/ghost-keyboard/setup/init-usb-gadget
 RemainAfterExit=true
-ExecStop=/opt/umkey/remove-usb-gadget
+ExecStop=/opt/ram-freezer/ghost-keyboard/setup/remove-usb-gadget
 StandardOutput=journal
 
 [Install]

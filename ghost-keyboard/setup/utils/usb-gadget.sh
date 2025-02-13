@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export USB_DEVICE_DIR="umkey"
+export USB_DEVICE_DIR="ghost-keyboard"
 readonly USB_DEVICE_DIR
 export USB_GADGET_PATH="/sys/kernel/config/usb_gadget"
 readonly USB_GADGET_PATH

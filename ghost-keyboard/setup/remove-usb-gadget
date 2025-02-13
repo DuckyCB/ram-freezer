@@ -1,20 +1,16 @@
 #!/bin/bash
 
-# Tears down USB gadgets, see: docs/usb-gadget-driver.md
-
 # Exit on first error.
 set -e
-
 # Echo commands before executing them, by default to stderr.
 set -x
-
 # Treat undefined environment variables as errors.
 set -u
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 readonly SCRIPT_DIR
-# shellcheck source=lib/usb-gadget.sh
-source "${SCRIPT_DIR}/lib/usb-gadget.sh"
+# shellcheck source=utils/usb-gadget.sh
+source "${SCRIPT_DIR}/utils/usb-gadget.sh"
 
 cd "${USB_GADGET_PATH}"
 
