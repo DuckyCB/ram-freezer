@@ -1,6 +1,4 @@
-#!/bin/bash
-
-# Configures USB gadgets, see: docs/usb-gadget-driver.md
+#!/usr/bin/env bash
 
 # Exit on first error.
 set -e
@@ -39,8 +37,6 @@ done
 
 modprobe libcomposite
 
-# Adapted from https://github.com/girst/hardpass-sendHID/blob/master/README.md
-
 cd "${USB_GADGET_PATH}"
 mkdir -p "${USB_DEVICE_DIR}"
 cd "${USB_DEVICE_DIR}"
@@ -51,9 +47,9 @@ echo 0x0100 > bcdDevice # v1.0.0
 echo 0x0200 > bcdUSB    # USB2
 
 mkdir -p "$USB_STRINGS_DIR"
-echo "6b65796d696d6570690" > "${USB_STRINGS_DIR}/serialnumber"
-echo "tinypilot" > "${USB_STRINGS_DIR}/manufacturer"
-echo "Multifunction USB Device" > "${USB_STRINGS_DIR}/product"
+echo "22slun7emp6l8qzrocc4" > "${USB_STRINGS_DIR}/serialnumber"
+echo "UM" > "${USB_STRINGS_DIR}/manufacturer"
+echo "UM USB device" > "${USB_STRINGS_DIR}/product"
 
 # Keyboard
 mkdir -p "$USB_KEYBOARD_FUNCTIONS_DIR"
