@@ -3,13 +3,10 @@
 .env
 
 # Out
-**/bin
 *.so
 
 ## Go
 # Binaries for programs and plugins
-*.exe
-*.exe~
 *.dll
 *.dylib
 
@@ -166,3 +163,5 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# raw data
+*.raw
