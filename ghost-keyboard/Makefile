@@ -1,6 +1,6 @@
 # Variables
 APP_NAME := ghost-keyboard
-BIN_DIR := ../../bin
+BIN_DIR := ../bin
 BUILD_PATH := cmd/main.go
 
 build-ghost-keyboard:

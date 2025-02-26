@@ -40,9 +40,9 @@ cd ./project-manager || { echo "Error: No se encontró el directorio project-man
 make build-project-manager
 cd ..
 
-cd ./ghost-keyboard/controller  || { echo "Error: No se encontró el directorio ghost-keyboard/controller"; exit 1; }
+cd ./ghost-keyboard  || { echo "Error: No se encontró el directorio ghost-keyboard"; exit 1; }
 make build-ghost-keyboard
-cd ../..
+cd ..
 
 mkdir -p ./bin/scripts
 cp ./ghost-keyboard/scripts/* ./bin/scripts
@@ -54,6 +54,8 @@ bash project-manager/setup.sh
 
 bash ghost-keyboard/setup/setup.sh
 
+
+printf "CONFIGURANDO SISTEMA\n\n"
 
 printf "Reiniciando dispositivo en 10 segundos...\n"
 sleep 10s
