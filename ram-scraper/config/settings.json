@@ -1,0 +1,7 @@
+{
+    "exe_name": "winpmem_mini_x64_rc2.exe",
+    "output_file": "RAM_winpmem.raw",
+    "output_folder": "data/",
+    "log_folder": "logs/",
+    "log_file": "run_scraper.log"
+}
