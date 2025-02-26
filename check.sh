@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-printf "VERIFICACIÓn DE LA INSTALACIÓN\n\n"
+printf "VERIFICACIÓN DE LA INSTALACIÓN\n\n"
 
 printf "Ghost keyboard:\n"
 

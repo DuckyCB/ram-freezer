@@ -22,7 +22,7 @@ cd /opt/ram-freezer/ghost-keyboard/setup
 chmod +x init-usb-gadget
 ./init-usb-gadget
 
-# Start keyboard at boot
+# Start USB Gadget at boot
 cp usb-gadget.service /lib/systemd/system/usb-gadget.service
 
 systemctl daemon-reload

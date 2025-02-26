@@ -1,0 +1,15 @@
+[Unit]
+Description=Initialize Project Manager
+After=syslog.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/opt/ram-freezer/bin/project-manager
+RemainAfterExit=true
+#ExecStop=/opt/ram-freezer/bin/project-manager
+StandardOutput=journal
+
+[Install]
+WantedBy=local-fs.target
+
