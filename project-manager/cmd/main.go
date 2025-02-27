@@ -1,22 +1,32 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
-	"os/exec"
+	"os"
+	"strings"
 )
 
 func main() {
 	log.Println("Starting project manager")
 
-	cmd := exec.Command("/opt/ram-freezer/bin/ghost-keyboard", "help")
+	scanner := bufio.NewScanner(os.Stdin)
 
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println("Error ejecutando el binario:", err)
-		return
+	for {
+		fmt.Print("Escriba 's' para comenzar: ")
+		scanner.Scan()
+		input := strings.TrimSpace(scanner.Text())
+
+		if err := scanner.Err(); err != nil {
+			fmt.Println("Error al leer la entrada:", err)
+			break
+		}
+
+		if input == "s" {
+			CopyRamScraper()
+			RunRamScraper()
+			CopyRamImage()
+		}
 	}
-
-	fmt.Println(string(output))
-
 }
