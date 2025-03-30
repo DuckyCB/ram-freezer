@@ -1,6 +1,9 @@
 
 # RAM Freezer
 
+## Requisitos
+ - git
+
 ## Setup
 
 ```shell
