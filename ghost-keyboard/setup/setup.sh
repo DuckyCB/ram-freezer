@@ -9,12 +9,10 @@ set -u
 
 MODULES_PATH='/etc/modules'
 CONFIG_FILE=/boot/firmware/config.txt
-CMDLINE_FILE=/boot/firmware/cmdline.txt
 
 # check if $CONFIG_FILE exists or go back to old path
 if [[ ! -e $CONFIG_FILE ]]; then
     CONFIG_FILE=/boot/config.txt
-    CMDLINE_FILE=/boot/cmdline.txt
 fi
 
 # Enable the dwc2 kernel driver, which we need to emulate USB devices with USB OTG.
