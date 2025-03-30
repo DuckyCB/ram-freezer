@@ -7,6 +7,8 @@ set -e
 # Treat undefined environment variables as errors.
 set -u
 
+cd /opt/ram-freezer/project-manager/setup
+
 # Start project-manager at boot
 cp project-manager.service /lib/systemd/system/project-manager.service
 
