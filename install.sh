@@ -50,7 +50,7 @@ cp ./ghost-keyboard/scripts/* ./bin/scripts
 
 printf "CONFIGURANDO SISTEMA\n\n"
 
-bash project-manager/setup.sh
+bash project-manager/setup/setup.sh
 
 bash ghost-keyboard/setup/setup.sh
 
