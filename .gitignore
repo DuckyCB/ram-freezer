@@ -27,3 +27,6 @@ go.work.sum
 
 # raw data
 *.raw
+
+# log data
+*.log
