@@ -1,7 +1,7 @@
 # Variables
 APP_NAME := project-manager
 BIN_DIR := ../bin
-BUILD_PATH := cmd/main.go
+BUILD_PATH := cmd/*.go
 
 build-project-manager:
 	@echo "Building $(APP_NAME)..."
