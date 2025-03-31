@@ -108,7 +108,7 @@ USB_STORAGE_FUNCTIONS_DIR="${USB_GADGET_PATH}/${USB_DEVICE_DIR}/functions/mass_s
 mkdir -p "${USB_STORAGE_FUNCTIONS_DIR}"
 echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/stall"
 echo 0 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/removable"
-echo /dev/sdb1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/file"  # Asegúrate de que /dev/sdb1 es tu USB
+echo /dev/sda1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/file"  # Asegúrate de que /dev/sda1 es tu USB
 
 # Vincular ambas funciones al gadget
 ln -s "${USB_STORAGE_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
