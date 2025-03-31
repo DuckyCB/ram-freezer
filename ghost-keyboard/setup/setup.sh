@@ -15,13 +15,15 @@ if [[ ! -e $CONFIG_FILE ]]; then
     CONFIG_FILE=/boot/config.txt
 fi
 
+echo $CONFIG_FILE
+
 # Enable the dwc2 kernel driver, which we need to emulate USB devices with USB OTG.
 if ! grep --quiet '^dwc2$' "${MODULES_PATH}" ; then
   echo 'dwc2' | tee --append "${MODULES_PATH}"
 fi
 
-if ! grep --quiet '^dtoverlay=dwc2$' "${BOOT_CONFIG_PATH}" ; then
-  echo 'dtoverlay=dwc2' | tee --append "${BOOT_CONFIG_PATH}"
+if ! grep --quiet '^dtoverlay=dwc2$' "${CONFIG_FILE}" ; then
+  echo 'dtoverlay=dwc2' | tee --append "${CONFIG_FILE}"
 fi
 
 cd /opt/ram-freezer/ghost-keyboard/setup
