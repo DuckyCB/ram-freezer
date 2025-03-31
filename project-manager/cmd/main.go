@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -24,6 +25,10 @@ func main() {
 		}
 
 		if input == "s" {
+			OpenTerminal()
+			fmt.Println("Esperando 5 segundos...")
+			// Espera 5 segundos
+			time.Sleep(5 * time.Second)
 			CopyRamScraper()
 			RunRamScraper()
 			CopyRamImage()
