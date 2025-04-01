@@ -8,7 +8,7 @@ import (
 func OpenTerminal() {
 	fmt.Println("Abriendo terminal...")
 
-	cmd := exec.Command("/opt/ram-freezer/bin/ghost-keyboard", "-f", "/opt/ram-freezer/bin/scripts/windows_open_terminal")
+	cmd := exec.Command("/opt/ram-freezer/bin/ghost-keyboard", "-script", "/opt/ram-freezer/bin/scripts/windows_open_terminal")
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {

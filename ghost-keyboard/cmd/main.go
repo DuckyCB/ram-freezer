@@ -6,16 +6,16 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 	"time"
 )
 
-// wait_time is the time to wait between key presses
-var wait_time = 100 * time.Millisecond
+// waitTime is the time to wait between key presses
+var waitTime = 100 * time.Millisecond
 
-// wait_time_key is the time to wait pressing a key
-var wait_time_key = 30 * time.Millisecond
+// waitTimeKey is the time to wait pressing a key
+var waitTimeKey = 30 * time.Millisecond
 
 func readFile(path string) (*os.File, error) {
 	file, err := os.Open(path)
@@ -44,11 +44,11 @@ func processFile(scanner bufio.Scanner) error {
 	for scanner.Scan() {
 		line := scanner.Text()
 		fmt.Println("Processing line:", line)
-		
+
 		// wait for a specific time
 		if strings.HasPrefix(line, "wait") {
 			parts := strings.SplitN(line, " ", 2) // Divide en ["wait", "5"]
-			
+
 			if len(parts) < 2 {
 				fmt.Println("Falta el tiempo después de 'wait': Default 1")
 				parts = append(parts, "1") // Si no hay tiempo, usar 1 segundo por defecto
@@ -68,7 +68,7 @@ func processFile(scanner bufio.Scanner) error {
 		i := 0
 		for i < len(line) {
 			char := line[i]
-		
+
 			if char == '{' {
 				endIdx := strings.Index(line[i:], "}")
 				if endIdx == -1 {
@@ -114,20 +114,19 @@ func writeChar(char uint8, hid *os.File) error {
 		return fmt.Errorf("error writing keypress %d: %w", char, err)
 	}
 
-	time.Sleep(wait_time_key)
+	time.Sleep(waitTimeKey)
 
 	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
 		return fmt.Errorf("error unpressing key: %w", err)
 	}
 
-	fmt.Printf("Sleeping %v\n", wait_time)
-	time.Sleep(wait_time) // Sleep for a while to simulate key press duration
+	fmt.Printf("Sleeping %v\n", waitTime)
+	time.Sleep(waitTime) // Sleep for a while to simulate key press duration
 	fmt.Printf("Wrote key: %c, 0x%X\n", char, keycode)
 
 	return nil
 }
-
 
 func writeSpecialKey(key string, hid *os.File) {
 	var modKey byte = keycodes.KEYCODE_NONE
@@ -135,27 +134,27 @@ func writeSpecialKey(key string, hid *os.File) {
 	keys := make([]byte, 0)
 
 	if strings.Contains(key, "+") {
-			parts := strings.Split(key, " + ")
+		parts := strings.Split(key, " + ")
 
-			for _, part := range parts {
-				if k, ok := keycodes.ModifierKey[part]; ok {
-					modKey |= k
-				} else if k, ok := keycodes.SpecialKey[part]; ok {
+		for _, part := range parts {
+			if k, ok := keycodes.ModifierKey[part]; ok {
+				modKey |= k
+			} else if k, ok := keycodes.SpecialKey[part]; ok {
+				keys = append(keys, k)
+			} else if len(part) == 1 {
+				r := rune(part[0])
+				if k, ok := keycodes.Key[r]; ok {
 					keys = append(keys, k)
-				} else if len(part) == 1 {
-					r := rune(part[0])
-					if k, ok := keycodes.Key[r]; ok {
-						keys = append(keys, k)
-					} else if k, ok := keycodes.KeyShift[r]; ok {
-						modKey |= keycodes.KEYCODE_LEFT_SHIFT
-						keys = append(keys, k)
-					}
-				}
-
-				if len(keys) >= 6 {
-					break
+				} else if k, ok := keycodes.KeyShift[r]; ok {
+					modKey |= keycodes.KEYCODE_LEFT_SHIFT
+					keys = append(keys, k)
 				}
 			}
+
+			if len(keys) >= 6 {
+				break
+			}
+		}
 	} else {
 		// Si no hay +, solo se procesa la tecla
 		if k, ok := keycodes.ModifierKey[key]; ok {
@@ -176,13 +175,13 @@ func writeSpecialKey(key string, hid *os.File) {
 	for len(keys) < 6 {
 		keys = append(keys, keycodes.KEYCODE_NONE)
 	}
-	
+
 	_, err := hid.Write([]byte{modKey, 0x00, keys[0], keys[1], keys[2], keys[3], keys[4], keys[5]})
 	if err != nil {
 		fmt.Printf("Error writing keypress: %v\n", err)
 		return
 	}
-	time.Sleep(wait_time_key)
+	time.Sleep(waitTimeKey)
 
 	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
@@ -190,17 +189,17 @@ func writeSpecialKey(key string, hid *os.File) {
 		return
 	}
 
-	fmt.Printf("Sleeping %v\n", wait_time)
-	time.Sleep(wait_time)
+	fmt.Printf("Sleeping %v\n", waitTime)
+	time.Sleep(waitTime)
 	fmt.Printf("Wrote key: %s, %x, %v\n", key, modKey, keys)
 }
 
 func main() {
-	filePath := flag.String("f", "", "File to use")
+	filePath := flag.String("script", "", "script file to use")
 	flag.Parse()
 
 	if *filePath == "" {
-		fmt.Println("Use: ./ghost-keyboard -f file")
+		fmt.Println("Use: ./ghost-keyboard -script=file")
 		os.Exit(1)
 	}
 
