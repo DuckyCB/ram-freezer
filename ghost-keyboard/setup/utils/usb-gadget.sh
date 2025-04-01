@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 export USB_DEVICE_DIR="ram-freezer"
 readonly USB_DEVICE_DIR

@@ -40,6 +40,7 @@ if ! command -v make &> /dev/null; then
     sudo apt update && sudo apt install -y make
 fi
 
+cd /opt/ram-freezer/
 
 printf "COMPILANDO PROYECTOS\n\n"
 
@@ -61,8 +62,12 @@ cp ./ghost-keyboard/scripts/* ./bin/scripts
 
 printf "CONFIGURANDO SISTEMA\n\n"
 
+cd /opt/ram-freezer/
+
 bash project-manager/setup/setup.sh
 bash ghost-keyboard/setup/setup.sh
+
+chmod +x check.sh
 
 printf "Reiniciando dispositivo en 10 segundos...\nPresiona cualquier tecla para cancelar\n"
 if read -t 10 -n 1; then

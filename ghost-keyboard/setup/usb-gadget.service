@@ -5,9 +5,9 @@ After=syslog.target
 [Service]
 Type=oneshot
 User=root
-ExecStart=/opt/ram-freezer/ghost-keyboard/setup/init-usb-gadget
+ExecStart=/opt/ram-freezer/ghost-keyboard/setup/init-usb-gadget.sh
 RemainAfterExit=true
-ExecStop=/opt/ram-freezer/ghost-keyboard/setup/remove-usb-gadget
+ExecStop=/opt/ram-freezer/ghost-keyboard/setup/remove-usb-gadget.sh
 StandardOutput=journal
 
 [Install]

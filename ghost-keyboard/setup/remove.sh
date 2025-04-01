@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 set -x
@@ -14,6 +14,6 @@ rm /etc/systemd/system/usb-gadget.service
 rm /usr/lib/systemd/system/usb-gadget.service
 systemctl daemon-reload
 
-/opt/ram-freezer/ghost-keyboard/setup/remove-usb-gadget
+/opt/ram-freezer/ghost-keyboard/setup/remove-usb-gadget.sh
 
 printf "usb-gadget eliminado"

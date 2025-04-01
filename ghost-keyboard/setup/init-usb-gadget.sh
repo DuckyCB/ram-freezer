@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-# Exit on first error.
 set -e
-# Echo commands before executing them, by default to stderr.
 set -x
-# Treat undefined environment variables as errors.
 set -u
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
