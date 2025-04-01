@@ -7,15 +7,14 @@ set -e
 # Treat undefined environment variables as errors.
 set -u
 
-MODULES_PATH='/etc/modules'
+readonly MODULES_PATH='/etc/modules'
+# TODO: chequear si es este path que rompe el teclado
 CONFIG_FILE=/boot/firmware/config.txt
 
 # check if $CONFIG_FILE exists or go back to old path
 if [[ ! -e $CONFIG_FILE ]]; then
     CONFIG_FILE=/boot/config.txt
 fi
-
-echo $CONFIG_FILE
 
 # Enable the dwc2 kernel driver, which we need to emulate USB devices with USB OTG.
 if ! grep --quiet '^dwc2$' "${MODULES_PATH}" ; then

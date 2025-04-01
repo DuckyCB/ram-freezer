@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export USB_DEVICE_DIR="ghost-keyboard"
+export USB_DEVICE_DIR="ram-freezer"
 readonly USB_DEVICE_DIR
 export USB_GADGET_PATH="/sys/kernel/config/usb_gadget"
 readonly USB_GADGET_PATH
@@ -9,8 +9,15 @@ readonly USB_DEVICE_PATH
 
 export USB_STRINGS_DIR="strings/0x409"
 readonly USB_STRINGS_DIR
+
+# keyboard
 export USB_KEYBOARD_FUNCTIONS_DIR="functions/hid.keyboard"
 readonly USB_KEYBOARD_FUNCTIONS_DIR
+# storage
+export USB_STORAGE_NAME="mass_storage.0"
+readonly USB_STORAGE_NAME
+export USB_STORAGE_FUNCTIONS_DIR="functions/${USB_MASS_STORAGE_NAME}"
+readonly USB_STORAGE_FUNCTIONS_DIR
 
 export USB_CONFIG_INDEX=1
 readonly USB_CONFIG_INDEX

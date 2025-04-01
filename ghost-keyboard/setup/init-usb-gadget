@@ -57,7 +57,6 @@ echo 8 > "${USB_KEYBOARD_FUNCTIONS_DIR}/report_length"
 
 # Write the report descriptor
 D=$(mktemp)
-
 {
   echo -ne \\x05\\x01       # Usage Page (Generic Desktop Ctrls)
   echo -ne \\x09\\x06       # Usage (Keyboard)
@@ -96,6 +95,13 @@ if [[ -f "${USB_KEYBOARD_FUNCTIONS_DIR}/no_out_endpoint" ]]; then
   echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/no_out_endpoint"
 fi
 
+# Storage
+mkdir -p "${USB_STORAGE_FUNCTIONS_DIR}"
+echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/stall"
+echo 0 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/removable"
+echo /dev/sda1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/file"
+
+
 mkdir -p "${USB_CONFIG_DIR}"
 echo 250 > "${USB_CONFIG_DIR}/MaxPower"
 
@@ -103,14 +109,6 @@ CONFIGS_STRINGS_DIR="${USB_CONFIG_DIR}/${USB_STRINGS_DIR}"
 mkdir -p "${CONFIGS_STRINGS_DIR}"
 echo "Config ${USB_CONFIG_INDEX}: ECM network" > "${CONFIGS_STRINGS_DIR}/configuration"
 
-# Agregar función de almacenamiento USB
-USB_STORAGE_FUNCTIONS_DIR="${USB_GADGET_PATH}/${USB_DEVICE_DIR}/functions/mass_storage.usb0"
-mkdir -p "${USB_STORAGE_FUNCTIONS_DIR}"
-echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/stall"
-echo 0 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/removable"
-echo /dev/sda1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/file"  # Asegúrate de que /dev/sda1 es tu USB
-
-# Vincular ambas funciones al gadget
 ln -s "${USB_STORAGE_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 

@@ -18,9 +18,9 @@ printf "
 
 printf "by: fedeabdo & DuckyCB\n\n\n"
 
+printf "--- Comenzando instalación ---\n\n\n"
 
-printf "COMENZANDO INSTALACIÓN\n\n"
-
+printf "INSTALANDO DEPENDENCIAS\n\n"
 # Verifica si Go está instalado
 if ! command -v go &> /dev/null; then
   printf "Instalando Go...\n"
@@ -44,6 +44,10 @@ cd ./ghost-keyboard  || { echo "Error: No se encontró el directorio ghost-keybo
 make build-ghost-keyboard
 cd ..
 
+cd ./data-seal  || { echo "Error: No se encontró el directorio ghost-keyboard"; exit 1; }
+make build-data-seal
+cd ..
+
 mkdir -p ./bin/scripts
 cp ./ghost-keyboard/scripts/* ./bin/scripts
 
@@ -51,11 +55,7 @@ cp ./ghost-keyboard/scripts/* ./bin/scripts
 printf "CONFIGURANDO SISTEMA\n\n"
 
 bash project-manager/setup/setup.sh
-
 bash ghost-keyboard/setup/setup.sh
-
-
-printf "CONFIGURANDO SISTEMA\n\n"
 
 printf "Reiniciando dispositivo en 10 segundos...\n"
 sleep 10s

@@ -7,3 +7,8 @@ build-project-manager:
 	@echo "Building $(APP_NAME)..."
 	@mkdir -p $(BIN_DIR)
 	@CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o $(BIN_DIR)/$(APP_NAME) $(BUILD_PATH)
+
+build-project-manager-test:
+	@echo "Building $(APP_NAME)..."
+	@mkdir -p $(BIN_DIR)
+	go build -o $(BIN_DIR)/$(APP_NAME) $(BUILD_PATH)
