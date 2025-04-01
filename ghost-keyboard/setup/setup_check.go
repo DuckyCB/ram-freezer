@@ -53,11 +53,25 @@ func checkUdevSettle() bool {
 	return err == nil
 }
 
+// checkUsbGadgetService verifica si el servicio usb-gadget está activo en systemd
+func checkUsbGadgetService() bool {
+	cmd := exec.Command("systemctl", "is-active", "usb-gadget")
+	output, err := cmd.Output()
+	if err != nil {
+		return false
+	}
+	status := strings.TrimSpace(string(output))
+	return status == "active"
+}
+
 func main() {
+	fmt.Println("👻⌨ Verificando Ghost Keyboard 👻⌨")
+
 	checks := []struct {
 		name   string
 		result bool
 	}{
+		{" - usb-gadget.service está activo", checkUsbGadgetService()},
 		{" - Módulo dwc2 cargado", checkModuleLoaded("dwc2")},
 		{" - Módulo libcomposite cargado", checkModuleLoaded("libcomposite")},
 		{" - ConfigFS montado", checkMountpoint("/sys/kernel/config")},
@@ -67,7 +81,7 @@ func main() {
 		{" - udev ha finalizado (udevadm settle)", checkUdevSettle()},
 	}
 
-	fmt.Println("📋 Resultados de la isntalacoón de ghost keyboard:")
+	fmt.Println("📋 Resultados de la isntalación de ghost keyboard:")
 	for _, check := range checks {
 		status := "✅ OK"
 		if !check.result {

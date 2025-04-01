@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-# Echo commands to stdout.
 set -x
-# Exit on first error.
 set -e
-# Treat undefined environment variables as errors.
 set -u
 
 readonly MODULES_PATH='/etc/modules'

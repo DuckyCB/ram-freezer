@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Echo commands to stdout.
+set -x
+# Exit on first error.
+set -e
+# Treat undefined environment variables as errors.
+set -u
+
 printf "
      ██████╗  █████╗ ███╗   ███╗
      ██╔══██╗██╔══██╗████╗ ████║
@@ -57,6 +64,10 @@ printf "CONFIGURANDO SISTEMA\n\n"
 bash project-manager/setup/setup.sh
 bash ghost-keyboard/setup/setup.sh
 
-printf "Reiniciando dispositivo en 10 segundos...\n"
-sleep 10s
-reboot
+printf "Reiniciando dispositivo en 10 segundos...\nPresiona cualquier tecla para cancelar\n"
+if read -t 10 -n 1; then
+    printf "Reinicio cancelado\n> Es necesario reiniciar el sistema para que la instalación se complete"
+else
+    printf "Reiniciando...\n"
+    reboot
+fi

@@ -4,4 +4,4 @@ printf "VERIFICACIÓN DE LA INSTALACIÓN\n\n"
 
 printf "Ghost keyboard:\n"
 
-go run ghost-keyboard/setup/setup_check.go
+go run /opt/ram-freezer/ghost-keyboard/setup/setup_check.go
