@@ -24,8 +24,8 @@ fi
 
 cd /opt/ram-freezer/ghost-keyboard/setup
 
-chmod +x init-usb-gadget.sh
-./init-usb-gadget.sh
+chmod +x setup-usb-gadget.sh
+./setup-usb-gadget.sh
 
 # Start USB Gadget at boot
 cp usb-gadget.service /lib/systemd/system/usb-gadget.service
