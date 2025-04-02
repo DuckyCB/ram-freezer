@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e 
+set -e
 set -x
 set -u
 
@@ -12,7 +12,5 @@ source "${SCRIPT_DIR}/utils/usb-gadget.sh"
 chmod +x ${SCRIPT_DIR}/setup-usb-gadget.sh
 ${SCRIPT_DIR}/setup-usb-gadget.sh
 
-# print pwd
-echo "Current directory: $(pwd)"
-
+# Se ejecuta el script de activación del gadget USB
 usb_gadget_activate
