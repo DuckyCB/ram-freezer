@@ -1,11 +1,14 @@
 
 # RAM Freezer
 
-## Requisitos de Hardware
- - Tener un Pendrive conectado a la Raspberry
-
 ## Requisitos
+
+### Software
  - git
+ - Raspberry PI OS bookworm 32 bits
+
+### Hardware
+ - Almacenamiento USB conectado a la Raspberry
 
 ## Setup
 
