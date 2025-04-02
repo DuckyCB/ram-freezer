@@ -14,7 +14,7 @@ readonly USB_STRINGS_DIR
 export USB_KEYBOARD_FUNCTIONS_DIR="functions/hid.keyboard"
 readonly USB_KEYBOARD_FUNCTIONS_DIR
 # storage
-export USB_STORAGE_NAME="mass_storage.0"
+export USB_STORAGE_NAME="mass_storage.usb0"
 readonly USB_STORAGE_NAME
 export USB_STORAGE_FUNCTIONS_DIR="functions/${USB_STORAGE_NAME}"
 readonly USB_STORAGE_FUNCTIONS_DIR
