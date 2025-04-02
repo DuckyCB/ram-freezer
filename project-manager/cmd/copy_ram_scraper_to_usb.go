@@ -10,7 +10,7 @@ func CopyRamScraperToUSB() {
 
 	// Montar el USB
 	fmt.Println("Montando el USB...")
-	cmd := exec.Command("mount", "/dev/sda1", "/mnt/usb/")
+	cmd := exec.Command("sudo", "mount", "/dev/sda1", "/mnt/usb/")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error montando el USB:", err)
@@ -20,7 +20,7 @@ func CopyRamScraperToUSB() {
 
 	// Crear el directorio en el USB
 	fmt.Println("Creando el directorio en el USB...")
-	cmd = exec.Command("mkdir", "-p", "/mnt/usb/ram-scraper/")
+	cmd = exec.Command("sudo", "mkdir", "-p", "/mnt/usb/ram-scraper/")
 	output, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error creando el directorio:", err)
@@ -29,7 +29,7 @@ func CopyRamScraperToUSB() {
 
 	// Copiar los archivos de ram-scraper al USB
 	fmt.Println("Copiando los archivos de ram-scraper al USB...")
-	cmd = exec.Command("cp", "-r", "/opt/ram-freezer/", "/mnt/usb/ram-scraper/")
+	cmd = exec.Command("sudo", "cp", "-r", "/opt/ram-freezer/", "/mnt/usb/ram-scraper/")
 	output, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error copiando ram-scraper:", err)
@@ -40,7 +40,7 @@ func CopyRamScraperToUSB() {
 
 	// Desmontar el USB
 	fmt.Println("Desmontando el USB...")
-	cmd = exec.Command("umount", "/mnt/usb/")
+	cmd = exec.Command("sudo", "umount", "/mnt/usb/")
 
 	output, err = cmd.CombinedOutput()
 	if err != nil {
@@ -64,7 +64,7 @@ func CopyRamScraperToUSB() {
 	cmd = exec.Command("sleep", "1")
 
 	// ls /sys/class/udc
-	cmd = exec.Command("ls", "/sys/class/udc", "tee", "/sys/kernel/config/usb_gadget/ram-freezer/UDC")
+	cmd = exec.Command("ls", "/sys/class/udc", "|", "sudo", "tee", "/sys/kernel/config/usb_gadget/ram-freezer/UDC")
 	output, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error listando el USB:", err)
