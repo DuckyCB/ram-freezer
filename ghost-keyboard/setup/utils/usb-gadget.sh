@@ -33,7 +33,7 @@ function usb_gadget_activate {
 	if [ -z "$(ls /sys/class/udc)" ]; then
 		echo "No UDC found. Exiting."
 		echo "Please check if the kernel module is loaded and the device is connected."
-		exit 0
+		exit 1
 	fi
 
 	ls /sys/class/udc >"${USB_DEVICE_PATH}/UDC"
