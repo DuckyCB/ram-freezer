@@ -8,15 +8,31 @@ import (
 func CopyRamScraperToUSB() {
 	fmt.Println("Copiando ram-scraper al USB...")
 
-	// Montar el USB
-	fmt.Println("Montando el USB...")
-	cmd := exec.Command("sudo", "mount", "/dev/sda1", "/mnt/usb/")
+	// Montar el USB si no esta montado
+	cmd := exec.Command("lsblk", "-o", "NAME,MOUNTPOINT")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error montando el USB:", err)
+		fmt.Println("Error al listar los dispositivos:", err)
 		return
 	}
 	fmt.Println(string(output))
+
+	// Verificar si el USB está montado
+	if string(output) == "" {
+		fmt.Println("El USB no está montado. Montando el USB...")
+			
+
+		fmt.Println("Montando el USB...")
+		cmd := exec.Command("sudo", "mount", "/dev/sda1", "/mnt/usb/")
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			fmt.Println("Error montando el USB:", err)
+			return
+		}
+		fmt.Println(string(output))
+	} else {
+		fmt.Println("El USB ya está montado.")
+	}
 
 	// Crear el directorio en el USB
 	fmt.Println("Creando el directorio en el USB...")
