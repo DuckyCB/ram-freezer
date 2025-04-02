@@ -29,6 +29,13 @@ export USB_ALL_FUNCTIONS_DIR="functions/*"
 readonly USB_ALL_FUNCTIONS_DIR
 
 function usb_gadget_activate {
+	# Check if /sys/class/udc is empty
+	if [ -z "$(ls /sys/class/udc)" ]; then
+		echo "No UDC found. Exiting."
+		echo "Please check if the kernel module is loaded and the device is connected."
+		exit 0
+	fi
+
 	ls /sys/class/udc >"${USB_DEVICE_PATH}/UDC"
 	chmod 777 /dev/hidg0
 }
