@@ -1,6 +1,9 @@
 
 # RAM Freezer
 
+## Requisitos de Hardware
+ - Tener un Pendrive conectado a la Raspberry
+
 ## Requisitos
  - git
 
