@@ -36,6 +36,44 @@ func CopyRamScraperToUSB() {
 		return
 	}
 	fmt.Println(string(output))
-}
 
-// Reconectar USB Gadget
+
+	// Desmontar el USB
+	fmt.Println("Desmontando el USB...")
+	cmd = exec.Command("umount", "/mnt/usb/")
+
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error desmontando el USB:", err)
+		return
+	}
+	fmt.Println(string(output))
+
+	// Reconectando el USB
+	fmt.Println("Reconectando el USB...")
+	// echo fe980000.usb | sudo tee UDC
+	cmd = exec.Command("echo", "fe980000.usb", "|", "sudo", "tee", "/sys/kernel/config/usb_gadget/ram-freezer/UDC")
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error reconectando el USB:", err)
+		return
+	}
+	fmt.Println(string(output))
+
+	// wait 1s
+	cmd = exec.Command("sleep", "1")
+
+	// ls /sys/class/udc
+	cmd = exec.Command("ls", "/sys/class/udc", "tee", "/sys/kernel/config/usb_gadget/ram-freezer/UDC")
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error listando el USB:", err)
+		return
+	}
+	fmt.Println(string(output))
+
+	// sleep 5
+	cmd = exec.Command("sleep", "5")
+
+	fmt.Println("Proceso de copia de ram-scraper al USB completado.")
+}
