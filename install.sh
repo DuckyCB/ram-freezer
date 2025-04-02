@@ -68,6 +68,7 @@ bash project-manager/setup/setup.sh
 bash ghost-keyboard/setup/setup.sh
 
 chmod +x check.sh
+chmod +x remove.sh
 
 printf "Reiniciando dispositivo en 10 segundos...\nPresiona cualquier tecla para cancelar\n"
 if read -t 10 -n 1; then

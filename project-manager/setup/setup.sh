@@ -11,3 +11,5 @@ cp project-manager.service /lib/systemd/system/project-manager.service
 
 systemctl daemon-reload
 systemctl enable project-manager.service
+
+chmod +x setup.sh
