@@ -10,7 +10,7 @@ func CopyRamScraperToUSB() {
 
 	// Montar el USB
 	fmt.Println("Montando el USB...")
-	cmd := exec.Command("mount -o sync", "/dev/sda1", "/mnt/usb/")
+	cmd := exec.Command("mount", "/dev/sda1", "/mnt/usb/")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error montando el USB:", err)
