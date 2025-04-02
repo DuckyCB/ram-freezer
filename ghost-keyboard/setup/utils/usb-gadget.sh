@@ -16,6 +16,8 @@ readonly USB_KEYBOARD_FUNCTIONS_DIR
 # storage
 export USB_STORAGE_NAME="mass_storage.usb0"
 readonly USB_STORAGE_NAME
+export USB_STORAGE_PENDRIVE_NAME="_pendrive_rbpi_"
+readonly USB_STORAGE_PENDRIVE_NAME
 export USB_STORAGE_FUNCTIONS_DIR="functions/${USB_STORAGE_NAME}"
 readonly USB_STORAGE_FUNCTIONS_DIR
 
