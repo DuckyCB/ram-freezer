@@ -67,8 +67,8 @@ func CopyRamScraperToUSB() {
 
 	// Reconectando el USB
 	fmt.Println("Reconectando el USB...")
-	// echo fe980000.usb | sudo tee UDC
-	cmd = exec.Command("echo", "fe980000.usb", "|", "sudo", "tee", "/sys/kernel/config/usb_gadget/ram-freezer/UDC")
+
+	cmd = exec.Command("echo", "", "|", "sudo", "tee", "/sys/kernel/config/usb_gadget/ram-freezer/UDC")
 	output, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error reconectando el USB:", err)
