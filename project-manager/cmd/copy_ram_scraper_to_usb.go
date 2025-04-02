@@ -9,7 +9,7 @@ func CopyRamScraperToUSB() {
 	fmt.Println("Copiando ram-scraper al USB...")
 
 	// Montar el USB si no esta montado
-	cmd := exec.Command("mount", "|" ,"grep", "/dev/sda1")
+	cmd := exec.Command("mount", " | " ,"grep", "/dev/sda1")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error al listar los dispositivos montados:", err)
