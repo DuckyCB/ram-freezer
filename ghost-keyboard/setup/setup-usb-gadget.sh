@@ -96,7 +96,7 @@ fi
 mkdir -p "${USB_STORAGE_FUNCTIONS_DIR}"
 echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/stall"
 echo 0 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/removable"
-echo ${USB_STORAGE_PENDRIVE_NAME} > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/removable/lun.0/inquiry_string"
+echo ${USB_STORAGE_PENDRIVE_NAME} > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/inquiry_string"
 echo /dev/sda1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/file"
 
 
