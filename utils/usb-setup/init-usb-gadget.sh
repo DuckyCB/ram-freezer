@@ -46,9 +46,6 @@ echo "22slun7emp6l8qzrocc4" > "${USB_STRINGS_DIR}/serialnumber"
 echo "Ram Freezer" > "${USB_STRINGS_DIR}/manufacturer"
 echo "Ram Freezer" > "${USB_STRINGS_DIR}/product"
 
-bash "${KEYBOARD_SETUP_PATH}/init-keyboard.sh"
-bash "${STORAGE_SETUP_PATH}/init-storage.sh"
-
 # Configs
 mkdir -p "${USB_CONFIG_DIR}"
 echo 250 > "${USB_CONFIG_DIR}/MaxPower"
@@ -56,6 +53,10 @@ echo 250 > "${USB_CONFIG_DIR}/MaxPower"
 CONFIGS_STRINGS_DIR="${USB_CONFIG_DIR}/${USB_STRINGS_DIR}"
 mkdir -p "${CONFIGS_STRINGS_DIR}"
 echo "Config ${USB_CONFIG_INDEX}: Keyboard and Storage" > "${CONFIGS_STRINGS_DIR}/configuration"
+
+# Devices
+bash "${KEYBOARD_SETUP_PATH}/init-keyboard.sh"
+bash "${STORAGE_SETUP_PATH}/init-storage.sh"
 
 # Activate gadget
 usb_gadget_activate

@@ -3,7 +3,7 @@
 set -e
 set -u
 
-printf "\Configurando Gadget USB...\n"
+printf "Configurando Gadget USB...\n"
 
 # shellcheck source=/opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
