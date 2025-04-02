@@ -16,6 +16,8 @@ readonly USB_KEYBOARD_FUNCTIONS_DIR
 # storage
 export USB_STORAGE_NAME="mass_storage.usb0"
 readonly USB_STORAGE_NAME
+export USB_STORAGE_PENDRIVE_NAME="_pendrive_"
+readonly USB_STORAGE_PENDRIVE_NAME
 export USB_STORAGE_FUNCTIONS_DIR="functions/${USB_STORAGE_NAME}"
 readonly USB_STORAGE_FUNCTIONS_DIR
 
@@ -29,6 +31,13 @@ export USB_ALL_FUNCTIONS_DIR="functions/*"
 readonly USB_ALL_FUNCTIONS_DIR
 
 function usb_gadget_activate {
+	# Check if /sys/class/udc is empty
+	if [ -z "$(ls /sys/class/udc)" ]; then
+		echo "No UDC found. Exiting."
+		echo "Please check if the kernel module is loaded and the device is connected."
+		exit 1
+	fi
+
 	ls /sys/class/udc >"${USB_DEVICE_PATH}/UDC"
 	chmod 777 /dev/hidg0
 }
