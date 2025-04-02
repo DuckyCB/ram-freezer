@@ -3,11 +3,9 @@
 set -e
 set -u
 
-readonly BASE_DIR='/opt/ram-freezer'
-readonly KEYBOARD_DIR='/opt/ram-freezer/ghost-keyboard/setup'
-readonly VAULT_DIR='/opt/ram-freezer/vault/setup'
 # shellcheck source=utils/usb-gadget.sh
-source "${BASE_DIR}/utils/usb-setup/usb-gadget.sh"
+source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
+
 
 #print_help() {
 #  cat << EOF
@@ -30,6 +28,7 @@ source "${BASE_DIR}/utils/usb-setup/usb-gadget.sh"
 #  esac
 #done
 
+# TODO: capaz esto puede ir en usb-modules-setup.sh ?
 modprobe libcomposite
 
 # USB device
@@ -47,16 +46,16 @@ echo "22slun7emp6l8qzrocc4" > "${USB_STRINGS_DIR}/serialnumber"
 echo "Ram Freezer" > "${USB_STRINGS_DIR}/manufacturer"
 echo "Ram Freezer" > "${USB_STRINGS_DIR}/product"
 
+bash "${KEYBOARD_SETUP_PATH}/init-keyboard.sh"
+bash "${STORAGE_SETUP_PATH}/init-storage.sh"
+
 # Configs
 mkdir -p "${USB_CONFIG_DIR}"
 echo 250 > "${USB_CONFIG_DIR}/MaxPower"
-# TODO: estas dos lineas estaban para storage, no se si estan bien
-#mkdir -p configs/c.1/strings/0x409
-#echo "Configuración USB" > configs/c.1/strings/0x409/configuration
 
 CONFIGS_STRINGS_DIR="${USB_CONFIG_DIR}/${USB_STRINGS_DIR}"
 mkdir -p "${CONFIGS_STRINGS_DIR}"
 echo "Config ${USB_CONFIG_INDEX}: Keyboard and Storage" > "${CONFIGS_STRINGS_DIR}/configuration"
 
-
+# Activate gadget
 usb_gadget_activate

@@ -28,6 +28,7 @@ printf "by: fedeabdo & DuckyCB\n\n\n"
 printf "Comenzando instalación\n\n"
 
 printf "INSTALANDO DEPENDENCIAS\n\n"
+
 # Verifica si Go está instalado
 if ! command -v go &> /dev/null; then
   printf "Instalando Go...\n"
@@ -40,9 +41,8 @@ if ! command -v make &> /dev/null; then
     sudo apt update && sudo apt install -y make
 fi
 
-cd /opt/ram-freezer/
-
 printf "COMPILANDO PROYECTOS\n\n"
+cd /opt/ram-freezer/
 
 cd ./project-manager || { echo "Error: No se encontró el directorio project-manager"; exit 1; }
 make build-project-manager
@@ -56,17 +56,17 @@ cd ./data-seal  || { echo "Error: No se encontró el directorio ghost-keyboard";
 make build-data-seal
 cd ..
 
+# Copy all scripts
 mkdir -p ./bin/scripts
 cp ./ghost-keyboard/scripts/* ./bin/scripts
 
 
 printf "CONFIGURANDO SISTEMA\n\n"
-
 cd /opt/ram-freezer/
 
-bash project-manager/setup/setup.sh
-bash ghost-keyboard/setup/setup.sh
+bash utils/usb-setup/setup.sh
 
+# Permissions
 chmod +x check.sh
 chmod +x remove.sh
 

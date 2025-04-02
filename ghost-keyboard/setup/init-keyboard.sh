@@ -3,11 +3,9 @@
 set -e
 set -u
 
-# shellcheck source=utils/usb-gadget.sh
 source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
 
 
-# Keyboard
 mkdir -p "${USB_KEYBOARD_FUNCTIONS_DIR}"
 echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/protocol" # Keyboard
 echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/subclass" # Boot interface subclass
@@ -53,13 +51,6 @@ if [[ -f "${USB_KEYBOARD_FUNCTIONS_DIR}/no_out_endpoint" ]]; then
   echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/no_out_endpoint"
 fi
 
-#mkdir -p "${USB_CONFIG_DIR}"
-#echo 250 > "${USB_CONFIG_DIR}/MaxPower"
-
-#CONFIGS_STRINGS_DIR="${USB_CONFIG_DIR}/${USB_STRINGS_DIR}"
-#mkdir -p "${CONFIGS_STRINGS_DIR}"
-#echo "Config ${USB_CONFIG_INDEX}: ECM network" > "${CONFIGS_STRINGS_DIR}/configuration"
-
 ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 
-usb_gadget_activate
+printf "Ghost Keyboard configurado\n"
