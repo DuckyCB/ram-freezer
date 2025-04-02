@@ -12,4 +12,3 @@ StandardOutput=journal
 
 [Install]
 WantedBy=local-fs.target
-

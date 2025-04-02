@@ -5,7 +5,7 @@ set -x
 set -u
 
 
-printf "Eliminando usb-gadget..."
+printf "Eliminando usb-gadget...\n"
 
 # Service
 systemctl stop usb-gadget.service
@@ -16,4 +16,4 @@ systemctl daemon-reload
 
 /opt/ram-freezer/ghost-keyboard/setup/remove-usb-gadget.sh
 
-printf "usb-gadget eliminado"
+printf "usb-gadget eliminado\n"

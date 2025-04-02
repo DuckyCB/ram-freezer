@@ -51,4 +51,3 @@ done
 popd
 
 rmdir "${USB_DEVICE_DIR}"
-
