@@ -9,13 +9,16 @@ func CopyRamScraperToUSB() {
 	fmt.Println("Copiando ram-scraper al USB...")
 
 	// Montar el USB si no esta montado
-	cmd := exec.Command("bash", "-c", "mount | grep '/dev/sda1'")
+	cmd := exec.Command("bash", "-c", "'mount | grep /dev/sda1'")
 	output, err := cmd.CombinedOutput()
-	if err != nil {
+	fmt.Println(string(output))
+
+	// si err es 1 significa que el USB no esta montado
+	if err != nil && string(output) != "" {
 		fmt.Println("Error al listar los dispositivos montados:", err)
 		return
 	}
-	fmt.Println(string(output))
+	
 
 	// Verificar si el USB está montado
 	if string(output) == "" {
