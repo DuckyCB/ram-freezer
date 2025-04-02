@@ -1,0 +1,1 @@
+$drive = (Get-WmiObject Win32_Volume | Where-Object { $_.Label -eq "_pendrive_" }).DriveLetter
