@@ -9,8 +9,8 @@ readonly SCRIPT_DIR
 # shellcheck source=utils/usb-gadget.sh
 source "${SCRIPT_DIR}/utils/usb-gadget.sh"
 
-chmod +x setup-usb-gadget.sh
-./setup-usb-gadget.sh
+chmod +x ${SCRIPT_DIR}/setup-usb-gadget.sh
+${SCRIPT_DIR}/setup-usb-gadget.sh
 
 # print pwd
 echo "Current directory: $(pwd)"
