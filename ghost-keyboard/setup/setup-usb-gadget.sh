@@ -96,7 +96,6 @@ fi
 mkdir -p "${USB_STORAGE_FUNCTIONS_DIR}"
 echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/stall"
 echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/removable"
-echo ${USB_STORAGE_PENDRIVE_NAME} > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/inquiry_string"
 echo /dev/sda1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/file"
 
 
@@ -109,3 +108,6 @@ echo "Config ${USB_CONFIG_INDEX}: ECM network" > "${CONFIGS_STRINGS_DIR}/configu
 
 ln -s "${USB_STORAGE_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
+
+# Rename the USB device label on /dev/sda1
+dosfslabel /dev/sda1 ${USB_STORAGE_PENDRIVE_NAME}  # Para FAT32 o exFATg
