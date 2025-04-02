@@ -25,7 +25,7 @@ printf "
 
 printf "by: fedeabdo & DuckyCB\n\n\n"
 
-printf "--- Comenzando instalación ---\n\n\n"
+printf "Comenzando instalación\n\n"
 
 printf "INSTALANDO DEPENDENCIAS\n\n"
 # Verifica si Go está instalado

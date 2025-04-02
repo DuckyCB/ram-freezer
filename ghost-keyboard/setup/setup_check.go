@@ -81,7 +81,7 @@ func main() {
 		{" - udev ha finalizado (udevadm settle)", checkUdevSettle()},
 	}
 
-	fmt.Println("📋 Resultados de la isntalación de ghost keyboard:")
+	fmt.Println("📋 Resultados de la instalación de ghost keyboard:")
 	for _, check := range checks {
 		status := "✅ OK"
 		if !check.result {
