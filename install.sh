@@ -9,6 +9,8 @@ set -u
 
 clear
 
+mkdir -p ./bin/logs
+
 source /opt/ram-freezer/audit-trail/log.sh
 
 log_info "Iniciando instalador de Ram Freezer"
@@ -73,8 +75,6 @@ cd ..
 log_info "Copiando scripts"
 mkdir -p ./bin/scripts
 cp ./ghost-keyboard/scripts/* ./bin/scripts
-
-mkdir -p ./bin/logs
 
 
 log_info "Configurando sistema...\n\n"

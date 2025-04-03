@@ -26,7 +26,7 @@ bash "${USB_SETUP_PATH}/usb-modules-setup.sh"
 # remove old device
 if [ -d "${USB_DEVICE_PATH}" ]; then
     echo "Removing old gadget."
-    bash "${SCRIPT_DIR}/remove.sh"
+    bash "${USB_SETUP_PATH}/remove.sh"
 fi
 
 # Init USB device with modules

@@ -4,7 +4,11 @@
 trap 'handle_error $? "$BASH_COMMAND" ${LINENO}' ERR
 
 function handle_error() {
-  log_error "Error en script"
+  local command="$2"
+  local error_message
+  error_message=$(eval "$command" 2>&1 >/dev/null)
+
+  log_error "$error_message"
 
   # Opcionalmente finalizar el script
   # exit $exit_code
@@ -31,10 +35,6 @@ function log() {
   lineno=$(echo "$caller_info" | awk '{print $1}')
   local source
   source=$(echo "$caller_info" | awk '{print $3}')
-  #  local source
-  #  source="${BASH_SOURCE[1]}"
-  #  local lineno
-  #  lineno="${BASH_LINENO[0]}"
 
   local level=$1
   local message=$2
