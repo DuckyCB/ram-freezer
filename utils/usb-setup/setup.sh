@@ -23,6 +23,12 @@ chmod +x "${STORAGE_SETUP_PATH}/init-storage.sh"
 # Load kernel modules
 bash "${USB_SETUP_PATH}/usb-modules-setup.sh"
 
+# remove old device
+if [ -d "${USB_DEVICE_PATH}" ]; then
+    echo "Removing old gadget."
+    bash "${SCRIPT_DIR}/remove.sh"
+fi
+
 # Init USB device with modules
 bash "${USB_SETUP_PATH}/init-usb-gadget.sh"
 
