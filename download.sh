@@ -6,7 +6,8 @@ DIR="/opt/ram-freezer"
 if [ -d "${DIR}" ]; then
   echo "El directorio ${DIR} existe. Actualizando..."
   cd "${DIR}"
-  git pull origin master
+  sudo git reset --hard origin/master
+  sudo git pull origin master
 else
   echo "El directorio ${DIR} no existe. Clonando..."
   sudo git clone "$URL" "$DIR"
