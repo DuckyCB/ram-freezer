@@ -121,7 +121,7 @@ func writeChar(char uint8, hid *os.File) error {
 
 	fmt.Printf("Sleeping %v\n", waitTime)
 	time.Sleep(waitTime) // Sleep for a while to simulate key press duration
-	fmt.Printf("Wrote key: %c, 0x%X\n", char, keycode)
+	fmt.Printf("Wrote char: %c, 0x%X\n", char, keycode)
 
 	return nil
 }
@@ -135,22 +135,40 @@ func writeSpecialKey(key string, hid *os.File) {
 		parts := strings.Split(key, " + ")
 
 		for _, part := range parts {
+			fmt.Println("Processing part:", part)
+			fmt.Println("Len:", len(part))
 			if k, ok := keycodes.ModifierKey[part]; ok {
 				modKey |= k
 			} else if k, ok := keycodes.SpecialKey[part]; ok {
 				keys = append(keys, k)
-			} else if len(part) == 1 {
+			} else if len(part) == 1{
+				// Si es una tecla normal, se procesa como un rune
+				fmt.Println("Processing rune:", part)
 				r := rune(part[0])
 				if k, ok := keycodes.Key[r]; ok {
+					fmt.Println("Processing rune without shift:", part)
 					keys = append(keys, k)
 				} else if k, ok := keycodes.KeyShift[r]; ok {
+					fmt.Println("Processing rune with shift:", part)
 					modKey |= keycodes.KEYCODE_LEFT_SHIFT
 					keys = append(keys, k)
 				}
+			} else if strings.HasPrefix(part, ".") {
+				// Si es un número, se procesa como un Keypad
+				fmt.Println("Processing number:", part)
+				r := rune(part[1])
+				if k, ok := keycodes.Keypad[r]; ok {
+					keys = append(keys, k)
+				} else {
+					fmt.Println("Key not found in Keypad:", part)
+				}
+			} else {
+				fmt.Println("Key not found:", part)
 			}
 
 			if len(keys) >= 6 {
-				break
+				fmt.Println("Limiting to 6 keys")
+				break // Limitar a 6 teclas
 			}
 		}
 	} else {
@@ -169,10 +187,11 @@ func writeSpecialKey(key string, hid *os.File) {
 			}
 		}
 	}
-
+	fmt.Println("Keys:", keys)
 	for len(keys) < 6 {
 		keys = append(keys, keycodes.KEYCODE_NONE)
 	}
+	fmt.Println("Keys:", keys)
 
 	_, err := hid.Write([]byte{modKey, 0x00, keys[0], keys[1], keys[2], keys[3], keys[4], keys[5]})
 	if err != nil {

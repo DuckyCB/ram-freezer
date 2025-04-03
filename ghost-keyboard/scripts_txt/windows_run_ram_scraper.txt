@@ -1,0 +1,21 @@
+$drive = (Get-WmiObject Win32_Volume | Where-Object { $_.Label -eq "_pendrive_" }).DriveLetter
+cd $drive/ram-scraper
+./scripts/run_scraper.ps1
+
+-----------------
+
+Cambios:
+{ → {ALT + .0 + .1 + .2 + .3}
+} → {ALT + .0 + .1 + .2 + .5}
+$ → {ALT + .0 + .3 + .6}
+_ → {ALT + .0 + .9 + .5}
+/ → {ALT + .0 + .4 + .7}
+\ → {ALT + .0 + .9 + .2}
+- → {ALT + .0 + .4 + .5}
+| → {ALT + .1 + .2 + .4}
+( → {ALT + .0 + .4 + .0}
+) → {ALT + .0 + .4 + .1}
+. → {ALT + .0 + .4 + .6}
+= → {ALT + .0 + .6 + .1}
+" → {ALT + .0 + .3 + .4}
+
