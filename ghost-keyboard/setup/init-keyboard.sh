@@ -4,7 +4,7 @@ set -e
 set -u
 
 source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
-
+log_info "Configurando ghost keyboard"
 
 mkdir -p "${USB_KEYBOARD_FUNCTIONS_DIR}"
 echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/protocol" # Keyboard
@@ -53,4 +53,4 @@ fi
 
 ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 
-printf "Ghost Keyboard configurado\n"
+log_info "Ghost Keyboard configurado\n"
