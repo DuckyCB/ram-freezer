@@ -43,18 +43,16 @@ func processFile(scanner bufio.Scanner) error {
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Println("Processing line:", line)
 
-		// wait for a specific time
 		if strings.HasPrefix(line, "wait") {
-			parts := strings.SplitN(line, " ", 2) // Divide en ["wait", "5"]
+			parts := strings.SplitN(line, " ", 2)
 
 			if len(parts) < 2 {
 				fmt.Println("Falta el tiempo después de 'wait': Default 1")
-				parts = append(parts, "1") // Si no hay tiempo, usar 1 segundo por defecto
+				parts = append(parts, "1")
 			}
 
-			waitTime, err := strconv.Atoi(parts[1]) // Convierte el tiempo a entero
+			waitTime, err := strconv.Atoi(parts[1])
 			if err != nil {
 				fmt.Println("Error: tiempo inválido después de 'wait'")
 				return fmt.Errorf("error: tiempo inválido después de 'wait'")
@@ -62,7 +60,7 @@ func processFile(scanner bufio.Scanner) error {
 
 			fmt.Printf("Sleeping %d seconds\n", waitTime)
 			time.Sleep(time.Duration(waitTime) * time.Second)
-			continue // Skip to the next line
+			continue
 		}
 
 		i := 0

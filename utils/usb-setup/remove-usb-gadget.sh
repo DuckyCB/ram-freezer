@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
 set -e
-set -x
 set -u
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-readonly SCRIPT_DIR
-# shellcheck source=utils/usb-gadget.sh
-source "${SCRIPT_DIR}/utils/usb-gadget.sh"
+
+source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
 
 cd "${USB_GADGET_PATH}"
 

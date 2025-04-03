@@ -1,53 +1,13 @@
 #!/usr/bin/env bash
 
-set -e 
-set -x
+set -e
 set -u
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-readonly SCRIPT_DIR
-# shellcheck source=utils/usb-gadget.sh
-source "${SCRIPT_DIR}/utils/usb-gadget.sh"
+source /opt/ram-freezer/audit-trail/log.sh
+source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
+log_info "Configurando ghost keyboard"
 
-print_help() {
-  cat << EOF
-Usage: ${0##*/} [-h]
-Init USB gadget.
-  -h Display this help and exit.
-EOF
-}
-
-# Parse command-line arguments.
-while getopts "h" opt; do
-  case "${opt}" in
-    h)
-      print_help
-      exit
-      ;;
-    *)
-      print_help >&2
-      exit 1
-  esac
-done
-
-modprobe libcomposite
-
-cd "${USB_GADGET_PATH}"
-mkdir -p "${USB_DEVICE_DIR}"
-cd "${USB_DEVICE_DIR}"
-
-echo 0x1d6b > idVendor  # Linux Foundation
-echo 0x0104 > idProduct # Multifunction Composite Gadget
-echo 0x0100 > bcdDevice # v1.0.0
-echo 0x0200 > bcdUSB    # USB2
-
-mkdir -p "$USB_STRINGS_DIR"
-echo "22slun7emp6l8qzrocc4" > "${USB_STRINGS_DIR}/serialnumber"
-echo "Ram Freezer" > "${USB_STRINGS_DIR}/manufacturer"
-echo "Ghost Keyboard" > "${USB_STRINGS_DIR}/product"
-
-# Keyboard
-mkdir -p "$USB_KEYBOARD_FUNCTIONS_DIR"
+mkdir -p "${USB_KEYBOARD_FUNCTIONS_DIR}"
 echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/protocol" # Keyboard
 echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/subclass" # Boot interface subclass
 echo 8 > "${USB_KEYBOARD_FUNCTIONS_DIR}/report_length"
@@ -92,22 +52,6 @@ if [[ -f "${USB_KEYBOARD_FUNCTIONS_DIR}/no_out_endpoint" ]]; then
   echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/no_out_endpoint"
 fi
 
-# Storage
-mkdir -p "${USB_STORAGE_FUNCTIONS_DIR}"
-echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/stall"
-echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/removable"
-echo /dev/sda1 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/file"
-
-
-mkdir -p "${USB_CONFIG_DIR}"
-echo 250 > "${USB_CONFIG_DIR}/MaxPower"
-
-CONFIGS_STRINGS_DIR="${USB_CONFIG_DIR}/${USB_STRINGS_DIR}"
-mkdir -p "${CONFIGS_STRINGS_DIR}"
-echo "Config ${USB_CONFIG_INDEX}: ECM network" > "${CONFIGS_STRINGS_DIR}/configuration"
-
-ln -s "${USB_STORAGE_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 
-# Rename the USB device label on /dev/sda1
-dosfslabel /dev/sda1 ${USB_STORAGE_PENDRIVE_NAME}  # Para FAT32 o exFATg
+log_info "Ghost Keyboard configurado\n"

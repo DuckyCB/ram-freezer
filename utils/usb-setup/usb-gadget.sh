@@ -1,5 +1,25 @@
 #!/usr/bin/env bash
 
+# Project
+export USB_SETUP_PATH="/opt/ram-freezer/utils/usb-setup"
+readonly USB_SETUP_PATH
+export KEYBOARD_SETUP_PATH="/opt/ram-freezer/ghost-keyboard/setup"
+readonly KEYBOARD_SETUP_PATH
+export STORAGE_SETUP_PATH="/opt/ram-freezer/vault/setup"
+readonly STORAGE_SETUP_PATH
+
+# Kernel
+export MODULES_PATH="/etc/modules"
+readonly MODULES_PATH
+export CONFIG_FILE=/boot/firmware/config.txt
+if [[ ! -e $CONFIG_FILE ]]; then
+    CONFIG_FILE=/boot/config.txt
+fi
+## Systemd
+export SYSTEM_SERVICES="/lib/systemd/system"
+readonly SYSTEM_SERVICES
+
+# Gadget
 export USB_DEVICE_DIR="ram-freezer"
 readonly USB_DEVICE_DIR
 export USB_GADGET_PATH="/sys/kernel/config/usb_gadget"
@@ -10,17 +30,24 @@ readonly USB_DEVICE_PATH
 export USB_STRINGS_DIR="strings/0x409"
 readonly USB_STRINGS_DIR
 
-# keyboard
+## Keyboard
 export USB_KEYBOARD_FUNCTIONS_DIR="functions/hid.keyboard"
 readonly USB_KEYBOARD_FUNCTIONS_DIR
-# storage
+## Storage
 export USB_STORAGE_NAME="mass_storage.usb0"
 readonly USB_STORAGE_NAME
-export USB_STORAGE_PENDRIVE_NAME="_pendrive_"
-readonly USB_STORAGE_PENDRIVE_NAME
+export USB_STORAGE_DEVICE_NAME="USB_Vault"
+readonly USB_STORAGE_DEVICE_NAME
 export USB_STORAGE_FUNCTIONS_DIR="functions/${USB_STORAGE_NAME}"
 readonly USB_STORAGE_FUNCTIONS_DIR
+export LOCAL_STORAGE_FILE="${HOME}/piusb.bin"
+readonly LOCAL_STORAGE_FILE
+export LOCAL_STORAGE_SIZE="18432"
+readonly LOCAL_STORAGE_SIZE
+export USB_DRIVE_PATH="/dev/sda1"
+readonly USB_DRIVE_PATH
 
+## USB config
 export USB_CONFIG_INDEX=1
 readonly USB_CONFIG_INDEX
 export USB_CONFIG_DIR="configs/c.${USB_CONFIG_INDEX}"
@@ -30,6 +57,7 @@ readonly USB_ALL_CONFIGS_DIR
 export USB_ALL_FUNCTIONS_DIR="functions/*"
 readonly USB_ALL_FUNCTIONS_DIR
 
+# Functions
 function usb_gadget_activate {
 	# Check if /sys/class/udc is empty
 	if [ -z "$(ls /sys/class/udc)" ]; then
