@@ -25,13 +25,21 @@ func main() {
 		}
 
 		if input == "s" {
+			fmt.Println("Iniciando el proceso...")
+			// Llama a las funciones en el orden deseado
+
+			// Copiar archivos de ram-scraper al USB
+			CopyRamScraperToUSB()
+
 			OpenTerminal()
 			fmt.Println("Esperando 5 segundos...")
 			// Espera 5 segundos
 			time.Sleep(5 * time.Second)
-			CopyRamScraper()
+
+			// CopyRamScraper() - entiendo que ya no es necesario
 			RunRamScraper()
-			CopyRamImage()
+			
+			// CopyRamImage() no programado
 		}
 	}
 }
