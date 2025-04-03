@@ -19,7 +19,6 @@ function _get_caller_info() {
   local frame=3
   local caller_info
 
-  # Intentamos obtener información 3 niveles arriba en la pila de llamadas
   caller_info=$(caller $frame 2>/dev/null || caller 2 2>/dev/null || caller 1 2>/dev/null || caller 0)
 
   echo "$caller_info"
@@ -32,19 +31,19 @@ function log() {
   lineno=$(echo "$caller_info" | awk '{print $1}')
   local source
   source=$(echo "$caller_info" | awk '{print $3}')
-#  local source
-#  source="${BASH_SOURCE[1]}"
-#  local lineno
-#  lineno="${BASH_LINENO[0]}"
+  #  local source
+  #  source="${BASH_SOURCE[1]}"
+  #  local lineno
+  #  lineno="${BASH_LINENO[0]}"
 
   local level=$1
   local message=$2
   local timestamp
   timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
 
-#  if [ -z "$source" ]; then
-#    source="bash"
-#  fi
+  #  if [ -z "$source" ]; then
+  #    source="bash"
+  #  fi
 
   shift 2
   local fields=""
@@ -53,7 +52,10 @@ function log() {
     shift 2
   done
 
-  echo "{\"timestamp\":\"$timestamp\",\"level\":\"$level\",\"message\":\"$message\",\"file\":\"$source\",\"line\":$lineno${fields}}"
+  echo "$level: $message"
+
+  today=$(date +%Y-%m-%d)
+  echo "{\"timestamp\":\"$timestamp\",\"level\":\"$level\",\"message\":\"$message\",\"file\":\"$source\",\"line\":$lineno${fields}}" >> /opt/ram-freezer/bin/logs/"$today".log
 }
 
 function log_fatal() {
