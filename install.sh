@@ -74,6 +74,8 @@ log_info "Copiando scripts"
 mkdir -p ./bin/scripts
 cp ./ghost-keyboard/scripts/* ./bin/scripts
 
+mkdir -p ./bin/logs
+
 
 log_info "Configurando sistema...\n\n"
 cd /opt/ram-freezer/
