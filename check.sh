@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-source /home/ducky/Projects/tesis/ram-freezer/audit-trail/log.sh
+source /opt/ram-freezer/audit-trail/log.sh
 
 log_info "Iniciando verificación de la instalación\n\n"
 
