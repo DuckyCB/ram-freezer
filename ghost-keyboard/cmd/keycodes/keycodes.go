@@ -139,6 +139,19 @@ const (
 
 var Empty = []byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
 
+var Keypad = map[rune]byte{
+	'1': KEYCODE_NUMPAD_1,
+	'2': KEYCODE_NUMPAD_2,
+	'3': KEYCODE_NUMPAD_3,
+	'4': KEYCODE_NUMPAD_4,
+	'5': KEYCODE_NUMPAD_5,
+	'6': KEYCODE_NUMPAD_6,
+	'7': KEYCODE_NUMPAD_7,
+	'8': KEYCODE_NUMPAD_8,
+	'9': KEYCODE_NUMPAD_9,
+	'0': KEYCODE_NUMPAD_0,
+}
+
 var Key = map[rune]byte{
 	'a': KEYCODE_A,
 	'b': KEYCODE_B,
@@ -166,16 +179,16 @@ var Key = map[rune]byte{
 	'x': KEYCODE_X,
 	'y': KEYCODE_Y,
 	'z': KEYCODE_Z,
-	1:   KEYCODE_NUMBER_1,
-	2:   KEYCODE_NUMBER_2,
-	3:   KEYCODE_NUMBER_3,
-	4:   KEYCODE_NUMBER_4,
-	5:   KEYCODE_NUMBER_5,
-	6:   KEYCODE_NUMBER_6,
-	7:   KEYCODE_NUMBER_7,
-	8:   KEYCODE_NUMBER_8,
-	9:   KEYCODE_NUMBER_9,
-	0:   KEYCODE_NUMBER_0,
+	'1':   KEYCODE_NUMBER_1,
+	'2':   KEYCODE_NUMBER_2,
+	'3':   KEYCODE_NUMBER_3,
+	'4':   KEYCODE_NUMBER_4,
+	'5':   KEYCODE_NUMBER_5,
+	'6':   KEYCODE_NUMBER_6,
+	'7':   KEYCODE_NUMBER_7,
+	'8':   KEYCODE_NUMBER_8,
+	'9':   KEYCODE_NUMBER_9,
+	'0':   KEYCODE_NUMBER_0,
 	//'\n': KEYCODE_ENTER,
 	//'\b': KEYCODE_ESCAPE,
 	//'	':  KEYCODE_TAB,
