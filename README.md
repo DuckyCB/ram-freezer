@@ -13,5 +13,5 @@
 ## Setup
 
 ```shell
-sudo bash -c 'mkdir -p /opt/ram-freezer && git clone https://github.com/DuckyCB/ram-freezer.git /opt/ram-freezer && cd /opt/ram-freezer && sudo bash install.sh'
+curl -s -o- https://raw.githubusercontent.com/DuckyCB/ram-freezer/refs/heads/master/download.sh | sudo bash
 ```
