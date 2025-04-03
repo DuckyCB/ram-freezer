@@ -3,7 +3,8 @@
 
 source /opt/ram-freezer/audit-trail/log.sh
 
-log_info "Iniciando verificación de la instalación\n\n"
 
-log_info "Ghost keyboard:\n"
-go run /opt/ram-freezer/ghost-keyboard/setup/setup_check.go
+log_info "Iniciando verificación de la instalación"
+
+log_info "Ghost keyboard"
+go run "/opt/ram-freezer/ghost-keyboard/setup/setup_check.go"

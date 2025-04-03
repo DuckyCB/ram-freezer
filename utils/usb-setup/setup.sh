@@ -3,11 +3,11 @@
 set -e
 set -u
 
-printf "Configurando Gadget USB...\n"
+source /opt/ram-freezer/audit-trail/log.sh
+source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 
-# shellcheck source=/opt/ram-freezer/utils/usb-setup/usb-gadget.sh
-source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
 
+log_info "Configurando Gadget USB..."
 
 # Exec permissions
 ## USB
@@ -25,7 +25,7 @@ bash "${USB_SETUP_PATH}/usb-modules-setup.sh"
 
 # remove old device
 if [ -d "${USB_DEVICE_PATH}" ]; then
-    echo "Removing old gadget."
+    log_info "Removing old gadget."
     bash "${USB_SETUP_PATH}/remove.sh"
 fi
 
@@ -38,4 +38,4 @@ systemctl daemon-reload
 systemctl enable usb-gadget.service
 
 
-printf "Gadget USB configurado\n"
+log_info "Gadget USB configurado"

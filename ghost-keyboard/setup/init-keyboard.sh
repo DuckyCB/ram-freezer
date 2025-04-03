@@ -4,7 +4,9 @@ set -e
 set -u
 
 source /opt/ram-freezer/audit-trail/log.sh
-source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
+source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
+
+
 log_info "Configurando ghost keyboard"
 
 mkdir -p "${USB_KEYBOARD_FUNCTIONS_DIR}"

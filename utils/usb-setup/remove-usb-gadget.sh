@@ -3,13 +3,15 @@
 set -e
 set -u
 
+source /opt/ram-freezer/audit-trail/log.sh
+source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 
-source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
+log_info "Eliminando usb-gadget"
 
 cd "${USB_GADGET_PATH}"
 
 if [ ! -d "${USB_DEVICE_DIR}" ]; then
-    echo "Gadget does not exist, quitting."
+    log_fatal "Gadget does not exist, quitting."
     exit 0
 fi
 
@@ -48,3 +50,5 @@ done
 popd
 
 rmdir "${USB_DEVICE_DIR}"
+
+log_info "usb-gadget eliminado"

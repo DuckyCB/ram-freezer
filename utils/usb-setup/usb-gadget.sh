@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+source /opt/ram-freezer/audit-trail/log.sh
+
+
 # Project
 export USB_SETUP_PATH="/opt/ram-freezer/utils/usb-setup"
 readonly USB_SETUP_PATH
@@ -59,10 +62,8 @@ readonly USB_ALL_FUNCTIONS_DIR
 
 # Functions
 function usb_gadget_activate {
-	# Check if /sys/class/udc is empty
 	if [ -z "$(ls /sys/class/udc)" ]; then
-		echo "No UDC found. Exiting."
-		echo "Please check if the kernel module is loaded and the device is connected."
+		log_fatal "No UDC found. Exiting. Please check if the kernel module is loaded and the device is connected."
 		exit 1
 	fi
 

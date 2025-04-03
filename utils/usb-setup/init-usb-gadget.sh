@@ -4,8 +4,7 @@ set -e
 set -u
 
 source /opt/ram-freezer/audit-trail/log.sh
-# shellcheck source=utils/usb-gadget.sh
-source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
+source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 
 
 #print_help() {
@@ -28,6 +27,8 @@ source "/opt/ram-freezer/utils/usb-setup/usb-gadget.sh"
 #      exit 1
 #  esac
 #done
+
+log_info "Iniciando usb-gadget"
 
 # TODO: capaz esto puede ir en usb-modules-setup.sh ?
 modprobe libcomposite
@@ -56,8 +57,11 @@ mkdir -p "${CONFIGS_STRINGS_DIR}"
 echo "Config ${USB_CONFIG_INDEX}: Keyboard and Storage" > "${CONFIGS_STRINGS_DIR}/configuration"
 
 # Devices
+log_info "Iniciando dispositivos de usb-gadget"
 bash "${KEYBOARD_SETUP_PATH}/init-keyboard.sh"
 bash "${STORAGE_SETUP_PATH}/init-storage.sh"
 
 # Activate gadget
 usb_gadget_activate
+
+log_info "usb-gadget iniciado"

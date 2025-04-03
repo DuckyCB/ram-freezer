@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-printf "Eliminando project-manager...\n"
+source /opt/ram-freezer/audit-trail/log.sh
+source /opt/ram-freezer/utils/service-utils.sh
+
+
+log_info "Eliminando project-manager...\n"
 
 # Service
-systemctl stop project-manager.service
-systemctl disable project-manager.service
-rm /etc/systemd/system/project-manager.service
-rm /usr/lib/systemd/system/project-manager.service
-systemctl daemon-reload
+remove_service "project-manager.service"
 
-printf "Project manager eliminado\n"
+log_info "Project manager eliminado\n"
