@@ -9,6 +9,7 @@ source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 
 log_info "Configurando Ghost Keyboard"
 
+cd "${USB_DEVICE_PATH}"
 mkdir -p "${USB_KEYBOARD_FUNCTIONS_DIR}"
 echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/protocol" # Keyboard
 echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/subclass" # Boot interface subclass

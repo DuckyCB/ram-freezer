@@ -8,6 +8,7 @@ source /opt/ram-freezer/audit-trail/log.sh
 
 
 log_info "Configurando modulos del Kernel"
+
 log_info "Cargando dwc2"
 if ! grep --quiet '^dtoverlay=dwc2$' "${CONFIG_FILE}" ; then
   echo 'dtoverlay=dwc2' | tee --append "${CONFIG_FILE}"
