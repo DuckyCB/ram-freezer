@@ -1,4 +1,4 @@
-$drive = (Get-WmiObject Win32_Volume | Where-Object { $_.Label -eq "_pendrive_" }).DriveLetter
+$drive = (Get-WmiObject Win32_Volume | Where-Object { $_.Label -eq "USB_VAULT" }).DriveLetter
 cd $drive/ram-scraper
 ./scripts/run_scraper.ps1
 
