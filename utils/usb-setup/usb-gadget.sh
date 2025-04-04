@@ -4,11 +4,13 @@ source /opt/ram-freezer/audit-trail/log.sh
 
 
 # Project
-export USB_SETUP_PATH="/opt/ram-freezer/utils/usb-setup"
+export BASE_PATH="/opt/ram-freezer"
+readonly BASE_PATH
+export USB_SETUP_PATH="${BASE_PATH}/utils/usb-setup"
 readonly USB_SETUP_PATH
-export KEYBOARD_SETUP_PATH="/opt/ram-freezer/ghost-keyboard/setup"
+export KEYBOARD_SETUP_PATH="${BASE_PATH}/ghost-keyboard/setup"
 readonly KEYBOARD_SETUP_PATH
-export STORAGE_SETUP_PATH="/opt/ram-freezer/vault/setup"
+export STORAGE_SETUP_PATH="${BASE_PATH}/vault/setup"
 readonly STORAGE_SETUP_PATH
 
 # Kernel
@@ -43,7 +45,7 @@ export USB_STORAGE_DEVICE_NAME="USB_VAULT"
 readonly USB_STORAGE_DEVICE_NAME
 export USB_STORAGE_FUNCTIONS_DIR="functions/${USB_STORAGE_NAME}"
 readonly USB_STORAGE_FUNCTIONS_DIR
-export LOCAL_STORAGE_FILE="${HOME}/piusb.bin"
+export LOCAL_STORAGE_FILE="${BASE_PATH}/bin/piusb.bin"
 readonly LOCAL_STORAGE_FILE
 export LOCAL_STORAGE_SIZE="18432"
 readonly LOCAL_STORAGE_SIZE

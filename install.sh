@@ -91,6 +91,7 @@ cd /opt/ram-freezer/
 bash utils/usb-setup/setup.sh
 
 log_info "Reiniciando dispositivo en 10 segundos... Presiona cualquier tecla para cancelar"
+# TODO esto todavia no funciona
 read -t 10 -n 1 -r -s key
 if [ $? -eq 0 ]; then
     log_info "Reinicio cancelado. Es necesario reiniciar el sistema para que la instalación se complete"
