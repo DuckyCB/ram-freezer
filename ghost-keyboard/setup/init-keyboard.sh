@@ -56,4 +56,4 @@ fi
 
 ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 
-log_info "Ghost Keyboard configurado\n"
+log_info "Ghost Keyboard configurado"

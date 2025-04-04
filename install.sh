@@ -12,6 +12,10 @@ mkdir -p ./bin/logs
 source /opt/ram-freezer/audit-trail/log.sh
 
 
+if [[ "$UID" -ne 0 ]]; then
+  log_fatal "Este script requiere privilegios de administrador (root)."
+fi
+
 log_info "Iniciando instalador de Ram Freezer"
 
 printf "
@@ -30,10 +34,15 @@ printf "
      ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
 \n"
 
-printf "by: fedeabdo & DuckyCB\n\n"
+printf "by: fedeabdo & DuckyCB"
 
-sleep 2
+sleep 3
 clear
+
+# Permissions
+log_info "Agregando permisos de ejecución"
+chmod +x check.sh
+chmod +x remove.sh
 
 log_info "Instalando dependencias..."
 
@@ -81,13 +90,9 @@ cd /opt/ram-freezer/
 
 bash utils/usb-setup/setup.sh
 
-# Permissions
-log_info "Agregando permisos de ejecución"
-chmod +x check.sh
-chmod +x remove.sh
-
 log_info "Reiniciando dispositivo en 10 segundos... Presiona cualquier tecla para cancelar"
-if read -t 10 -n 1; then
+read -t 10 -n 1 -r -s key
+if [ $? -eq 0 ]; then
     log_info "Reinicio cancelado. Es necesario reiniciar el sistema para que la instalación se complete"
 else
     log_info "Reiniciando..."
