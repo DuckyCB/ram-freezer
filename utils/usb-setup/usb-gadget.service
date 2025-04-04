@@ -1,14 +1,16 @@
 [Unit]
 Description=Initialize Ram Freezer USB Gadget
-After=local-fs.target
+After=syslog.target
+#After=local-fs.target
 
 [Service]
 Type=oneshot
-#User=root
+User=root
 ExecStart=/opt/ram-freezer/utils/usb-setup/init-usb-gadget.sh
 RemainAfterExit=true
 ExecStop=/opt/ram-freezer/utils/usb-setup/remove-usb-gadget.sh
 StandardOutput=journal
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=local-fs.target
+#WantedBy=multi-user.target

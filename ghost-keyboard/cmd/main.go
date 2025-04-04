@@ -141,7 +141,7 @@ func writeSpecialKey(key string, hid *os.File) {
 				modKey |= k
 			} else if k, ok := keycodes.SpecialKey[part]; ok {
 				keys = append(keys, k)
-			} else if len(part) == 1{
+			} else if len(part) == 1 {
 				// Si es una tecla normal, se procesa como un rune
 				fmt.Println("Processing rune:", part)
 				r := rune(part[0])

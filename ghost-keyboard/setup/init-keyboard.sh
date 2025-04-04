@@ -7,7 +7,7 @@ source /opt/ram-freezer/audit-trail/log.sh
 source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 
 
-log_info "Configurando ghost keyboard"
+log_info "Configurando Ghost Keyboard"
 
 mkdir -p "${USB_KEYBOARD_FUNCTIONS_DIR}"
 echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/protocol" # Keyboard

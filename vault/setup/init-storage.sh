@@ -7,6 +7,8 @@ source /opt/ram-freezer/audit-trail/log.sh
 source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 
 
+log_info "Configurando Vault"
+
 mkdir -p "${USB_STORAGE_FUNCTIONS_DIR}"
 echo 1 > "${USB_STORAGE_FUNCTIONS_DIR}/stall"
 echo 0 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/removable"
