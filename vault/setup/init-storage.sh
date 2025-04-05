@@ -36,7 +36,22 @@ fi
 ln -s "${USB_STORAGE_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 
 # Storage device label
-# Para FAT32 o exFATg
-dosfslabel "${USB_DRIVE_PATH}" "${USB_STORAGE_DEVICE_NAME}"
+
+# Ver si es FAT32 o exfat
+
+if [ "$(blkid -o value -s TYPE "${USB_DRIVE_PATH}")" == "vfat" ]; then
+    # Para FAT32
+    echo "WARN : Formato de almacenamiento FAT32 detectado. En este formato los archivos no pueden ser mayores a 4GB."
+    echo "WARN : Se recomienda usar exfat."
+    echo "Renombrando dispositivo de almacenamiento a ${USB_STORAGE_DEVICE_NAME}"
+    dosfslabel "${USB_DRIVE_PATH}" "${USB_STORAGE_DEVICE_NAME}"
+elif [ "$(blkid -o value -s TYPE "${USB_DRIVE_PATH}")" == "exfat" ]; then
+    # Para exfat
+    echo "Renombrando dispositivo de almacenamiento a ${USB_STORAGE_DEVICE_NAME}"
+    exfatlabel "${USB_DRIVE_PATH}" "${USB_STORAGE_DEVICE_NAME}"
+else
+    log_error "Formato de sistema de archivos no soportado. Solo FAT32 y exfat son soportados."
+    exit 1
+fi
 
 log_info "Vault configurado"
