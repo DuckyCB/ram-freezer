@@ -30,7 +30,7 @@ if [ -d "${USB_DEVICE_PATH}" ]; then
 fi
 
 # Init USB device with modules
-bash "${USB_SETUP_PATH}/init-usb-gadget.sh"
+#bash "${USB_SETUP_PATH}/init-usb-gadget.sh"
 
 # Service
 cp "${USB_SETUP_PATH}/usb-gadget.service" "${SYSTEM_SERVICES}/usb-gadget.service"

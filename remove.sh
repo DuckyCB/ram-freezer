@@ -8,5 +8,5 @@ if [[ "$UID" -ne 0 ]]; then
 fi
 
 log_info "Eliminando instalación"
-bash /opt/ram-freezer/ghost-keyboard/setup/remove.sh
+bash /opt/ram-freezer/utils/usb-setup/remove.sh
 bash /opt/ram-freezer/project-manager/setup/remove.sh

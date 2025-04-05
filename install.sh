@@ -8,7 +8,7 @@ set -e
 set -u
 
 clear
-mkdir -p ./bin/logs
+mkdir -p /opt/ram-freezer/bin/logs
 source /opt/ram-freezer/audit-trail/log.sh
 
 
