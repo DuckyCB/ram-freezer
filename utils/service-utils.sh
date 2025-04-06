@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source /opt/ram-freezer/audit-trail/log.sh
+source /opt/ram-freezer/utils/file-utils.sh
 
 
 function remove_service() {
@@ -10,8 +11,8 @@ function remove_service() {
     if [ $? -eq 0 ]; then
       log_info "Servicio $1 detenido exitosamente."
       systemctl disable "$1"
-      rm /etc/systemd/system/"$1"
-      rm /usr/lib/systemd/system/"$1"
+      remove_file /etc/systemd/system/"$1"
+      remove_file /usr/lib/systemd/system/"$1"
       systemctl daemon-reload
     else
       log_warn "No se pudo detener el servicio $1."
@@ -19,8 +20,8 @@ function remove_service() {
   elif systemctl is-enabled --quiet "$1"; then
     log_info "El servicio $1 está habilitado pero no activo."
     systemctl disable "$1"
-    rm /etc/systemd/system/"$1"
-    rm /usr/lib/systemd/system/"$1"
+    remove_file /etc/systemd/system/"$1"
+    remove_file /usr/lib/systemd/system/"$1"
     systemctl daemon-reload
   else
     log_info "El servicio $1 no existe o no está habilitado."
