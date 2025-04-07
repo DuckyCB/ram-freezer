@@ -32,9 +32,9 @@ func NewLEDController(pin int) (*LEDController, error) {
 		os.Exit(1)
 	}
 
-	err = writeGPIO(pin, 0)
+	err = writeGPIO(gpioPin, 0)
 	if err != nil {
-		return nil, fmt.Errorf("error al apagar LED en pin %d: %v", pin, err)
+		return nil, fmt.Errorf("error al apagar LED en pin %d (gpio %d): %v", pin, gpioPin, err)
 	}
 
 	return &LEDController{
