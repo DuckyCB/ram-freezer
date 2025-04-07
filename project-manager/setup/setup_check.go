@@ -9,7 +9,7 @@ import (
 
 // checkProjectManagerService verifica si el servicio project-manager está activo en systemd
 func checkProjectManagerService() bool {
-	cmd := exec.Command("systemctl", "is-active", "project-manager")
+	cmd := exec.Command("systemctl", "status", "project-manager")
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return false
