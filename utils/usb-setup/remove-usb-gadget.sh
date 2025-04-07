@@ -12,7 +12,7 @@ cd "${USB_GADGET_PATH}"
 
 if [ ! -d "${USB_DEVICE_DIR}" ]; then
     log_info "Gadget does not exist, quitting."
-    return
+    exit 0
 fi
 
 pushd "${USB_DEVICE_DIR}"
