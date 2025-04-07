@@ -2,10 +2,10 @@ package main
 
 import (
 	"bufio"
-	"controller/cmd/keycodes"
 	"flag"
 	"fmt"
 	"os"
+	"ram-freezer/ghost-keyboard/internal/keycodes"
 	"strconv"
 	"strings"
 	"time"

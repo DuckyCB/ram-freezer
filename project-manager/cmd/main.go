@@ -5,36 +5,11 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"project-manager/cmd/command"
-	"project-manager/cmd/utils"
+	"project-manager/internal/workflow"
+	"project-manager/pkg/utils"
+	"project-manager/utils/constants"
 	"syscall"
-	"time"
 )
-
-// runSystem runs main system process
-func (wfc *WorkflowController) runSystem() {
-	// Llama a las funciones en el orden deseado
-
-	// Copiar archivos de ram-scraper al USB
-	// TODO: descomentar el codigo
-	//command.CopyRamScraperToUSB()
-	//
-	//command.OpenTerminal()
-	//fmt.Println("Esperando 5 segundos...")
-	//// Espera 5 segundos
-	//time.Sleep(5 * time.Second)
-	//
-	//// command.CopyRamScraper() - entiendo que ya no es necesario
-	//command.RunRamScraper()
-	// TODO hasta aca
-
-	// command.CopyRamImage() no programado
-
-	command.TestKeyboard()
-
-	log.Println("espera 5 segundos para simular que esta haciendo algo")
-	time.Sleep(50 * time.Millisecond)
-}
 
 func main() {
 	log.Println("Starting project manager")
@@ -44,7 +19,7 @@ func main() {
 		return
 	}
 
-	controller, err := NewWorkflowController(ledPin, buttonPin)
+	controller, err := workflow.NewWorkflowController(constants.LedPin, constants.ButtonPin)
 	if err != nil {
 		fmt.Printf("Error al inicializar el sistema: %v\n", err)
 		return

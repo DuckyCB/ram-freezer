@@ -1,15 +1,10 @@
-package main
+package workflow
 
 import (
 	"fmt"
-	"project-manager/cmd/gpio"
+	"project-manager/pkg/gpio"
 	"sync"
 	"time"
-)
-
-const (
-	buttonPin = 17
-	ledPin    = 27
 )
 
 const (
