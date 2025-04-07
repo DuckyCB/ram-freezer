@@ -51,7 +51,13 @@ echo "22slun7emp6l8qzrocc4" > "${USB_STRINGS_DIR}/serialnumber"
 echo "Ram Freezer" > "${USB_STRINGS_DIR}/manufacturer"
 echo "Ram Freezer" > "${USB_STRINGS_DIR}/product"
 
+# Devices
+log_info "Configurando dispositivos de usb-gadget"
+bash "${KEYBOARD_SETUP_PATH}/init-keyboard.sh"
+bash "${STORAGE_SETUP_PATH}/init-storage.sh"
+
 # Configs
+log_info "Configurando usb-gadget"
 mkdir -p "${USB_CONFIG_DIR}"
 echo 250 > "${USB_CONFIG_DIR}/MaxPower"
 
@@ -59,12 +65,12 @@ CONFIGS_STRINGS_DIR="${USB_CONFIG_DIR}/${USB_STRINGS_DIR}"
 mkdir -p "${CONFIGS_STRINGS_DIR}"
 echo "Config ${USB_CONFIG_INDEX}: Keyboard and Storage" > "${CONFIGS_STRINGS_DIR}/configuration"
 
-# Devices
-log_info "Iniciando dispositivos de usb-gadget"
-bash "${KEYBOARD_SETUP_PATH}/init-keyboard.sh"
-bash "${STORAGE_SETUP_PATH}/init-storage.sh"
+# Symbolic links
+ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
+ln -s "${USB_STORAGE_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 
 # Activate gadget
+log_info "Activando dispositivos de usb-gadget"
 usb_gadget_activate
 
 log_info "usb-gadget iniciado"
