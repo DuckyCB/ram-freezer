@@ -104,7 +104,7 @@ func (bc *ButtonController) startMonitoringInternal() {
 				}
 
 				lastState = currentState
-				time.Sleep(50 * time.Millisecond) // Polling rate
+				time.Sleep(15 * time.Millisecond) // Polling rate
 			}
 		}
 	}()

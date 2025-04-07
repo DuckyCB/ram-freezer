@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -52,6 +53,28 @@ func checkProjectManagerService() bool {
 	return strings.Contains(state, "active") || strings.Contains(state, "activating")
 }
 
+func isPinExported(pin int) bool {
+	_, err := os.Stat(fmt.Sprintf("/sys/class/gpio/gpio%d", pin))
+	return err == nil
+}
+
+func isGPIODirection(pin int, expectedDirection string) bool {
+	directionFile := fmt.Sprintf("/sys/class/gpio/gpio%d/direction", pin)
+
+	contentBytes, err := os.ReadFile(directionFile)
+	if err != nil {
+		if os.IsNotExist(err) {
+			fmt.Printf("GPIO pin %d is not exported", pin)
+			return false
+		}
+		fmt.Printf("error reading direction for GPIO pin %d: %v", pin, err)
+		return false
+	}
+
+	direction := strings.TrimSpace(string(contentBytes))
+	return direction == expectedDirection
+}
+
 func main() {
 	fmt.Println("🧙 Project Manager 🧙")
 
@@ -60,6 +83,10 @@ func main() {
 		result bool
 	}{
 		{" - project-manager.service está activo", checkProjectManagerService()},
+		{" - pin 17 exportado", isPinExported(529)},          // (512 + 17 = 529)
+		{" - pin 29 exportado", isPinExported(539)},          // (512 + 27 = 539)
+		{" - pin 17 es input", isGPIODirection(529, "in")},   // (512 + 17 = 529)
+		{" - pin 29 es output", isGPIODirection(539, "out")}, // (512 + 27 = 539)
 	}
 
 	fmt.Println("📋 Resultados de la instalación de project manager:")
