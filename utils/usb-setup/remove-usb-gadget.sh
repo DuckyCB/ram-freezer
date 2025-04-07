@@ -11,8 +11,8 @@ log_info "Eliminando usb-gadget"
 cd "${USB_GADGET_PATH}"
 
 if [ ! -d "${USB_DEVICE_DIR}" ]; then
-    log_fatal "Gadget does not exist, quitting."
-    exit 0
+    log_info "Gadget does not exist, quitting."
+    return
 fi
 
 pushd "${USB_DEVICE_DIR}"
