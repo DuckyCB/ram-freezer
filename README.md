@@ -1,6 +1,17 @@
 
 # RAM Freezer
 
+## Requisitos
+
+- Raspberry Pi
+  - Con puerto OTG (ej.:Raspberry Pi 4, Raspberry Pi 5)
+- Tarjeta SD (para OS)
+- (Recomendado) Almacenamiento USB (con capacidad > a la cantidad de ram que tiene la PC objetivo)
+- Botón
+- LED
+- Resistencia para el LED
+- Cables
+
 ## Setup
 
 ### Requisitos previos
@@ -14,6 +25,8 @@
 - Conectar un LED en el GPIO 27 (utilizar resistencia de 220Ω)
 
 - Conectar un botón en el GPIO 17 de la Raspberry
+
+> [Diagrama pines GPIO](https://www.raspberrypi.com/documentation/computers/images/GPIO-Pinout-Diagram-2.png?hash=df7d7847c57a1ca6d5b2617695de6d46)
 
 - (Recomendado) Conectar un almacenamiento USB a la Raspberry
 
@@ -33,10 +46,8 @@
 
 ### Instalar y actualizar sistema
 
-> Desde la raspberry (ver Conectarse a la Raspberry)
-
 ```shell
-curl -s -o- https://raw.githubusercontent.com/DuckyCB/ram-freezer/refs/heads/master/download.sh | sudo bash
+  curl -s -o- https://raw.githubusercontent.com/DuckyCB/ram-freezer/refs/heads/master/download.sh | sudo bash
 ```
 
 ## Como se usa

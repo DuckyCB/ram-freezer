@@ -5,30 +5,33 @@ set -u
 
 source /opt/ram-freezer/audit-trail/log.sh
 source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
+source /opt/ram-freezer/utils/kernel-utils.sh
 
 
-#print_help() {
-#  cat << EOF
-#Usage: ${0##*/} [-h]
-#Init USB gadget.
-#  -h Display this help and exit.
-#EOF
-#}
-#
-## Parse command-line arguments.
-#while getopts "h" opt; do
-#  case "${opt}" in
-#    h)
-#      print_help
-#      exit
-#      ;;
-#    *)
-#      print_help >&2
-#      exit 1
-#  esac
-#done
+print_help() {
+  cat << EOF
+Usage: ${0##*/} [-h]
+Init USB gadget.
+  -h Display this help and exit.
+EOF
+}
+
+# Parse command-line arguments.
+while getopts "h" opt; do
+  case "${opt}" in
+    h)
+      print_help
+      exit
+      ;;
+    *)
+      print_help >&2
+      exit 1
+  esac
+done
 
 log_info "Iniciando usb-gadget"
+
+check_modules
 
 # TODO: capaz esto puede ir en usb-modules-setup.sh ?
 modprobe libcomposite
