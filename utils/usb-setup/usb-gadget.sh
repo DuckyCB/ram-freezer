@@ -16,7 +16,7 @@ readonly STORAGE_SETUP_PATH
 # Kernel
 export MODULES_PATH="/etc/modules"
 readonly MODULES_PATH
-export CONFIG_FILE=/boot/firmware/config.txt
+export CONFIG_FILE=/boot/config.txt
 if [[ ! -e $CONFIG_FILE ]]; then
     CONFIG_FILE=/boot/config.txt
 fi

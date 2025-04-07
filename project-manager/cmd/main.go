@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"project-manager/cmd/command"
 	"project-manager/cmd/utils"
 	"syscall"
 	"time"
@@ -28,6 +29,9 @@ func (wfc *WorkflowController) runSystem() {
 	// TODO hasta aca
 
 	// command.CopyRamImage() no programado
+
+	command.TestKeyboard()
+
 	log.Println("espera 5 segundos para simular que esta haciendo algo")
 	time.Sleep(50 * time.Millisecond)
 }
