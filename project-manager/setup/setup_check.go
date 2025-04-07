@@ -14,7 +14,7 @@ func checkUsbGadgetService() bool {
 		return false
 	}
 	status := strings.TrimSpace(string(output))
-	return status == "active"
+	return status == "active" || status == "activating"
 }
 
 func main() {
