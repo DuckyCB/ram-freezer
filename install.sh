@@ -47,16 +47,17 @@ chmod +x /opt/ram-freezer/remove.sh
 
 log_info "Instalando dependencias..."
 
-# Verifica si Go está instalado
 if ! command -v go &> /dev/null; then
   log_info "Instalando Go"
   sudo apt update && sudo apt install -y golang
+  go_version=$(go version | awk '{print $3}')
+  log_info "Go ${go_version} instalado correctamente"
 fi
 
-# Verificar si Make está instalado
 if ! command -v make &> /dev/null; then
     log_info "Instalando Make"
     sudo apt update && sudo apt install -y make
+    log_info "Make instalado correctamente"
 fi
 
 

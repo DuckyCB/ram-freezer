@@ -45,8 +45,8 @@ func main() {
 	}
 
 	if allOk {
-		fmt.Println("\n🎉 Todo está correctamente configurado en project manager.")
+		fmt.Println("🎉 Todo está correctamente configurado en project manager.")
 	} else {
-		fmt.Println("\n⚠️ Hay problemas en la configuración de project manager. Revisa los errores.")
+		fmt.Println("⚠️ Hay problemas en la configuración de project manager. Revisa los errores.")
 	}
 }
