@@ -23,12 +23,11 @@ func (wfc *WorkflowController) runSystem() {
 	//// Espera 5 segundos
 	//time.Sleep(5 * time.Second)
 	//
-	//// CopyRamScraper() - entiendo que ya no es necesario
+	//// command.CopyRamScraper() - entiendo que ya no es necesario
 	//command.RunRamScraper()
 	// TODO hasta aca
 
-	// CopyRamImage() no programado
-	log.Println("||||||| Se apreto el boton |||||||")
+	// command.CopyRamImage() no programado
 	log.Println("espera 5 segundos para simular que esta haciendo algo")
 	time.Sleep(50 * time.Millisecond)
 }

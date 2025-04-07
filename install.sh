@@ -96,15 +96,10 @@ bash project-manager/setup/setup.sh
 bash utils/usb-setup/setup.sh
 
 
-log_info "Esperando 10 segundos antes de reiniciar. Crear /tmp/cancelar-reinicio para cancelar..."
-echo "touch /tmp/cancelar-reinicio"
+log_info "Esperando 10 segundos antes de reiniciar. Presiona ctrl + C para cancelar."
 
 for i in {10..1}; do
     echo "Reinicio en $i segundos..."
-    if [ -f /tmp/cancelar-reinicio ]; then
-        log_info "Se detectó cancelación. Abortando reinicio."
-        exit 0
-    fi
     sleep 1
 done
 

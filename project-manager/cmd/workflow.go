@@ -19,9 +19,9 @@ const (
 )
 
 const (
-	BlinkSlow   = 1000 * time.Millisecond
-	BlinkMedium = 500 * time.Millisecond
-	BlinkFast   = 100 * time.Millisecond
+	BlinkSlow   = 2000 * time.Millisecond
+	BlinkMedium = 1000 * time.Millisecond
+	BlinkFast   = 200 * time.Millisecond
 )
 
 // WorkflowController maneja el flujo del sistema
