@@ -41,8 +41,8 @@ clear
 
 # Permissions
 log_info "Agregando permisos de ejecución"
-chmod +x check.sh
-chmod +x remove.sh
+chmod +x /opt/ram-freezer/check.sh
+chmod +x /opt/ram-freezer/remove.sh
 
 
 log_info "Instalando dependencias..."
