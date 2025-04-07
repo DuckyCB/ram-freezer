@@ -1,20 +1,55 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os/exec"
 	"strings"
 )
 
-// checkUsbGadgetService verifica si el servicio usb-gadget está activo en systemd
-func checkUsbGadgetService() bool {
+// checkProjectManagerService verifica si el servicio project-manager está activo en systemd
+func checkProjectManagerService() bool {
 	cmd := exec.Command("systemctl", "is-active", "project-manager")
-	output, err := cmd.Output()
+	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return false
 	}
-	status := strings.TrimSpace(string(output))
-	return status == "active" || status == "activating"
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return false
+	}
+
+	if err := cmd.Start(); err != nil {
+		return false
+	}
+
+	scanner := bufio.NewScanner(stdout)
+	state := ""
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "Active:") {
+			parts := strings.SplitN(line, ":", 2)
+			if len(parts) > 1 {
+				state = strings.TrimSpace(parts[1])
+				break
+			}
+		}
+	}
+
+	errStderr := ""
+	errScanner := bufio.NewScanner(stderr)
+	for errScanner.Scan() {
+		errStderr += errScanner.Text() + "\n"
+	}
+	if err := errScanner.Err(); err != nil {
+		return strings.Contains(state, "active") || strings.Contains(state, "activating")
+	}
+
+	if err := cmd.Wait(); err != nil {
+		return strings.Contains(state, "active") || strings.Contains(state, "activating")
+	}
+
+	return strings.Contains(state, "active") || strings.Contains(state, "activating")
 }
 
 func main() {
@@ -24,7 +59,7 @@ func main() {
 		name   string
 		result bool
 	}{
-		{" - project-manager.service está activo", checkUsbGadgetService()},
+		{" - project-manager.service está activo", checkProjectManagerService()},
 	}
 
 	fmt.Println("📋 Resultados de la instalación de project manager:")

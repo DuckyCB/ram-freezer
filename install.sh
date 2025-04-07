@@ -52,12 +52,16 @@ if ! command -v go &> /dev/null; then
   sudo apt update && sudo apt install -y golang
   go_version=$(go version | awk '{print $3}')
   log_info "Go ${go_version} instalado correctamente"
+else
+  log_info "Go ${go_version} ya está instalado"
 fi
 
 if ! command -v make &> /dev/null; then
-    log_info "Instalando Make"
-    sudo apt update && sudo apt install -y make
-    log_info "Make instalado correctamente"
+  log_info "Instalando Make"
+  sudo apt update && sudo apt install -y make
+  log_info "Make instalado correctamente"
+else
+  log_info "Make ya está instalado"
 fi
 
 
@@ -100,8 +104,8 @@ bash utils/usb-setup/setup.sh
 log_info "Esperando 10 segundos antes de reiniciar. Presiona ctrl + C para cancelar."
 
 for i in {10..1}; do
-    echo "Reinicio en $i segundos..."
-    sleep 1
+  echo "Reinicio en $i segundos..."
+  sleep 1
 done
 
 log_info "Reiniciando..."
