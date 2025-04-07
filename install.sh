@@ -53,6 +53,7 @@ if ! command -v go &> /dev/null; then
   go_version=$(go version | awk '{print $3}')
   log_info "Go ${go_version} instalado correctamente"
 else
+  go_version=$(go version | awk '{print $3}')
   log_info "Go ${go_version} ya está instalado"
 fi
 
