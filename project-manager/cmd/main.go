@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"project-manager/cmd/utils"
 	"syscall"
 	"time"
 )
@@ -34,6 +35,11 @@ func (wfc *WorkflowController) runSystem() {
 
 func main() {
 	log.Println("Starting project manager")
+
+	if !utils.IsAdmin() {
+		log.Println("Es necesario ejecutar el programa como administrador")
+		return
+	}
 
 	controller, err := NewWorkflowController(ledPin, buttonPin)
 	if err != nil {
