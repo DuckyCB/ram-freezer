@@ -10,11 +10,15 @@ log_info "Iniciando configuración de Project Manager"
 
 cd /opt/ram-freezer/project-manager/setup
 
-# Start project-manager at boot
+
 log_info "Creando servicio project-manager.service"
+
+# TODO: si existe un servicio viejo, lo deberia eliminar
+
 cp project-manager.service /lib/systemd/system/project-manager.service
 systemctl daemon-reload
 systemctl enable project-manager.service
+
 
 chmod +x remove.sh
 

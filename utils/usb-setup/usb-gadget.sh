@@ -65,8 +65,7 @@ readonly USB_ALL_FUNCTIONS_DIR
 # Functions
 function usb_gadget_activate {
 	if [ -z "$(ls /sys/class/udc)" ]; then
-		log_fatal "No UDC found. Exiting. Please check if the kernel module is loaded and the device is connected."
-		exit 1
+		log_error "No UDC found. Exiting. Please check if the kernel module is loaded and the device is connected."
 	fi
 
 	ls /sys/class/udc >"${USB_DEVICE_PATH}/UDC"

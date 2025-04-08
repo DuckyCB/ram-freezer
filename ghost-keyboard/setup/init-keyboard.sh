@@ -55,6 +55,4 @@ if [[ -f "${USB_KEYBOARD_FUNCTIONS_DIR}/no_out_endpoint" ]]; then
   echo 1 > "${USB_KEYBOARD_FUNCTIONS_DIR}/no_out_endpoint"
 fi
 
-ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
-
 log_info "Ghost Keyboard configurado"

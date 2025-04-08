@@ -8,7 +8,7 @@ set -e
 set -u
 
 clear
-mkdir -p ./bin/logs
+mkdir -p /opt/ram-freezer/bin/logs
 source /opt/ram-freezer/audit-trail/log.sh
 
 
@@ -41,22 +41,30 @@ clear
 
 # Permissions
 log_info "Agregando permisos de ejecución"
-chmod +x check.sh
-chmod +x remove.sh
+chmod +x /opt/ram-freezer/check.sh
+chmod +x /opt/ram-freezer/remove.sh
+
 
 log_info "Instalando dependencias..."
 
-# Verifica si Go está instalado
 if ! command -v go &> /dev/null; then
   log_info "Instalando Go"
   sudo apt update && sudo apt install -y golang
+  go_version=$(go version | awk '{print $3}')
+  log_info "Go ${go_version} instalado correctamente"
+else
+  go_version=$(go version | awk '{print $3}')
+  log_info "Go ${go_version} ya está instalado"
 fi
 
-# Verificar si Make está instalado
 if ! command -v make &> /dev/null; then
-    log_info "Instalando Make"
-    sudo apt update && sudo apt install -y make
+  log_info "Instalando Make"
+  sudo apt update && sudo apt install -y make
+  log_info "Make instalado correctamente"
+else
+  log_info "Make ya está instalado"
 fi
+
 
 log_info "Compilando proyectos..."
 cd /opt/ram-freezer/
@@ -79,8 +87,10 @@ make build-data-seal
 log_info "Data Seal fue compilado con exito"
 cd ..
 
-# Copy all scripts
+
 log_info "Copiando scripts"
+cd /opt/ram-freezer/
+
 mkdir -p ./bin/scripts
 cp ./ghost-keyboard/scripts/* ./bin/scripts
 
@@ -88,14 +98,17 @@ cp ./ghost-keyboard/scripts/* ./bin/scripts
 log_info "Configurando sistema..."
 cd /opt/ram-freezer/
 
+bash project-manager/setup/setup.sh
 bash utils/usb-setup/setup.sh
 
-log_info "Reiniciando dispositivo en 10 segundos... Presiona cualquier tecla para cancelar"
-# TODO esto todavia no funciona
-read -t 10 -n 1 -r -s key
-if [ $? -eq 0 ]; then
-    log_info "Reinicio cancelado. Es necesario reiniciar el sistema para que la instalación se complete"
-else
-    log_info "Reiniciando..."
-    reboot
-fi
+
+log_info "Esperando 10 segundos antes de reiniciar. Presiona ctrl + C para cancelar."
+
+for i in {10..1}; do
+  echo "Reinicio en $i segundos..."
+  sleep 1
+done
+
+log_info "Reiniciando..."
+sleep 1
+reboot

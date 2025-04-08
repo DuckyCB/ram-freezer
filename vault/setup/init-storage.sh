@@ -33,8 +33,6 @@ fi
 #echo 0 > "${USB_STORAGE_FUNCTIONS_DIR}/lun.0/nofua"
 
 
-ln -s "${USB_STORAGE_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
-
 # Storage device label
 
 # Ver si es FAT32 o exfat

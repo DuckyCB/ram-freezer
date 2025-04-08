@@ -3,22 +3,25 @@
 ## Requisitos
 
 - Golang
-
-```shell
-sudo apt install golang
-```
+    ```shell
+    sudo apt install golang
+    ```
 
 ## HID Setup
 
-- Darle permisos de ejecución a `setup.sh` con `sudo chown +x setup.sh`
-- Ejecutar `setup.sh` con `./setup.sh`
-- Reiniciar dispositivo con `sudo reboot`
+- Ghost keyboard se configura automaticamente al ejecutar el script de instalación principal de Ram Freezer
 
 ### Test setup
 
-```shell
-go run setup_check.go
-```
+- Verificación de que los componentes existen y están cargados correctamente
+    ```shell
+    sudo go run /opt/ram-freezer/ghost-keyboard/setup/setup_check.go
+    ```
+
+- Verificación manual de que el teclado realmente escribe
+    ```shell
+    echo -ne "\x00\x00\x04\x00\x00\x00\x00\x00" > /dev/hidg0
+    ```
 
 ## HID Controller
 

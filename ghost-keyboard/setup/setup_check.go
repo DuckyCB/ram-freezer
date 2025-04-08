@@ -61,7 +61,7 @@ func checkUsbGadgetService() bool {
 		return false
 	}
 	status := strings.TrimSpace(string(output))
-	return status == "active"
+	return status == "active" || status == "activating"
 }
 
 func main() {
@@ -99,8 +99,8 @@ func main() {
 	}
 
 	if allOk {
-		fmt.Println("\n🎉 Todo está correctamente configurado en ghost keyboard.")
+		fmt.Println("🎉 Todo está correctamente configurado en ghost keyboard.")
 	} else {
-		fmt.Println("\n⚠️ Hay problemas en la configuración de ghost keyboard. Revisa los errores.")
+		fmt.Println("⚠️ Hay problemas en la configuración de ghost keyboard. Revisa los errores.")
 	}
 }
