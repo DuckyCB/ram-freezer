@@ -36,10 +36,13 @@ func main() {
 			// Espera 5 segundos
 			time.Sleep(5 * time.Second)
 
-			// CopyRamScraper() - entiendo que ya no es necesario
+			// Crear la imagen de RAM
 			RunRamScraper()
 			
-			// CopyRamImage() no programado
+			// Validar la imagen de RAM
+
+			// Crear el hash de la imagen de RAM
+
 		}
 	}
 }
