@@ -10,23 +10,29 @@ import (
 func (wfc *WorkflowController) runSystem() {
 	// Llama a las funciones en el orden deseado
 
-	// Copiar archivos de ram-scraper al USB
 	// TODO: descomentar el codigo
-	//command.CopyRamScraperToUSB()
-	//
-	//command.OpenTerminal()
-	//fmt.Println("Esperando 5 segundos...")
-	//// Espera 5 segundos
-	//time.Sleep(5 * time.Second)
-	//
-	//// command.CopyRamScraper() - entiendo que ya no es necesario
-	//command.RunRamScraper()
+	// Copiar archivos de ram-scraper al USB
+	command.CopyRamScraperToUSB()
+	
+	// Abrir la terminal
+	command.OpenTerminal()
+
+	// Espera 5 segundos
+	log.Println("Esperando 5 segundos...")
+	time.Sleep(5 * time.Second)
+	
+
+	// Crear la imagen de RAM
+	command.RunRamScraper()
+	
+	// Validar la imagen de RAM - TODO: no programado
+
+	// Crear el hash de la imagen de RAM - TODO: no programado
+
 	// TODO hasta aca
 
-	// command.CopyRamImage() no programado
-
-	command.TestKeyboard()
-
-	log.Println("espera 5 segundos para simular que esta haciendo algo")
-	time.Sleep(50 * time.Millisecond)
+	// TESSTING
+	//command.TestKeyboard()
+	//log.Println("espera 5 segundos para simular que esta haciendo algo")
+	//time.Sleep(50 * time.Millisecond)
 }
