@@ -3,5 +3,6 @@
     "output_file": "RAM_winpmem.raw",
     "output_folder": "data/",
     "log_folder": "logs/",
-    "log_file": "run_scraper.log"
+    "log_file": "run_scraper.log",
+    "state_file": "data/state.json"
 }
