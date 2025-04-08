@@ -18,7 +18,7 @@ func (wfc *WorkflowController) runSystem() {
 	command.OpenTerminal()
 
 	// Espera 5 segundos
-	fmt.Println("Esperando 5 segundos...")
+	log.Println("Esperando 5 segundos...")
 	time.Sleep(5 * time.Second)
 	
 
@@ -31,8 +31,8 @@ func (wfc *WorkflowController) runSystem() {
 
 	// TODO hasta aca
 
-	command.TestKeyboard()
-
+	// TESSTING
+	//command.TestKeyboard()
 	//log.Println("espera 5 segundos para simular que esta haciendo algo")
 	//time.Sleep(50 * time.Millisecond)
 }
