@@ -26,6 +26,7 @@ func (wfc *WorkflowController) runSystem() {
 	command.RunRamScraper()
 	
 	// Validar la imagen de RAM - TODO: no programado
+	command.ValidateRamImage()
 
 	// Crear el hash de la imagen de RAM - TODO: no programado
 

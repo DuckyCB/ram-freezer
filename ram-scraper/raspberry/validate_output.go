@@ -1,89 +1,172 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
-	"syscall"
 )
 
-// levantamos el archivo de configuracion
-// de json en config/settings.json
-config := Config{}
-err := config.Load("config/settings.json")
-if err != nil {
-	fmt.Println("ERROR: No se pudo cargar el archivo de configuración.")
-	os.Exit(1)
+// Estructura de configuracion
+type Config struct {
+	ExeName      string `json:"exe_name"`
+	OutputFile   string `json:"output_file"`
+	OutputFolder string `json:"output_folder"`
+	LogFolder    string `json:"log_folder"`
+	LogFile      string `json:"log_file"`
+	StateFile    string `json:"state_file"`
 }
 
-// getTotalRAM obtiene la cantidad total de RAM del sistema en bytes
-func getTotalRAM() (int) {
-	// Lo sacamos de la configuracion
-	totalRAM := config.TotalRAM
+type State struct {
+	Status       string   `json:"status"`
+	StartTime    string   `json:"start_time"`
+	EndTime      string   `json:"end_time"`
+	Duration     float64  `json:"duration"`
+	ErrorMessage *string  `json:"error_message"` // puntero para soportar null
+	TotalRAM     float64   `json:"total_ram"`
+	ValidationMessage string `json:"validation_message"` // puntero para soportar null
+	ValidationExitCode int `json:"validation_exit_code"`
 }
+
+func LoadState(path string) (*State, error) {
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("error leyendo state.json: %w", err)
+	}
+
+	var state State
+	if err := json.Unmarshal(bytes, &state); err != nil {
+		return nil, fmt.Errorf("error parseando state.json: %w", err)
+	}
+
+	return &state, nil
+}
+
+func LoadConfig(path string) (*Config, error) {
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("error leyendo state.json: %w", err)
+	}
+
+	var config Config
+	if err := json.Unmarshal(bytes, &config); err != nil {
+		return nil, fmt.Errorf("error parseando config.json: %w", err)
+	}
+
+	return &config, nil
+}
+
 
 // bytesToGB convierte bytes a GB con dos decimales
-func bytesToGB(bytes uint64) float64 {
+func bytesToGB(bytes int64) float64 {
 	return float64(bytes) / (1024 * 1024 * 1024)
 }
 
+// escribir en state el estado de la validacion
+func writeStateVal(path string, state *State, val_msg string, val_exit_code int) error {
+
+	state.ValidationMessage = val_msg
+	state.Status = "VALIDATION"
+	state.ValidationExitCode = val_exit_code
+
+	bytes, err := json.MarshalIndent(state, "", "  ")
+	if err != nil {
+		return fmt.Errorf("error al serializar el estado: %w", err)
+	}
+
+	if err := os.WriteFile(path, bytes, 0644); err != nil {
+		return fmt.Errorf("error al escribir el estado: %w", err)
+	}
+
+	return nil
+}
+
 func main() {
-	// Verificar si se pasó un argumento (ruta del archivo)
-	if len(os.Args) < 2 {
-		fmt.Println("ERROR: Debes proporcionar la ruta del archivo como argumento.")
+	config, err := LoadConfig("config/settings.json")
+	if err != nil {
+		fmt.Printf("ERROR: No se pudo cargar la configuracion: %v\n", err)
+		os.Exit(1)
+	}
+	
+	state, err := LoadState(config.StateFile)
+	if err != nil {
+		fmt.Printf("ERROR: No se pudo cargar el estado: %v\n", err)
 		os.Exit(1)
 	}
 
-	filePath := os.Args[1]
+	currentDir, err := os.Getwd()
+
+	filePath := currentDir + "/" + config.OutputFolder + "ps1/" + config.OutputFile
+	fmt.Printf("Validando el archivo %s...\n", filePath)
 
 	// Verificar si el archivo existe
 	fileInfo, err := os.Stat(filePath)
 	if os.IsNotExist(err) {
-		fmt.Printf("ERROR: El archivo %s no fue generado.\n", filePath)
+		msg := fmt.Sprintf("ERROR: El archivo %s no fue generado.\n", filePath)
+		exit_code := 1
+		writeStateVal(config.StateFile, state, msg, exit_code)
+		fmt.Printf(msg)
+		os.Exit(exit_code)
 		os.Exit(1)
 	}
 
 	// Obtener el tamaño del archivo en bytes
 	fileSize := fileInfo.Size()
+	// Convertir a GB
+	fileSizeGB := bytesToGB(fileSize)
 
 	// Obtener la cantidad total de RAM del sistema
-	totalRAM, err := getTotalRAM()
-	if err != nil {
-		fmt.Println("ERROR: No se pudo obtener la cantidad de RAM del sistema.")
-		os.Exit(4)
-	}
-
-	// Convertir a GB
-	fileSizeGB := bytesToGB(uint64(fileSize))
-	totalRAMGB := bytesToGB(totalRAM)
+	totalRAMGB := state.TotalRAM
+	
+	fmt.Printf("Tamaño total de RAM: %.2f GB\n", totalRAMGB)
 
 	// Definir un margen de error del 5%
-	lowerLimit := uint64(float64(totalRAM) * 0.95) // 95% de la RAM total
-	upperLimit := uint64(float64(totalRAM) * 1.05) // 105% de la RAM total
+	lowerLimit := totalRAMGB * 0.95 // 95% de la RAM total
+	upperLimit := totalRAMGB * 1.2 // 120% de la RAM total
+
+	fmt.Printf("Tamaño del archivo: %.2f GB\n", fileSizeGB)
+	fmt.Printf("Límite inferior: %.2f GB\n", lowerLimit)
+	fmt.Printf("Límite superior: %.2f GB\n", upperLimit)
+
 
 	// Verificar si el archivo es demasiado pequeño
-	if fileSize < 1024 {
-		fmt.Printf("WARNING: El archivo %s es demasiado pequeño para ser válido. Tamaño: %.2f GB\n", filePath, fileSizeGB)
-		os.Exit(2)
+	if fileSizeGB < 1 {
+		msg := fmt.Sprintf("ERROR: El archivo %s es demasiado pequeño para ser válido. Tamaño: %.2f GB\n", filePath, fileSizeGB)
+		exit_code := 1
+		writeStateVal(config.StateFile, state, msg, exit_code)
+		fmt.Printf(msg)
+		os.Exit(exit_code)
 	}
 
 	// Verificar si el archivo tiene un tamaño adecuado en comparación con la RAM
-	if uint64(fileSize) < lowerLimit {
-		fmt.Printf("WARNING: El archivo %s es más pequeño de lo esperado. Tamaño: %.2f GB, RAM esperada: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
-		os.Exit(5)
-	} else if uint64(fileSize) > upperLimit {
-		fmt.Printf("WARNING: El archivo %s es más grande de lo esperado. Tamaño: %.2f GB, RAM esperada: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
-		os.Exit(6)
+	if fileSizeGB < lowerLimit {
+		msg := fmt.Sprintf("WARNING: El archivo %s es más pequeño de lo esperado. Tamaño: %.2f GB, RAM esperada: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
+		exit_code := 0
+		writeStateVal(config.StateFile, state, msg, exit_code)
+		fmt.Printf(msg)
+		os.Exit(exit_code)
+	} else if fileSizeGB > upperLimit {
+		msg := fmt.Sprintf("WARNING: El archivo %s es más grande de lo esperado. Tamaño: %.2f GB, RAM esperada: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
+		exit_code := 0
+		writeStateVal(config.StateFile, state, msg, exit_code)
+		fmt.Printf(msg)
+		os.Exit(exit_code)
 	}
 
 	// Intentar abrir el archivo
 	file, err := os.Open(filePath)
 	if err != nil {
-		fmt.Printf("WARNING: No se pudo abrir el archivo %s. Puede estar corrupto.\n", filePath)
-		os.Exit(3)
+		msg := fmt.Sprintf("ERROR: No se pudo abrir el archivo %s. Puede estar corrupto.", filePath)
+		exit_code := 1
+		writeStateVal(config.StateFile, state, msg, exit_code)
+		fmt.Printf(msg)
+		os.Exit(exit_code)
 	}
 	defer file.Close()
 
 	// Si todo está bien
-	fmt.Printf("SUCCESS: El archivo %s es válido. Tamaño: %.2f GB, RAM esperada: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
-	os.Exit(0)
+	msg := fmt.Sprintf("SUCCESS: El archivo %s es válido. Tamaño: %.2f GB, memoria RAM fisica: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
+	exit_code := 0
+	writeStateVal(config.StateFile, state, msg, exit_code)
+	fmt.Printf(msg)
+	os.Exit(exit_code)
 }
