@@ -29,7 +29,7 @@ function Write-Log {
 }
 
 # Obtener memoria total
-$totalram = "{0:N2}" -f ((Get-WmiObject -Class Win32_ComputerSystem).TotalPhysicalMemory / 1GB)
+$totalram = [string]::Format([System.Globalization.CultureInfo]::InvariantCulture, "{0:N2}", ((Get-WmiObject -Class Win32_ComputerSystem).TotalPhysicalMemory / 1GB))
 
 # Creando directorios si no existen
 if (-Not (Test-Path $logFolder)) {
