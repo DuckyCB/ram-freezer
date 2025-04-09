@@ -28,6 +28,9 @@ function Write-Log {
     Add-Content -Path $logPath -Value $logLine -Encoding UTF8
 }
 
+# Obtener memoria total
+$memoriaTotal = "{0:N2}" -f ((Get-WmiObject -Class Win32_ComputerSystem).TotalPhysicalMemory / 1GB)
+
 # Creando directorios si no existen
 if (-Not (Test-Path $logFolder)) {
     New-Item -ItemType Directory -Path $logFolder
@@ -63,6 +66,7 @@ $state = [PSCustomObject]@{
     end_time      = $null
     duration      = $null
     error_message = $null
+    memory_total  = $memoriaTotal
 }
 
 $state.status = "running"
