@@ -6,14 +6,19 @@ import (
 	"syscall"
 )
 
+// levantamos el archivo de configuracion
+// de json en config/settings.json
+config := Config{}
+err := config.Load("config/settings.json")
+if err != nil {
+	fmt.Println("ERROR: No se pudo cargar el archivo de configuración.")
+	os.Exit(1)
+}
+
 // getTotalRAM obtiene la cantidad total de RAM del sistema en bytes
-func getTotalRAM() (uint64, error) {
-	var info syscall.Sysinfo_t
-	err := syscall.Sysinfo(&info)
-	if err != nil {
-		return 0, err
-	}
-	return info.Totalram * uint64(info.Unit), nil
+func getTotalRAM() (int) {
+	// Lo sacamos de la configuracion
+	totalRAM := config.TotalRAM
 }
 
 // bytesToGB convierte bytes a GB con dos decimales

@@ -29,7 +29,7 @@ function Write-Log {
 }
 
 # Obtener memoria total
-$memoriaTotal = "{0:N2}" -f ((Get-WmiObject -Class Win32_ComputerSystem).TotalPhysicalMemory / 1GB)
+$totalram = "{0:N2}" -f ((Get-WmiObject -Class Win32_ComputerSystem).TotalPhysicalMemory / 1GB)
 
 # Creando directorios si no existen
 if (-Not (Test-Path $logFolder)) {
@@ -66,7 +66,7 @@ $state = [PSCustomObject]@{
     end_time      = $null
     duration      = $null
     error_message = $null
-    memory_total  = $memoriaTotal
+    total_ram     = $totalram
 }
 
 $state.status = "running"
@@ -97,7 +97,8 @@ if (Test-Path $outputPath) {
     $state.status = "completed"
     $state.end_time = $endTime.ToString("yyyy-MM-dd HH:mm:ss:fff")
     $state.duration = $duration
-}else {
+}
+else {
     Write-Log "ERROR: Error en la ejecucion. Codigo de salida: $LASTEXITCODE"
     $state.status = "error"
     $state.error_message = "Error en la ejecucion del programa."
