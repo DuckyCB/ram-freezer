@@ -76,9 +76,9 @@ log_info "Project Manager fue compilado con exito"
 cd ..
 
 cd ./ram-scraper || { log_error "No se encontró el directorio ram-scraper"; exit 1; }
-log_info "Compilando Ram Scraper Validation"
-make build-ram-scraper-validation
-log_info "Ram Scraper Validatio exito"
+log_info "Compilando Ram Scraper"
+make build-ram-scraper
+log_info "Ram Scraper fue compilado con exito"
 cd ..
 
 cd ./ghost-keyboard  || { log_error "No se encontró el directorio ghost-keyboard"; exit 1; }
