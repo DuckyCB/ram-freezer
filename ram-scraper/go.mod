@@ -1,3 +1,3 @@
-module ram-scrapper-validation
+module ram-scraper
 
 go 1.23
