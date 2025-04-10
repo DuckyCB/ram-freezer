@@ -19,3 +19,17 @@ func RunRamScraper() {
 
 	fmt.Println(string(output))
 }
+
+func WaitAndValidateImage() {
+	fmt.Println("Esperando la creacion y validacion de la imagen RAM...")
+
+	cmd := exec.Command("/opt/ram-freezer/bin/ram-scraper")
+
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error ejecutando el binario:", err)
+		return
+	}
+
+	fmt.Println(string(output))
+}
