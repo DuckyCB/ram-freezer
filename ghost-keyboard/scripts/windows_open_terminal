@@ -1,4 +1,5 @@
 {META + r}
+wait 3
 powershell
 {CTRL + SHIFT + ENTER}
 wait 5
