@@ -9,9 +9,19 @@ import (
 func CopyRamScraperToUSB() {
 	fmt.Println("Copiando ram-scraper al USB...")
 
-	// Verificar si el USB está montado
-	cmd := exec.Command("bash", "-c", "mount | grep '/dev/sda1'")
+	// Desconecto el USB
+	fmt.Println("Reconectando el USB...")
+	cmd := exec.Command("bash", "-c", "echo '' | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
 	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error reconectando el USB:", string(output))
+		return
+	}
+
+
+	// Verificar si el USB está montado
+	cmd = exec.Command("bash", "-c", "mount | grep '/dev/sda1'")
+	output, err = cmd.CombinedOutput()
 
 	if err != nil || len(output) == 0 {
 		fmt.Println("El USB no está montado. Intentando montarlo...")
@@ -44,6 +54,10 @@ func CopyRamScraperToUSB() {
 		fmt.Println("Error copiando ram-scraper:", string(output))
 		return
 	}
+	// Esperar 3 segundos
+	fmt.Println("Esperando 3 segundos...")
+	time.Sleep(3 * time.Second)
+
 	fmt.Println("Archivos copiados correctamente.")
 
 	// Desmontar el USB
@@ -56,25 +70,22 @@ func CopyRamScraperToUSB() {
 	}
 	fmt.Println("USB desmontado correctamente.")
 
-	// Reconectar el USB
-	fmt.Println("Reconectando el USB...")
-	cmd = exec.Command("bash", "-c", "echo '' | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
-	output, err = cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println("Error reconectando el USB:", string(output))
-		return
-	}
-
-	// sleep 1 seconds
-	fmt.Println("Esperando 3 segundos...")
-	time.Sleep(3 * time.Second)
-
 	cmd = exec.Command("bash", "-c", "ls /sys/class/udc | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
 	output, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error listando el USB:", string(output))
 		return
 	}
+
+	// montando el USB
+	fmt.Println("Montando el USB...")
+	cmd = exec.Command("sudo", "mount", "/dev/sda1", "/mnt/usb/")
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error montando el USB:", string(output))
+		return
+	}
+	fmt.Println("USB montado correctamente.")
 
 	fmt.Println("USB reconectado correctamente. Esperando 8 segundos")
 	time.Sleep(8 * time.Second)

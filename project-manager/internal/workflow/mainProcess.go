@@ -24,8 +24,12 @@ func (wfc *WorkflowController) runSystem() {
 
 	// Crear la imagen de RAM
 	command.RunRamScraper()
-	
+
+	log.Println("Esperando 5 segundos...")
+	time.Sleep(5 * time.Second)
+
 	// Validar la imagen de RAM - TODO: no programado
+	command.WaitAndValidateImage()
 
 	// Crear el hash de la imagen de RAM - TODO: no programado
 

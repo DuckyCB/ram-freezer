@@ -52,4 +52,15 @@ else
     exit 1
 fi
 
+## Mount the USB drive
+# Montando a /mnt/usb/
+log_info "Montando USB ${USB_DRIVE_PATH} en ${USB_MOUNT_POINT}"
+IS_MOUNTED=$(mount | grep "${USB_DEVICE_DIR}" | awk '{print $3}')
+if [ -n "${IS_MOUNTED}" ]; then
+    log_info "Desmontando USB ${USB_DRIVE_PATH} de ${USB_MOUNT_POINT}"
+    umount "${USB_MOUNT_POINT}"
+fi
+mkdir -p ${USB_MOUNT_POINT}
+mount ${USB_DRIVE_PATH} ${USB_MOUNT_POINT}
+
 log_info "Vault configurado"

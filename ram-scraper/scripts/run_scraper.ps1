@@ -28,6 +28,9 @@ function Write-Log {
     Add-Content -Path $logPath -Value $logLine -Encoding UTF8
 }
 
+# Obtener memoria total
+$totalram = [math]::Round(((Get-WmiObject -Class Win32_ComputerSystem).TotalPhysicalMemory / 1GB), 2)
+
 # Creando directorios si no existen
 if (-Not (Test-Path $logFolder)) {
     New-Item -ItemType Directory -Path $logFolder
@@ -63,12 +66,33 @@ $state = [PSCustomObject]@{
     end_time      = $null
     duration      = $null
     error_message = $null
+    total_ram     = $totalram
 }
 
 $state.status = "running"
 
-# Escribir el estado en el archivo
-$state | ConvertTo-Json | Out-File -FilePath $stateFile -Force
+# Obtener el directorio donde se está ejecutando el script
+$currentDir = Get-Location
+
+# Construir la ruta completa para el archivo de estado
+$stateFile = Join-Path -Path $currentDir -ChildPath "data\state.json"
+
+# Verificar si el directorio existe, si no, crearlo
+$dir = [System.IO.Path]::GetDirectoryName($stateFile)
+if (-not (Test-Path -Path $dir)) {
+    New-Item -ItemType Directory -Force -Path $dir
+}
+
+# Convertir el estado a JSON
+$stateJson = $state | ConvertTo-Json
+
+# Crear una codificación UTF-8 sin BOM
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+# Usar StreamWriter para escribir el archivo en UTF-8 sin BOM
+$writer = New-Object System.IO.StreamWriter($stateFile, $false, $utf8NoBom)
+$writer.Write($stateJson)
+$writer.Close()
 Write-Log "INFO: Estado de la ejecución marcado como 'running'."
 
 
@@ -93,7 +117,8 @@ if (Test-Path $outputPath) {
     $state.status = "completed"
     $state.end_time = $endTime.ToString("yyyy-MM-dd HH:mm:ss:fff")
     $state.duration = $duration
-}else {
+}
+else {
     Write-Log "ERROR: Error en la ejecucion. Codigo de salida: $LASTEXITCODE"
     $state.status = "error"
     $state.error_message = "Error en la ejecucion del programa."

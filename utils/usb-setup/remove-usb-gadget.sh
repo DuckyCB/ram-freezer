@@ -6,6 +6,12 @@ set -u
 source /opt/ram-freezer/audit-trail/log.sh
 source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 
+IS_MOUNTED=$(mount | grep "${USB_DEVICE_DIR}" | awk '{print $3}')
+if [ -n "${IS_MOUNTED}" ]; then
+    log_info "Desmontando USB ${USB_DRIVE_PATH} de ${USB_MOUNT_POINT}"
+    umount "${USB_MOUNT_POINT}"
+fi
+
 log_info "Eliminando usb-gadget"
 
 cd "${USB_GADGET_PATH}"

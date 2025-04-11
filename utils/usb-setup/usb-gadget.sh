@@ -51,6 +51,8 @@ export LOCAL_STORAGE_SIZE="18432"
 readonly LOCAL_STORAGE_SIZE
 export USB_DRIVE_PATH="/dev/sda1"
 readonly USB_DRIVE_PATH
+export USB_MOUNT_POINT="/mnt/usb"
+readonly USB_MOUNT_POINT
 
 ## USB config
 export USB_CONFIG_INDEX=1
