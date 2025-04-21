@@ -6,15 +6,23 @@ $isAdmin = (New-Object Security.Principal.WindowsPrincipal $currentUser).IsInRol
 $rootPath = Split-Path -Parent $PSScriptRoot
 Set-Location -Path $rootPath
 
+
 # Cargar configuración
-$type = "ps1"
 $configPath = ".\config\settings.json"
 $config = Get-Content $configPath | ConvertFrom-Json
 $exePath = ".\bin\$($config.exe_name)"
-$outputFolder = ".\$($config.output_folder)$type\"
-$outputPath = "$outputFolder$($config.output_file)"
-$logFolder = ".\$($config.log_folder)$type\"
-$logPath = "$logFolder$($config.log_file)"
+
+# Obtener el letter de la unidad actual
+$driveLetter = "$((Get-Location).Drive.Name):"
+
+# Crear el path del archivo de estado
+$stateFile = Join-Path -Path $driveLetter -ChildPath $config.state_file
+# Crear el path del archivo de salida
+$outputFolder = Join-Path -Path $driveLetter -ChildPath $config.output_folder
+$outputPath = Join-Path -Path $outputFolder -ChildPath $config.output_file
+# Crear el path del archivo de log
+$logFolder = Join-Path -Path $driveLetter -ChildPath $config.log_folder
+$logPath = Join-Path -Path $logFolder -ChildPath $config.log_file
 
 # Obtener timestamp de inicio
 $startTime = Get-Date
@@ -51,7 +59,6 @@ if (-Not $isAdmin) {
 
 # Marcar el estado
 Write-Log "INFO: Marcando el estado de la ejecución..."
-$stateFile = ".\$($config.state_file)"
 
 # rm state file if exists
 if (Test-Path $stateFile) {
@@ -70,12 +77,6 @@ $state = [PSCustomObject]@{
 }
 
 $state.status = "running"
-
-# Obtener el directorio donde se está ejecutando el script
-$currentDir = Get-Location
-
-# Construir la ruta completa para el archivo de estado
-$stateFile = Join-Path -Path $currentDir -ChildPath $stateFile
 
 # Verificar si el directorio existe, si no, crearlo
 $dir = [System.IO.Path]::GetDirectoryName($stateFile)
