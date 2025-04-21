@@ -43,8 +43,13 @@ func WaitForImageCompletion(waitTime int) int {
 		os.Exit(1)
 	}
 
+	// State file path
+	stateFilePath := config.StateFile
+	// Le hago join con /mnt/usb/
+	stateFilePath = "/mnt/usb/" + stateFilePath
+
 	// Cargar el estado
-	state, err := utils.LoadState(config.StateFile)
+	state, err := utils.LoadState(stateFilePath)
 	if err != nil {
 		fmt.Println("Error cargando el estado:", err)
 		os.Exit(1)
