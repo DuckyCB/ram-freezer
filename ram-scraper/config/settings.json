@@ -1,8 +1,8 @@
 {
     "exe_name": "winpmem_mini_x64_rc2.exe",
     "output_file": "RAM_winpmem.raw",
-    "output_folder": "/mnt/usb/ram-scraper/data/",
+    "output_folder": "ram-scraper/data/",
     "log_folder": "logs/",
     "log_file": "run_scraper.log",
-    "state_file": "/mnt/usb/ram-scraper/data/state.json"
+    "state_file": "ram-scraper/data/state.json"
 }

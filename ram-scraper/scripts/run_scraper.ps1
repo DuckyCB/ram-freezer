@@ -75,7 +75,7 @@ $state.status = "running"
 $currentDir = Get-Location
 
 # Construir la ruta completa para el archivo de estado
-$stateFile = Join-Path -Path $currentDir -ChildPath "data\state.json"
+$stateFile = Join-Path -Path $currentDir -ChildPath $stateFile
 
 # Verificar si el directorio existe, si no, crearlo
 $dir = [System.IO.Path]::GetDirectoryName($stateFile)
