@@ -12,7 +12,7 @@ import (
 )
 
 // waitTime is the time to wait between key presses
-var waitTime = 100 * time.Millisecond
+var waitTime = 50 * time.Millisecond
 
 // waitTimeKey is the time to wait pressing a key
 var waitTimeKey = 30 * time.Millisecond
@@ -135,27 +135,21 @@ func writeSpecialKey(key string, hid *os.File) {
 		parts := strings.Split(key, " + ")
 
 		for _, part := range parts {
-			fmt.Println("Processing part:", part)
-			fmt.Println("Len:", len(part))
 			if k, ok := keycodes.ModifierKey[part]; ok {
 				modKey |= k
 			} else if k, ok := keycodes.SpecialKey[part]; ok {
 				keys = append(keys, k)
 			} else if len(part) == 1 {
 				// Si es una tecla normal, se procesa como un rune
-				fmt.Println("Processing rune:", part)
 				r := rune(part[0])
 				if k, ok := keycodes.Key[r]; ok {
-					fmt.Println("Processing rune without shift:", part)
 					keys = append(keys, k)
 				} else if k, ok := keycodes.KeyShift[r]; ok {
-					fmt.Println("Processing rune with shift:", part)
 					modKey |= keycodes.KEYCODE_LEFT_SHIFT
 					keys = append(keys, k)
 				}
 			} else if strings.HasPrefix(part, ".") {
 				// Si es un número, se procesa como un Keypad
-				fmt.Println("Processing number:", part)
 				r := rune(part[1])
 				if k, ok := keycodes.Keypad[r]; ok {
 					keys = append(keys, k)
@@ -187,11 +181,9 @@ func writeSpecialKey(key string, hid *os.File) {
 			}
 		}
 	}
-	fmt.Println("Keys:", keys)
 	for len(keys) < 6 {
 		keys = append(keys, keycodes.KEYCODE_NONE)
 	}
-	fmt.Println("Keys:", keys)
 
 	_, err := hid.Write([]byte{modKey, 0x00, keys[0], keys[1], keys[2], keys[3], keys[4], keys[5]})
 	if err != nil {
@@ -208,7 +200,7 @@ func writeSpecialKey(key string, hid *os.File) {
 
 	fmt.Printf("Sleeping %v\n", waitTime)
 	time.Sleep(waitTime)
-	fmt.Printf("Wrote key: %s, %x, %v\n", key, modKey, keys)
+	fmt.Printf("Wrote key: %s\n", key)
 }
 
 func main() {
