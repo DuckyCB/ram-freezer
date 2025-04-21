@@ -62,7 +62,7 @@ func WaitForImageCompletion(waitTime int) int {
 			return 1
 		}
 	
-		if state.Status != "completed"{
+		if state.Status == "completed"{
 			fmt.Println("La imagen de RAM se ha creado correctamente.")
 			return 0
 		} else if state.Status == "error" {
