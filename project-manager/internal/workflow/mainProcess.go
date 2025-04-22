@@ -23,7 +23,7 @@ func (wfc *WorkflowController) runSystem() {
 	time.Sleep(5 * time.Second)
 
 	// Crear la imagen de RAM
-	// command.RunRamScraper()
+	command.RunRamScraper()
 
 	log.Println("Esperando 5 segundos...")
 	time.Sleep(5 * time.Second)
