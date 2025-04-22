@@ -127,7 +127,18 @@ else {
     $state.duration = $duration
 }
 
-$state | ConvertTo-Json | Out-File -FilePath $stateFile -Force
+# Convertir el estado a JSON
+$stateJson = $state | ConvertTo-Json
+
+# Crear una codificación UTF-8 sin BOM
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+# Usar StreamWriter para escribir el archivo en UTF-8 sin BOM
+$writer = New-Object System.IO.StreamWriter($stateFile, $false, $utf8NoBom)
+$writer.Write($stateJson)
+$writer.Close()
+Write-Log "INFO: Estado de la ejecución marcado como 'running'."
+
 Write-Log "INFO: Estado de la ejecución actualizado."
 
 # Registrar fin de ejecución
