@@ -25,9 +25,9 @@ func ValidateOutput() {
 	stateFilePath := config.StateFile
 	// Le hago join con /mnt/usb/
 	stateFilePath = "/mnt/usb/" + stateFilePath
-
 	
 	state, err := utils.LoadState(stateFilePath)
+	fmt.log.Println("Cargando el estado desde:", stateFilePath)
 	if err != nil {
 		fmt.Printf("ERROR: No se pudo cargar el estado: %v\n", err)
 		os.Exit(1)
