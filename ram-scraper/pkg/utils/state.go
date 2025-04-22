@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"syscall"
 )
 
-// Estructura de configuracion
+// Config Estructura de configuracion
 type Config struct {
 	ExeName      string `json:"exe_name"`
 	OutputFile   string `json:"output_file"`
@@ -18,14 +17,14 @@ type Config struct {
 }
 
 type State struct {
-	Status       string   `json:"status"`
-	StartTime    string   `json:"start_time"`
-	EndTime      string   `json:"end_time"`
-	Duration     float64  `json:"duration"`
-	ErrorMessage *string  `json:"error_message"` // puntero para soportar null
-	TotalRAM     float64   `json:"total_ram"`
-	ValidationMessage string `json:"validation_message"` // puntero para soportar null
-	ValidationExitCode int `json:"validation_exit_code"`
+	Status             string  `json:"status"`
+	StartTime          string  `json:"start_time"`
+	EndTime            string  `json:"end_time"`
+	Duration           float64 `json:"duration"`
+	ErrorMessage       *string `json:"error_message"` // puntero para soportar null
+	TotalRAM           float64 `json:"total_ram"`
+	ValidationMessage  string  `json:"validation_message"` // puntero para soportar null
+	ValidationExitCode int     `json:"validation_exit_code"`
 }
 
 func LoadState(path string) (*State, error) {
@@ -55,12 +54,13 @@ func LoadConfig(path string) (*Config, error) {
 
 	return &config, nil
 }
-// escribir en state el estado de la validacion
-func WriteStateVal(path string, state *State, val_msg string, val_exit_code int) error {
+
+// WriteStateVal escribir en state el estado de la validacion
+func WriteStateVal(path string, state *State, valMsg string, valExitCode int) error {
 	fmt.Printf("Escribiendo en el estado: %s\n", path)
-	state.ValidationMessage = val_msg
+	state.ValidationMessage = valMsg
 	state.Status = "validation"
-	state.ValidationExitCode = val_exit_code
+	state.ValidationExitCode = valExitCode
 
 	bytes, err := json.MarshalIndent(state, "", "  ")
 	if err != nil {

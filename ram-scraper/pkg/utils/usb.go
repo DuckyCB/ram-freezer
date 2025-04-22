@@ -22,7 +22,7 @@ func RemountUSB() {
 	output, err = cmd.CombinedOutput()
 	if err != nil {
 		log.Println("Error desmontando y volviendo a montar el USB:", string(output))
-		return 
+		return
 	}
 	//log.Println("USB desmontado y montado correctamente.")
 }
