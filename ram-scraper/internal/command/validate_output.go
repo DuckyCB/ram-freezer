@@ -42,7 +42,7 @@ func ValidateOutput() {
 	if os.IsNotExist(err) {
 		msg := fmt.Sprintf("ERROR: El archivo %s no fue generado.\n", filePath)
 		exit_code := 1
-		utils.WriteStateVal(config.StateFile, state, msg, exit_code)
+		utils.WriteStateVal(stateFilePath, state, msg, exit_code)
 		fmt.Printf(msg)
 		os.Exit(exit_code)
 	}
@@ -70,7 +70,7 @@ func ValidateOutput() {
 	if fileSizeGB < 1 {
 		msg := fmt.Sprintf("ERROR: El archivo %s es demasiado pequeño para ser válido. Tamaño: %.2f GB\n", filePath, fileSizeGB)
 		exit_code := 1
-		utils.WriteStateVal(config.StateFile, state, msg, exit_code)
+		utils.WriteStateVal(stateFilePath, state, msg, exit_code)
 		fmt.Printf(msg)
 		os.Exit(exit_code)
 	}
@@ -79,13 +79,13 @@ func ValidateOutput() {
 	if fileSizeGB < lowerLimit {
 		msg := fmt.Sprintf("WARNING: El archivo %s es más pequeño de lo esperado. Tamaño: %.2f GB, RAM esperada: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
 		exit_code := 0
-		utils.WriteStateVal(config.StateFile, state, msg, exit_code)
+		utils.WriteStateVal(stateFilePath, state, msg, exit_code)
 		fmt.Printf(msg)
 		os.Exit(exit_code)
 	} else if fileSizeGB > upperLimit {
 		msg := fmt.Sprintf("WARNING: El archivo %s es más grande de lo esperado. Tamaño: %.2f GB, RAM esperada: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
 		exit_code := 0
-		utils.WriteStateVal(config.StateFile, state, msg, exit_code)
+		utils.WriteStateVal(stateFilePath, state, msg, exit_code)
 		fmt.Printf(msg)
 		os.Exit(exit_code)
 	}
@@ -95,7 +95,7 @@ func ValidateOutput() {
 	if err != nil {
 		msg := fmt.Sprintf("ERROR: No se pudo abrir el archivo %s. Puede estar corrupto.", filePath)
 		exit_code := 1
-		utils.WriteStateVal(config.StateFile, state, msg, exit_code)
+		utils.WriteStateVal(stateFilePath, state, msg, exit_code)
 		fmt.Printf(msg)
 		os.Exit(exit_code)
 	}
@@ -104,7 +104,7 @@ func ValidateOutput() {
 	// Si todo está bien
 	msg := fmt.Sprintf("SUCCESS: El archivo %s es válido. Tamaño: %.2f GB, memoria RAM fisica: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
 	exit_code := 0
-	utils.WriteStateVal(config.StateFile, state, msg, exit_code)
+	utils.WriteStateVal(stateFilePath, state, msg, exit_code)
 	fmt.Printf(msg)
 	os.Exit(exit_code)
 }
