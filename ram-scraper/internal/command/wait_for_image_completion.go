@@ -57,7 +57,7 @@ func WaitForImageCompletion(waitTime int) int {
 
 
 	// Esperar el tiempo especificado
-	for state.Status != "completed" && state.Status != "error"{
+	for state.Status != "completed" || state.Status != "error"{
 		remountUSB()
 
 		// Cargar el estado
