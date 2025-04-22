@@ -4,35 +4,33 @@ import (
 	"fmt"
 	"os/exec"
 	"time"
+	"project-manager/pkg/utils"
 )
 
 func CopyRamScraperToUSB() {
 	fmt.Println("Copiando ram-scraper al USB...")
 
 	// Desconecto el USB
-	fmt.Println("Reconectando el USB...")
-	cmd := exec.Command("bash", "-c", "echo '' | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println("Error reconectando el USB:", string(output))
-		return
-	}
+	utils.DisconnectUSB()
+	// fmt.Println("Reconectando el USB...")
+	// cmd := exec.Command("bash", "-c", "echo '' | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
+	// output, err := cmd.CombinedOutput()
+	// if err != nil {
+	// 	fmt.Println("Error reconectando el USB:", string(output))
+	// 	return
+	// }
 
 
 	// Verificar si el USB está montado
-	cmd = exec.Command("bash", "-c", "mount | grep '/dev/sda1'")
-	output, err = cmd.CombinedOutput()
+	cmd := exec.Command("bash", "-c", "mount | grep '/dev/sda1'")
+	output, err := cmd.CombinedOutput()
 
 	if err != nil || len(output) == 0 {
 		fmt.Println("El USB no está montado. Intentando montarlo...")
 
-		cmd = exec.Command("sudo", "mount", "/dev/sda1", "/mnt/usb/")
-		output, err = cmd.CombinedOutput()
-		if err != nil {
-			fmt.Println("Error montando el USB:", string(output))
-			return
-		}
-		fmt.Println("USB montado correctamente.")
+		// Montar el USB
+		utils.MountUSB()
+
 	} else {
 		fmt.Println("El USB ya está montado.")
 	}
@@ -61,32 +59,14 @@ func CopyRamScraperToUSB() {
 	fmt.Println("Archivos copiados correctamente.")
 
 	// Desmontar el USB
-	fmt.Println("Desmontando el USB...")
-	cmd = exec.Command("sudo", "umount", "/mnt/usb/")
-	output, err = cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println("Error desmontando el USB:", string(output))
-		return
-	}
-	fmt.Println("USB desmontado correctamente.")
-
-	cmd = exec.Command("bash", "-c", "ls /sys/class/udc | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
-	output, err = cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println("Error listando el USB:", string(output))
-		return
-	}
+	utils.UmountUSB()
+	
+	utils.ConnectUSB()
 
 	// montando el USB
-	fmt.Println("Montando el USB...")
-	cmd = exec.Command("sudo", "mount", "/dev/sda1", "/mnt/usb/")
-	output, err = cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println("Error montando el USB:", string(output))
-		return
-	}
-	fmt.Println("USB montado correctamente.")
+	utils.MountUSB()
 
+	
 	fmt.Println("USB reconectado correctamente. Esperando 8 segundos")
 	time.Sleep(8 * time.Second)
 
