@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"syscall"
 )
 
 // Estructura de configuracion
@@ -66,8 +67,20 @@ func WriteStateVal(path string, state *State, val_msg string, val_exit_code int)
 		return fmt.Errorf("error al serializar el estado: %w", err)
 	}
 
-	if err := os.WriteFile(path, bytes, 0644); err != nil {
-		return fmt.Errorf("error al escribir el estado: %w", err)
+	// Abrimos el archivo manualmente para poder hacer f.Sync()
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return fmt.Errorf("error al abrir el archivo: %w", err)
+	}
+	defer f.Close()
+
+	if _, err := f.Write(bytes); err != nil {
+		return fmt.Errorf("error al escribir en el archivo: %w", err)
+	}
+
+	// Forzar que los cambios se escriban en el dispositivo físico
+	if err := f.Sync(); err != nil {
+		return fmt.Errorf("error al sincronizar el archivo: %w", err)
 	}
 
 	return nil

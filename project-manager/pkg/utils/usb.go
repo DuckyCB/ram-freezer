@@ -53,10 +53,20 @@ func UmountUSB() {
 	fmt.Println("USB desmontado correctamente.")
 }
 
+// RemountUSB remounts the USB device to ensure it is properly connected
+func RemountUSB() {
+	fmt.Println("Remontando el USB...")
+	UmountUSB()
+	MountUSB()
+	fmt.Println("USB remontado correctamente.")
+}
+
 // ReconnectUSB reconnects the USB device by first disconnecting and then connecting it
 func ReconnectUSB() {
 	fmt.Println("Reconectando el USB...")
 	DisconnectUSB()
+	UmountUSB()
+	MountUSB()
 	ConnectUSB()
 	fmt.Println("USB reconectado correctamente.")
 }
