@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"fmt"
+	"project-manager/internal/logs"
 	"project-manager/pkg/gpio"
 	"sync"
 	"time"
@@ -19,8 +20,8 @@ const (
 	BlinkFast   = 200 * time.Millisecond
 )
 
-// WorkflowController maneja el flujo del sistema
-type WorkflowController struct {
+// Controller maneja el flujo del sistema
+type Controller struct {
 	ledPin       int
 	buttonPin    int
 	status       int
@@ -30,20 +31,22 @@ type WorkflowController struct {
 	isProcessing bool
 }
 
-// NewWorkflowController crea un nuevo controlador de flujo
-func NewWorkflowController(ledPin, buttonPin int) (*WorkflowController, error) {
+// NewController crea un nuevo controlador de flujo
+func NewController(ledPin, buttonPin int) (*Controller, error) {
 	led, err := gpio.NewLEDController(ledPin)
 	if err != nil {
-		return nil, fmt.Errorf("error al inicializar LED: %v", err)
+		logs.Log.Error(fmt.Sprintf("error al inicializar LED: %v", err))
+		return nil, err
 	}
 
 	button, err := gpio.NewButtonController(buttonPin)
 	if err != nil {
+		logs.Log.Error("error al inicializar botón")
 		led.Close()
-		return nil, fmt.Errorf("error al inicializar botón: %v", err)
+		return nil, err
 	}
 
-	wfc := &WorkflowController{
+	wfc := &Controller{
 		ledPin:       ledPin,
 		buttonPin:    buttonPin,
 		status:       StatusIdle,
@@ -58,17 +61,19 @@ func NewWorkflowController(ledPin, buttonPin int) (*WorkflowController, error) {
 }
 
 // Start starts the system
-func (wfc *WorkflowController) Start() {
+func (wfc *Controller) Start() {
 	wfc.ledControl.SetBlinkSpeed(BlinkSlow)
 	wfc.ledControl.StartBlinking()
 
 	wfc.btnControl.StartMonitoring()
 
-	fmt.Println("Sistema iniciado. Presiona el botón para comenzar el proceso.")
+	logs.Log.Info("Sistema iniciado. Esperando que se presione el botón")
 }
 
 // handleButtonPress manages button press
-func (wfc *WorkflowController) handleButtonPress() {
+func (wfc *Controller) handleButtonPress() {
+	logs.Log.Info("Botón presionado")
+
 	wfc.processMu.Lock()
 	defer wfc.processMu.Unlock()
 
@@ -79,7 +84,7 @@ func (wfc *WorkflowController) handleButtonPress() {
 		wfc.ledControl.SetBlinkSpeed(BlinkMedium)
 
 		go func() {
-			fmt.Println("Iniciando proceso...")
+			logs.Log.Info("Iniciando proceso...")
 			wfc.runSystem()
 
 			wfc.processMu.Lock()
@@ -87,7 +92,7 @@ func (wfc *WorkflowController) handleButtonPress() {
 			wfc.ledControl.SetBlinkSpeed(BlinkFast)
 			wfc.processMu.Unlock()
 
-			fmt.Println("Proceso completado. Parpadeo rápido por 10 segundos.")
+			logs.Log.Info("Proceso completado")
 
 			time.Sleep(10 * time.Second)
 
@@ -97,16 +102,17 @@ func (wfc *WorkflowController) handleButtonPress() {
 			wfc.ledControl.SetBlinkSpeed(BlinkSlow)
 			wfc.processMu.Unlock()
 
-			fmt.Println("Sistema listo para nuevo proceso.")
+			logs.Log.Info("Sistema listo para nuevo proceso.")
 		}()
 	}
 }
 
 // Stop detiene el sistema y libera recursos
-func (wfc *WorkflowController) Stop() {
+func (wfc *Controller) Stop() {
+	logs.Log.Info("Deteniendo sistema")
 	wfc.btnControl.StopMonitoring()
 	wfc.ledControl.StopBlinking()
 	wfc.btnControl.Close()
 	wfc.ledControl.Close()
-	fmt.Println("Sistema detenido.")
+	logs.Log.Info("Sistema detenido")
 }

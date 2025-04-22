@@ -2,8 +2,8 @@ package gpio
 
 import (
 	"fmt"
-	"log"
 	"os"
+	"project-manager/internal/logs"
 	"sync"
 	"time"
 )
@@ -21,8 +21,10 @@ type ButtonController struct {
 
 // NewButtonController crea un nuevo controlador para un botón
 func NewButtonController(pin int) (*ButtonController, error) {
+	logs.Log.Info("Creando nuevo botón")
+
 	if !checkGPIOAccess() {
-		log.Println("No se puede acceder al sistema de archivos GPIO. ¿Estás ejecutando como sudo?")
+		logs.Log.Error("No se puede acceder al sistema de archivos GPIO. ¿Estás ejecutando como sudo?")
 		os.Exit(1)
 	}
 
@@ -30,7 +32,8 @@ func NewButtonController(pin int) (*ButtonController, error) {
 
 	err = initGPIO(gpioPin, "in")
 	if err != nil {
-		return nil, fmt.Errorf("error al inicializar botón en pin %d: %v", pin, err)
+		logs.Log.Error(fmt.Sprintf("Error al inicializar botón en pin %d: %v", pin, err))
+		return nil, err
 	}
 
 	return &ButtonController{

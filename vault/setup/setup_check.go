@@ -93,7 +93,7 @@ func checkDiskLabel() bool {
 }
 
 func main() {
-	fmt.Println("/n📦🔒 Verificando Vault 📦🔒")
+	fmt.Println("📦🔒 Verificando Vault 📦🔒")
 
 	availableSpaceGB := getAvailableSpaceGB()
 

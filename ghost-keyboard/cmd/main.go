@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"ram-freezer/ghost-keyboard/internal/keycodes"
+	"ram-freezer/ghost-keyboard/internal/logs"
 	"strconv"
 	"strings"
 	"time"
@@ -187,7 +188,7 @@ func writeSpecialKey(key string, hid *os.File) {
 
 	_, err := hid.Write([]byte{modKey, 0x00, keys[0], keys[1], keys[2], keys[3], keys[4], keys[5]})
 	if err != nil {
-		fmt.Printf("Error writing keypress: %v\n", err)
+		logs.Log.Error(fmt.Sprintf("Error writing keypress: %v", err))
 		return
 	}
 	time.Sleep(waitTimeKey)
@@ -204,6 +205,8 @@ func writeSpecialKey(key string, hid *os.File) {
 }
 
 func main() {
+	logs.SetupLogger()
+
 	filePath := flag.String("script", "", "script file to use")
 	flag.Parse()
 
@@ -214,13 +217,13 @@ func main() {
 
 	file, err := readFile(*filePath)
 	if err != nil {
-		fmt.Println("Error opening file:", err)
+		logs.Log.Error(fmt.Sprintf("Error opening file %s: %v", *filePath, err))
 	}
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	err = processFile(*scanner)
 	if err != nil {
-		fmt.Println("Error processing file:", err)
+		logs.Log.Error(fmt.Sprintf("Error processing file %s: %v", *filePath, err))
 	}
 }

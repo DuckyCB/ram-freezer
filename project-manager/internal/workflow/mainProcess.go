@@ -8,7 +8,7 @@ import (
 )
 
 // runSystem runs main system process
-func (wfc *WorkflowController) runSystem() {
+func (wfc *Controller) runSystem() {
 	// Llama a las funciones en el orden deseado
 
 	// TODO: descomentar el codigo

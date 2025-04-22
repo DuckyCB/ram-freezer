@@ -1,6 +1,7 @@
 package main
 
 import (
+	"data-seal/internal/logs"
 	"data-seal/pkg/files"
 	"data-seal/pkg/hash"
 	"flag"
@@ -13,6 +14,8 @@ var basePath = "/opt/ram-freezer/bin/"
 var hashesDir = "integrity"
 
 func main() {
+	logs.SetupLogger()
+
 	dirPtr := flag.String("dir", "", "directory to hash")
 	filePtr := flag.String("file", "", "file to hash")
 	//allPtr := flag.Bool("all", false, "hash all files")

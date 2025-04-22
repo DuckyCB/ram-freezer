@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
+	"project-manager/internal/logs"
 	"project-manager/internal/workflow"
 	"project-manager/pkg/utils"
 	"project-manager/utils/constants"
@@ -12,16 +12,18 @@ import (
 )
 
 func main() {
-	log.Println("Starting project manager")
+	logs.SetupLogger()
+
+	logs.Log.Info("Starting project manager")
 
 	if !utils.IsAdmin() {
-		log.Println("Es necesario ejecutar el programa como administrador")
+		logs.Log.Error("Es necesario ejecutar el programa como administrador")
 		return
 	}
 
-	controller, err := workflow.NewWorkflowController(constants.LedPin, constants.ButtonPin)
+	controller, err := workflow.NewController(constants.LedPin, constants.ButtonPin)
 	if err != nil {
-		fmt.Printf("Error al inicializar el sistema: %v\n", err)
+		logs.Log.Error(fmt.Sprintf("Error al inicializar el sistema: %v\n", err))
 		return
 	}
 	defer controller.Stop()

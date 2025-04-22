@@ -3,6 +3,7 @@ package gpio
 import (
 	"fmt"
 	"os"
+	"project-manager/internal/logs"
 	"strconv"
 	"strings"
 	"time"
@@ -27,7 +28,8 @@ func initGPIO(pin int, direction string) error {
 		err := os.WriteFile("/sys/class/gpio/export", []byte(strconv.Itoa(pin)), 0644)
 		if err != nil {
 			if !strings.Contains(err.Error(), "device or resource busy") {
-				return fmt.Errorf("error al exportar pin %d: %v", pin, err)
+				logs.Log.Error(fmt.Sprintf("error al exportar pin %d: %v", pin, err))
+				return err
 			}
 		}
 
