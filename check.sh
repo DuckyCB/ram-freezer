@@ -14,3 +14,6 @@ go run "/opt/ram-freezer/project-manager/setup/setup_check.go"
 
 log_info "Ghost keyboard"
 go run "/opt/ram-freezer/ghost-keyboard/setup/setup_check.go"
+
+log_info "Vault"
+go run "/opt/ram-freezer/vault/setup/setup_check.go"
