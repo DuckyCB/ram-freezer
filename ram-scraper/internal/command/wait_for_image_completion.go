@@ -61,7 +61,7 @@ func WaitForImageCompletion(waitTime int) int {
 		remountUSB()
 
 		// Cargar el estado
-		state, err := utils.LoadState(config.StateFile)
+		state, err := utils.LoadState(stateFilePath)
 		if err != nil {
 			fmt.Println("Error cargando el estado:", err)
 			return 1
