@@ -21,10 +21,12 @@ func ValidateOutput() {
 		fmt.Printf("ERROR: No se pudo cargar la configuracion: %v\n", err)
 		os.Exit(1)
 	}
+	// mnt usb folder
+	usbFolder := "/mnt/usb/"
 	// State file path
 	stateFilePath := config.StateFile
 	// Le hago join con /mnt/usb/
-	stateFilePath = "/mnt/usb/" + stateFilePath
+	stateFilePath = usbFolder + stateFilePath
 	
 	state, err := utils.LoadState(stateFilePath)
 	if err != nil {
@@ -32,7 +34,7 @@ func ValidateOutput() {
 		os.Exit(1)
 	}
 
-	filePath := config.OutputFolder + "ps1/" + config.OutputFile
+	filePath := usbFolder + config.OutputFolder + config.OutputFile
 	fmt.Printf("Validando el archivo %s...\n", filePath)
 
 	// Verificar si el archivo existe
