@@ -21,8 +21,13 @@ func ValidateOutput() {
 		fmt.Printf("ERROR: No se pudo cargar la configuracion: %v\n", err)
 		os.Exit(1)
 	}
+	// State file path
+	stateFilePath := config.StateFile
+	// Le hago join con /mnt/usb/
+	stateFilePath = "/mnt/usb/" + stateFilePath
+
 	
-	state, err := utils.LoadState(config.StateFile)
+	state, err := utils.LoadState(stateFilePath)
 	if err != nil {
 		fmt.Printf("ERROR: No se pudo cargar el estado: %v\n", err)
 		os.Exit(1)
