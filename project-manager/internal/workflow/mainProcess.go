@@ -30,7 +30,11 @@ func (wfc *WorkflowController) runSystem() {
 
 	// Validar la imagen de RAM - TODO: no programado
 	command.WaitAndValidateImage()
-
+	
+	// Espera 5 segundos
+	log.Println("Esperando 5 segundos...")
+	time.Sleep(5 * time.Second)
+	
 	// Reconecto el USB
 	utils.ReconnectUSB()
 
