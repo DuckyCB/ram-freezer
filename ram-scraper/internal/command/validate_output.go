@@ -105,6 +105,6 @@ func ValidateOutput() {
 	msg := fmt.Sprintf("SUCCESS: El archivo %s es válido. Tamaño: %.2f GB, memoria RAM fisica: %.2f GB\n", filePath, fileSizeGB, totalRAMGB)
 	exit_code := 0
 	utils.WriteStateVal(stateFilePath, state, msg, exit_code)
-	fmt.Printf(msg)
+
 	os.Exit(exit_code)
 }

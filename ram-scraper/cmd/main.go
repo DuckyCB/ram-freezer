@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"ram-scraper/internal/command"
 	"ram-scraper/utils/constants"
-	"fmt"
 )
 
 func main() {
@@ -13,4 +13,6 @@ func main() {
 
 	fmt.Println("Validando la imagen de RAM...")
 	command.ValidateOutput()
+
+	fmt.Println("La imagen de RAM ha sido validada.")
 }

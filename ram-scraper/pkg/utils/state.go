@@ -56,9 +56,9 @@ func LoadConfig(path string) (*Config, error) {
 }
 // escribir en state el estado de la validacion
 func WriteStateVal(path string, state *State, val_msg string, val_exit_code int) error {
-
+	fmt.Printf("Escribiendo en el estado: %s\n", path)
 	state.ValidationMessage = val_msg
-	state.Status = "VALIDATION"
+	state.Status = "validation"
 	state.ValidationExitCode = val_exit_code
 
 	bytes, err := json.MarshalIndent(state, "", "  ")
