@@ -2,7 +2,9 @@ package hash
 
 import (
 	"crypto/sha256"
+	"data-seal/internal/logs"
 	"encoding/hex"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -11,22 +13,29 @@ import (
 func CalculateFileHash(filePath string) (string, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
+		logs.Log.Error(err.Error())
 		return "", err
 	}
 	defer file.Close()
 
 	hash := sha256.New()
 	if _, err := io.Copy(hash, file); err != nil {
+		logs.Log.Error(err.Error())
 		return "", err
 	}
 
-	return hex.EncodeToString(hash.Sum(nil)), nil
+	fileHash := hex.EncodeToString(hash.Sum(nil))
+	logs.Log.Info(fmt.Sprintf("el hash de %s es %s", filePath, fileHash))
+
+	return fileHash, nil
 }
 
 func CalculateDirectoryHash(dirPath string) (string, error) {
-	directoryHash := sha256.New()
+	hash := sha256.New()
+
 	err := filepath.Walk(dirPath, func(filePath string, fileInfo os.FileInfo, err error) error {
 		if err != nil {
+			logs.Log.Error(err.Error())
 			return err
 		}
 		if fileInfo.IsDir() {
@@ -35,11 +44,13 @@ func CalculateDirectoryHash(dirPath string) (string, error) {
 
 		fileHash, err := CalculateFileHash(filePath)
 		if err != nil {
+			logs.Log.Error(err.Error())
 			return err
 		}
 
-		_, err = directoryHash.Write([]byte(fileHash))
+		_, err = hash.Write([]byte(fileHash))
 		if err != nil {
+			logs.Log.Error(err.Error())
 			return err
 		}
 
@@ -47,17 +58,22 @@ func CalculateDirectoryHash(dirPath string) (string, error) {
 	})
 
 	if err != nil {
+		logs.Log.Error(err.Error())
 		return "", err
 	}
 
-	return hex.EncodeToString(directoryHash.Sum(nil)), nil
+	dirHash := hex.EncodeToString(hash.Sum(nil))
+	logs.Log.Info(fmt.Sprintf("el hash de %s es %s", dirPath, dirHash))
+
+	return dirHash, nil
 }
 
 func CalculateFinalHashFromIntegrityDir(hashesDir string) (string, error) {
-	finalHash := sha256.New()
+	hash := sha256.New()
 
 	err := filepath.Walk(hashesDir, func(filePath string, fileInfo os.FileInfo, err error) error {
 		if err != nil {
+			logs.Log.Error(err.Error())
 			return err
 		}
 		if fileInfo.IsDir() {
@@ -66,11 +82,13 @@ func CalculateFinalHashFromIntegrityDir(hashesDir string) (string, error) {
 
 		fileContent, err := os.ReadFile(filePath)
 		if err != nil {
+			logs.Log.Error(err.Error())
 			return err
 		}
 
-		_, err = finalHash.Write(fileContent)
+		_, err = hash.Write(fileContent)
 		if err != nil {
+			logs.Log.Error(err.Error())
 			return err
 		}
 
@@ -78,8 +96,12 @@ func CalculateFinalHashFromIntegrityDir(hashesDir string) (string, error) {
 	})
 
 	if err != nil {
+		logs.Log.Error(err.Error())
 		return "", err
 	}
 
-	return hex.EncodeToString(finalHash.Sum(nil)), nil
+	calculatedHash := hex.EncodeToString(hash.Sum(nil))
+	logs.Log.Info(fmt.Sprintf("el hash de %s es %s", hashesDir, calculatedHash))
+
+	return calculatedHash, nil
 }

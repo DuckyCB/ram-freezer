@@ -10,10 +10,11 @@ fi
 
 log_info "Iniciando verificación de la instalación"
 
+echo ""
 go run "/opt/ram-freezer/project-manager/setup/setup_check.go"
 
-log_info "Ghost keyboard"
+echo ""
 go run "/opt/ram-freezer/ghost-keyboard/setup/setup_check.go"
 
-log_info "Vault"
+echo ""
 go run "/opt/ram-freezer/vault/setup/setup_check.go"

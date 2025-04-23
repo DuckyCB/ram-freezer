@@ -3,18 +3,19 @@ package command
 import (
 	"fmt"
 	"os/exec"
+	"project-manager/internal/logs"
 )
 
 func TestKeyboard() {
-	fmt.Println("Probando ghost keyboard...")
+	logs.Log.Info("Probando ghost keyboard...")
 
 	cmd := exec.Command("/opt/ram-freezer/bin/ghost-keyboard", "-script", "/opt/ram-freezer/bin/scripts/test")
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error ejecutando el binario:", err)
+		logs.Log.Error(fmt.Sprintf("Error ejecutando el binario: %v", err))
 		return
 	}
 
-	fmt.Println(string(output))
+	logs.Log.Info(string(output))
 }

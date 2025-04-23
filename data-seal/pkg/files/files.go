@@ -1,14 +1,14 @@
 package files
 
 import (
-	"fmt"
+	"data-seal/internal/logs"
 	"os"
 )
 
 func WriteToFile(filePath, data string) error {
 	err := os.WriteFile(filePath, []byte(data), 0644)
 	if err != nil {
-		fmt.Println("Error al escribir en el archivo:", err)
+		logs.Log.Error(err.Error())
 		return err
 	}
 	return nil

@@ -3,18 +3,19 @@ package command
 import (
 	"fmt"
 	"os/exec"
+	"project-manager/internal/logs"
 )
 
 func OpenTerminal() {
-	fmt.Println("Abriendo terminal...")
+	logs.Log.Info("Abriendo terminal...")
 
 	cmd := exec.Command("/opt/ram-freezer/bin/ghost-keyboard", "-script", "/opt/ram-freezer/bin/scripts/windows_open_terminal")
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error ejecutando el binario:", err)
+		logs.Log.Error(fmt.Sprintf("Error ejecutando el binario: %v", err))
 		return
 	}
 
-	fmt.Println(string(output))
+	logs.Log.Info(string(output))
 }

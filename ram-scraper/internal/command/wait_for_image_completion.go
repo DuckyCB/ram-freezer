@@ -1,11 +1,12 @@
 package command
 
 import (
-	"log"
-	"ram-scraper/pkg/utils"
-	"time"
-	"ram-scraper/utils/constants"
+	"fmt"
 	"os"
+	"ram-scraper/internal/logs"
+	"ram-scraper/pkg/utils"
+	"ram-scraper/utils/constants"
+	"time"
 )
 
 func WaitForImageCompletion(waitTime int) int {
@@ -16,7 +17,7 @@ func WaitForImageCompletion(waitTime int) int {
 	// Cargar la configuracion
 	config, err := utils.LoadConfig(constants.ConfigPath)
 	if err != nil {
-		log.Println("Error cargando la configuracion:", err)
+		logs.Log.Error(fmt.Sprintf("Error cargando la configuracion: %v", err))
 		os.Exit(1)
 	}
 
@@ -28,32 +29,31 @@ func WaitForImageCompletion(waitTime int) int {
 	// Cargar el estado
 	state, err := utils.LoadState(stateFilePath)
 	if err != nil {
-		log.Println("Error cargando el estado:", err)
+		logs.Log.Error(fmt.Sprintf("Error cargando el estado: %v", err))
 		os.Exit(1)
 	}
 
-
 	// Esperar el tiempo especificado
-	for state.Status != "completed" && state.Status != "error"{
+	for state.Status != "completed" && state.Status != "error" {
 		utils.RemountUSB()
 
 		// Cargar el estado
 		state, err := utils.LoadState(stateFilePath)
 		if err != nil {
-			log.Println("Error cargando el estado:", err)
+			logs.Log.Error(fmt.Sprintf("Error cargando el estado: %v", err))
 			return 1
 		}
-	
-		if state.Status == "completed"{
-			log.Println("La imagen de RAM se ha creado correctamente.")
+
+		if state.Status == "completed" {
+			logs.Log.Info("La imagen de RAM se ha creado correctamente.")
 			return 0
 		} else if state.Status == "error" {
-			log.Println("Error al crear la imagen de RAM:", *state.ErrorMessage)
+			logs.Log.Error(fmt.Sprintf("Error al crear la imagen de RAM: %v", *state.ErrorMessage))
 			return 1
 		} else {
-			log.Println("La imagen de RAM no se ha creado. Estado actual:", state.Status)
+			logs.Log.Info(fmt.Sprintf("La imagen de RAM no se ha creado. Estado actual: %s", state.Status))
 		}
-		log.Printf("Esperando %v\n", waitTimeSec)
+		logs.Log.Info(fmt.Sprintf("Esperando %v\n", waitTimeSec))
 		time.Sleep(waitTimeSec)
 	}
 	return 1

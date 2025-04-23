@@ -3,70 +3,70 @@ package utils
 import (
 	"fmt"
 	"os/exec"
+	"project-manager/internal/logs"
 )
 
 // DisconnectUSB disconnects the USB device by writing to the UDC file
 func DisconnectUSB() {
-	fmt.Println("Desconectando el USB...")
+	logs.Log.Info("Desconectando el USB...")
 	// Desconecto el USB
 	cmd := exec.Command("bash", "-c", "echo '' | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error reconectando el USB:", string(output))
+		logs.Log.Error(fmt.Sprintf("%s. %s", output, err.Error()))
 		return
 	}
 }
 
 // ConnectUSB connects the USB device by writing to the UDC file
 func ConnectUSB() {
-	fmt.Println("Conectando el USB...")
+	logs.Log.Info("Conectando el USB...")
 	cmd := exec.Command("bash", "-c", "ls /sys/class/udc | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error conectando el USB:", string(output))
+		logs.Log.Error(fmt.Sprintf("%s. %s", output, err.Error()))
 		return
 	}
 }
 
-
 // MountUSB mounts the USB device to the specified mount point
 func MountUSB() {
-	fmt.Println("Montando el USB...")
+	logs.Log.Info("Montando el USB...")
 	cmd := exec.Command("sudo", "mount", "/dev/sda1", "/mnt/usb/")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error montando el USB:", string(output))
+		logs.Log.Error(fmt.Sprintf("%s. %s", output, err.Error()))
 		return
 	}
-	fmt.Println("USB montado correctamente.")
+	logs.Log.Info("USB montado correctamente.")
 }
 
 // UmountUSB unmounts the USB device from the specified mount point
 func UmountUSB() {
-	fmt.Println("Desmontando el USB...")
+	logs.Log.Info("Desmontando el USB...")
 	cmd := exec.Command("sudo", "umount", "/mnt/usb/")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error desmontando el USB:", string(output))
+		logs.Log.Error(fmt.Sprintf("%s. %s", output, err.Error()))
 		return
 	}
-	fmt.Println("USB desmontado correctamente.")
+	logs.Log.Info("USB desmontado correctamente.")
 }
 
 // RemountUSB remounts the USB device to ensure it is properly connected
 func RemountUSB() {
-	fmt.Println("Remontando el USB...")
+	logs.Log.Info("Remontando el USB...")
 	UmountUSB()
 	MountUSB()
-	fmt.Println("USB remontado correctamente.")
+	logs.Log.Info("USB remontado correctamente.")
 }
 
 // ReconnectUSB reconnects the USB device by first disconnecting and then connecting it
 func ReconnectUSB() {
-	fmt.Println("Reconectando el USB...")
+	logs.Log.Info("Reconectando el USB...")
 	DisconnectUSB()
 	UmountUSB()
 	MountUSB()
 	ConnectUSB()
-	fmt.Println("USB reconectado correctamente.")
+	logs.Log.Info("USB reconectado correctamente.")
 }

@@ -13,11 +13,11 @@ import (
 type LogLevel string
 
 const (
-	LevelDebug LogLevel = "DEBUG"
-	LevelInfo  LogLevel = "INFO"
-	LevelWarn  LogLevel = "WARN"
-	LevelError LogLevel = "ERROR"
-	LevelFatal LogLevel = "FATAL"
+	Debug LogLevel = "DEBUG"
+	Info  LogLevel = "INFO"
+	Warn  LogLevel = "WARN"
+	Error LogLevel = "ERROR"
+	Fatal LogLevel = "FATAL"
 )
 
 type LogEntry struct {
@@ -88,21 +88,21 @@ func (l *SimpleLogger) Log(level LogLevel, message string) {
 }
 
 func (l *SimpleLogger) Debug(message string) {
-	l.Log(LevelDebug, message)
+	l.Log(Debug, message)
 }
 
 func (l *SimpleLogger) Info(message string) {
-	l.Log(LevelInfo, message)
+	l.Log(Info, message)
 }
 
 func (l *SimpleLogger) Warn(message string) {
-	l.Log(LevelWarn, message)
+	l.Log(Warn, message)
 }
 
 func (l *SimpleLogger) Error(message string) {
-	l.Log(LevelError, message)
+	l.Log(Error, message)
 }
 
 func (l *SimpleLogger) Fatal(message string) {
-	l.Log(LevelFatal, message)
+	l.Log(Fatal, message)
 }

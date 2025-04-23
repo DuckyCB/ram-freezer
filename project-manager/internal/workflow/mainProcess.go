@@ -1,14 +1,14 @@
 package workflow
 
 import (
-	"log"
 	"project-manager/internal/command"
+	"project-manager/internal/logs"
 	"project-manager/pkg/utils"
 	"time"
 )
 
 // runSystem runs main system process
-func (wfc *WorkflowController) runSystem() {
+func (wfc *Controller) runSystem() {
 	// Llama a las funciones en el orden deseado
 
 	// TODO: descomentar el codigo
@@ -19,7 +19,7 @@ func (wfc *WorkflowController) runSystem() {
 	command.OpenTerminal()
 
 	// Espera 5 segundos
-	log.Println("Esperando 5 segundos...")
+	logs.Log.Info("Esperando 5 segundos...")
 	time.Sleep(5 * time.Second)
 
 	// Crear la imagen de RAM
@@ -28,14 +28,14 @@ func (wfc *WorkflowController) runSystem() {
 	utils.DisconnectUSB()
 	utils.RemountUSB()
 
-	log.Println("Esperando 5 segundos...")
+	logs.Log.Info("Esperando 5 segundos...")
 	time.Sleep(5 * time.Second)
 
 	// Validar la imagen de RAM - TODO: no programado
 	command.WaitAndValidateImage()
 
 	// Espera 5 segundos
-	log.Println("Esperando 5 segundos...")
+	logs.Log.Info("Esperando 5 segundos...")
 	time.Sleep(5 * time.Second)
 
 	// Reconecto el USB
