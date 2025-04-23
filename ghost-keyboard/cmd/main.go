@@ -21,6 +21,7 @@ var waitTimeKey = 30 * time.Millisecond
 func readFile(path string) (*os.File, error) {
 	file, err := os.Open(path)
 	if err != nil {
+		logs.Log.Error(err.Error())
 		return nil, err
 	}
 
@@ -30,7 +31,8 @@ func readFile(path string) (*os.File, error) {
 func openHIDG0() (*os.File, error) {
 	hid, err := os.OpenFile("/dev/hidg0", os.O_WRONLY, 0666)
 	if err != nil {
-		return nil, fmt.Errorf("error opening hidg0: %w", err)
+		logs.Log.Error(err.Error())
+		return nil, err
 	}
 	return hid, nil
 }
@@ -49,17 +51,16 @@ func processFile(scanner bufio.Scanner) error {
 			parts := strings.SplitN(line, " ", 2)
 
 			if len(parts) < 2 {
-				fmt.Println("Falta el tiempo después de 'wait': Default 1")
+				logs.Log.Warn("Falta el tiempo después de 'wait': Default 1")
 				parts = append(parts, "1")
 			}
 
 			waitTime, err := strconv.Atoi(parts[1])
 			if err != nil {
-				fmt.Println("Error: tiempo inválido después de 'wait'")
-				return fmt.Errorf("error: tiempo inválido después de 'wait'")
+				logs.Log.Error(fmt.Sprintf("Error: tiempo inválido después de 'wait': %v", err))
+				return err
 			}
 
-			fmt.Printf("Sleeping %d seconds\n", waitTime)
 			time.Sleep(time.Duration(waitTime) * time.Second)
 			continue
 		}
@@ -71,6 +72,7 @@ func processFile(scanner bufio.Scanner) error {
 			if char == '{' {
 				endIdx := strings.Index(line[i:], "}")
 				if endIdx == -1 {
+					logs.Log.Error(fmt.Sprintf("error: } not found in line: %s", line))
 					return fmt.Errorf("error: } not found in line: %s", line)
 				}
 				specialKeys := line[i+1 : i+endIdx]
@@ -79,6 +81,9 @@ func processFile(scanner bufio.Scanner) error {
 			} else {
 				err = writeChar(char, hid)
 				// TODO: handle err
+				if err != nil {
+					logs.Log.Error(err.Error())
+				}
 				i++
 			}
 			// TODO: agregar caso para escribir {
@@ -86,6 +91,7 @@ func processFile(scanner bufio.Scanner) error {
 	}
 
 	if err := scanner.Err(); err != nil {
+		logs.Log.Error(err.Error())
 		return fmt.Errorf("error reading file: %w", err)
 	}
 
@@ -99,6 +105,7 @@ func writeChar(char uint8, hid *os.File) error {
 		keycode, ok = keycodes.KeyShift[rune(char)]
 		shift = true
 		if !ok {
+			logs.Log.Error("keycode not found")
 			return fmt.Errorf("keycode not found")
 		}
 	}
@@ -110,6 +117,7 @@ func writeChar(char uint8, hid *os.File) error {
 
 	_, err := hid.Write([]byte{modifier, 0x00, keycode, 0x00, 0x00, 0x00, 0x00, 0x00})
 	if err != nil {
+		logs.Log.Error(fmt.Sprintf("error writing keypress %d: %w", char, err))
 		return fmt.Errorf("error writing keypress %d: %w", char, err)
 	}
 
@@ -117,12 +125,12 @@ func writeChar(char uint8, hid *os.File) error {
 
 	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
+		logs.Log.Error(err.Error())
 		return fmt.Errorf("error unpressing key: %w", err)
 	}
 
-	fmt.Printf("Sleeping %v\n", waitTime)
 	time.Sleep(waitTime) // Sleep for a while to simulate key press duration
-	fmt.Printf("Wrote char: %c, 0x%X\n", char, keycode)
+	logs.Log.Info(fmt.Sprintf("Wrote char: %c, 0x%X\n", char, keycode))
 
 	return nil
 }
@@ -155,14 +163,14 @@ func writeSpecialKey(key string, hid *os.File) {
 				if k, ok := keycodes.Keypad[r]; ok {
 					keys = append(keys, k)
 				} else {
-					fmt.Println("Key not found in Keypad:", part)
+					logs.Log.Warn(fmt.Sprintf("Key not found in Keypad: %s", part))
 				}
 			} else {
-				fmt.Println("Key not found:", part)
+				logs.Log.Warn(fmt.Sprintf("key not found: %s", part))
 			}
 
 			if len(keys) >= 6 {
-				fmt.Println("Limiting to 6 keys")
+				logs.Log.Warn("Limiting to 6 keys")
 				break // Limitar a 6 teclas
 			}
 		}
@@ -195,13 +203,12 @@ func writeSpecialKey(key string, hid *os.File) {
 
 	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
-		fmt.Printf("Error unpressing key: %v\n", err)
+		logs.Log.Error(fmt.Sprintf("Error unpressing key: %v\n", err))
 		return
 	}
 
-	fmt.Printf("Sleeping %v\n", waitTime)
 	time.Sleep(waitTime)
-	fmt.Printf("Wrote key: %s\n", key)
+	logs.Log.Info(fmt.Sprintf("Wrote key: %s\n", key))
 }
 
 func main() {
@@ -218,6 +225,7 @@ func main() {
 	file, err := readFile(*filePath)
 	if err != nil {
 		logs.Log.Error(fmt.Sprintf("Error opening file %s: %v", *filePath, err))
+		return
 	}
 	defer file.Close()
 
@@ -225,5 +233,6 @@ func main() {
 	err = processFile(*scanner)
 	if err != nil {
 		logs.Log.Error(fmt.Sprintf("Error processing file %s: %v", *filePath, err))
+		return
 	}
 }

@@ -1,18 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"ram-scraper/internal/command"
+	"ram-scraper/internal/logs"
 	"ram-scraper/utils/constants"
 )
 
 func main() {
-	fmt.Println("Esperando la creacion de la imagen RAM...")
-	command.WaitForImageCompletion(constants.WaitTime)
-	fmt.Println("La imagen de RAM se ha creado.")
+	logs.SetupLogger()
 
-	fmt.Println("Validando la imagen de RAM...")
+	logs.Log.Info("Esperando la creacion de la imagen RAM...")
+	command.WaitForImageCompletion(constants.WaitTime)
+	logs.Log.Info("La imagen de RAM se ha creado.")
+
+	logs.Log.Info("Validando la imagen de RAM...")
 	command.ValidateOutput()
 
-	fmt.Println("La imagen de RAM ha sido validada.")
+	logs.Log.Info("La imagen de RAM ha sido validada.")
 }

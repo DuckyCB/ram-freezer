@@ -83,7 +83,7 @@ func (bc *ButtonController) startMonitoringInternal() {
 		// Leer el estado inicial
 		lastState, err = readGPIO(bc.pin)
 		if err != nil {
-			fmt.Printf("Error al leer estado inicial del botón: %v\n", err)
+			logs.Log.Error(err.Error())
 			return
 		}
 
@@ -94,7 +94,7 @@ func (bc *ButtonController) startMonitoringInternal() {
 			default:
 				currentState, err = readGPIO(bc.pin)
 				if err != nil {
-					fmt.Printf("Error al leer estado del botón: %v\n", err)
+					logs.Log.Error(err.Error())
 					time.Sleep(100 * time.Millisecond)
 					continue
 				}

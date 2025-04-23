@@ -2,8 +2,8 @@ package gpio
 
 import (
 	"fmt"
-	"log"
 	"os"
+	"project-manager/internal/logs"
 	"sync"
 	"time"
 )
@@ -20,7 +20,7 @@ type LEDController struct {
 // NewLEDController crea un nuevo controlador para el LED
 func NewLEDController(pin int) (*LEDController, error) {
 	if !checkGPIOAccess() {
-		log.Println("No se puede acceder al sistema de archivos GPIO. ¿Estás ejecutando como sudo?")
+		logs.Log.Fatal("No se puede acceder al sistema de archivos GPIO. ¿Estás ejecutando como sudo?")
 		os.Exit(1)
 	}
 
@@ -28,13 +28,14 @@ func NewLEDController(pin int) (*LEDController, error) {
 
 	err = initGPIO(gpioPin, "out")
 	if err != nil {
-		log.Printf("Error inicializando led: %v", err)
+		logs.Log.Error(err.Error())
 		os.Exit(1)
 	}
 
 	err = writeGPIO(gpioPin, 0)
 	if err != nil {
-		return nil, fmt.Errorf("error al apagar LED en pin %d (gpio %d): %v", pin, gpioPin, err)
+		logs.Log.Error(fmt.Sprintf("error al apagar LED en pin %d (gpio %d): %v", pin, gpioPin, err))
+		return nil, err
 	}
 
 	return &LEDController{

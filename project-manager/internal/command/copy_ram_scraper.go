@@ -1,20 +1,20 @@
 package command
 
 import (
-	"fmt"
 	"os/exec"
+	"project-manager/internal/logs"
 )
 
 func CopyRamScraper() {
-	fmt.Println("Copiando ram-scraper...")
+	logs.Log.Info("Copiando ram-scraper...")
 
 	cmd := exec.Command("/opt/ram-freezer/bin/ghost-keyboard", "-script", "/opt/ram-freezer/bin/scripts/windows_copy_ram_scraper")
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error ejecutando el binario:", err)
+		logs.Log.Error(err.Error())
 		return
 	}
 
-	fmt.Println(string(output))
+	logs.Log.Info(string(output))
 }

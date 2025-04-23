@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"ram-scraper/internal/logs"
 )
 
 // Config Estructura de configuracion
@@ -30,12 +31,14 @@ type State struct {
 func LoadState(path string) (*State, error) {
 	bytes, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("error leyendo %s: %w", path, err)
+		logs.Log.Error(err.Error())
+		return nil, err
 	}
 
 	var state State
 	if err := json.Unmarshal(bytes, &state); err != nil {
-		return nil, fmt.Errorf("error parseando state.json: %w", err)
+		logs.Log.Error(err.Error())
+		return nil, err
 	}
 
 	return &state, nil
@@ -44,12 +47,14 @@ func LoadState(path string) (*State, error) {
 func LoadConfig(path string) (*Config, error) {
 	bytes, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("error leyendo %s: %w", path, err)
+		logs.Log.Error(fmt.Sprintf("error leyendo %s: %v", path, err))
+		return nil, err
 	}
 
 	var config Config
 	if err := json.Unmarshal(bytes, &config); err != nil {
-		return nil, fmt.Errorf("error parseando config.json: %w", err)
+		logs.Log.Error(err.Error())
+		return nil, err
 	}
 
 	return &config, nil
@@ -57,30 +62,34 @@ func LoadConfig(path string) (*Config, error) {
 
 // WriteStateVal escribir en state el estado de la validacion
 func WriteStateVal(path string, state *State, valMsg string, valExitCode int) error {
-	fmt.Printf("Escribiendo en el estado: %s\n", path)
+	logs.Log.Info(fmt.Sprintf("Escribiendo en el estado: %s\n", path))
 	state.ValidationMessage = valMsg
 	state.Status = "validation"
 	state.ValidationExitCode = valExitCode
 
 	bytes, err := json.MarshalIndent(state, "", "  ")
 	if err != nil {
-		return fmt.Errorf("error al serializar el estado: %w", err)
+		logs.Log.Info(err.Error())
+		return err
 	}
 
 	// Abrimos el archivo manualmente para poder hacer f.Sync()
 	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
-		return fmt.Errorf("error al abrir el archivo: %w", err)
+		logs.Log.Error(err.Error())
+		return err
 	}
 	defer f.Close()
 
 	if _, err := f.Write(bytes); err != nil {
-		return fmt.Errorf("error al escribir en el archivo: %w", err)
+		logs.Log.Error(err.Error())
+		return err
 	}
 
 	// Forzar que los cambios se escriban en el dispositivo físico
 	if err := f.Sync(); err != nil {
-		return fmt.Errorf("error al sincronizar el archivo: %w", err)
+		logs.Log.Error(err.Error())
+		return err
 	}
 
 	return nil
