@@ -11,37 +11,37 @@ import (
 func (wfc *Controller) runSystem() {
 	// Llama a las funciones en el orden deseado
 
-	// TODO: descomentar el codigo
+	utils.MountUSB()
+
 	// Copiar archivos de ram-scraper al USB
 	command.CopyRamScraperToUSB()
 
+	utils.UmountUSB()
+
+	utils.ConnectUSB()
 	// Abrir la terminal
 	command.OpenTerminal()
-
-	// Espera 5 segundos
+	
 	logs.Log.Info("Esperando 5 segundos...")
 	time.Sleep(5 * time.Second)
 
 	// Crear la imagen de RAM
 	command.RunRamScraper()
 
+	logs.Log.Info("Esperando 5 segundos...")
+	time.Sleep(5 * time.Second)
+
+	utils.MountUSB()
+	
+	// Validar la imagen de RAM
+	command.WaitAndValidateImage()
+
+	// Reconecto el USB
 	utils.DisconnectUSB()
 	utils.RemountUSB()
 
-	logs.Log.Info("Esperando 5 segundos...")
-	time.Sleep(5 * time.Second)
-
-	// Validar la imagen de RAM - TODO: no programado
-	command.WaitAndValidateImage()
-
-	// Espera 5 segundos
-	logs.Log.Info("Esperando 5 segundos...")
-	time.Sleep(5 * time.Second)
-
-	// Reconecto el USB
-	utils.ReconnectUSB()
-
-	// Crear el hash de la imagen de RAM - TODO: no programado
+	// Crear el hash de la imagen de RAM
+	command.HashFiles("/mnt/usb/data/")
 
 	// TODO hasta aca
 

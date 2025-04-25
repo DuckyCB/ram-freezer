@@ -1,4 +1,4 @@
-package hash
+package hashUtils
 
 import (
 	"crypto/sha256"
@@ -8,9 +8,13 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
+	"hash"
+	"strings"
+	"data-seal/utils/constants"
 )
 
-func CalculateFileHash(filePath string) (string, error) {
+func CalculateFileHash(filePath string, hash hash.Hash) (string, error) { // hash es un puntero a sha256.New() o sha256.New() hash := sha256.New()
 	file, err := os.Open(filePath)
 	if err != nil {
 		logs.Log.Error(err.Error())
@@ -18,52 +22,54 @@ func CalculateFileHash(filePath string) (string, error) {
 	}
 	defer file.Close()
 
-	hash := sha256.New()
 	if _, err := io.Copy(hash, file); err != nil {
 		logs.Log.Error(err.Error())
 		return "", err
 	}
 
 	fileHash := hex.EncodeToString(hash.Sum(nil))
-	logs.Log.Info(fmt.Sprintf("el hash de %s es %s", filePath, fileHash))
 
 	return fileHash, nil
 }
 
 func CalculateDirectoryHash(dirPath string) (string, error) {
-	hash := sha256.New()
+	var files []string
 
-	err := filepath.Walk(dirPath, func(filePath string, fileInfo os.FileInfo, err error) error {
+	// Recorre el directorio y guarda todos los paths de archivos
+	err := filepath.WalkDir(dirPath, func(path string, d os.DirEntry, err error) error {
 		if err != nil {
 			logs.Log.Error(err.Error())
 			return err
 		}
-		if fileInfo.IsDir() {
-			return nil
+		if !d.IsDir() {
+			files = append(files, path)
 		}
-
-		fileHash, err := CalculateFileHash(filePath)
-		if err != nil {
-			logs.Log.Error(err.Error())
-			return err
-		}
-
-		_, err = hash.Write([]byte(fileHash))
-		if err != nil {
-			logs.Log.Error(err.Error())
-			return err
-		}
-
 		return nil
 	})
-
 	if err != nil {
 		logs.Log.Error(err.Error())
 		return "", err
 	}
 
+	// Ordena los paths para asegurar un hash determinista
+	sort.Strings(files)
+
+	hash := sha256.New()
+
+	for _, filePath := range files {
+		fileHash, err := CalculateFileHash(filePath, hash)
+		if err != nil {
+			logs.Log.Error(fmt.Sprintf("Error al calcular el hash de %s: %v", filePath, err))
+			return "", err
+		}
+
+		// Escribe tanto el nombre del archivo como su hash
+		hash.Write([]byte(filePath))
+		hash.Write([]byte(fileHash))
+	}
+
 	dirHash := hex.EncodeToString(hash.Sum(nil))
-	logs.Log.Info(fmt.Sprintf("el hash de %s es %s", dirPath, dirHash))
+	logs.Log.Info(fmt.Sprintf("El hash del directorio %s es %s", dirPath, dirHash))
 
 	return dirHash, nil
 }
@@ -104,4 +110,15 @@ func CalculateFinalHashFromIntegrityDir(hashesDir string) (string, error) {
 	logs.Log.Info(fmt.Sprintf("el hash de %s es %s", hashesDir, calculatedHash))
 
 	return calculatedHash, nil
+}
+
+
+func IsHashFile(path string) bool {
+	for key := range constants.Hashes {
+		if strings.HasSuffix(path, key) {
+			// Si el archivo ya tiene un hash, no lo procesamos
+			return true
+		}
+	}
+	return false
 }
