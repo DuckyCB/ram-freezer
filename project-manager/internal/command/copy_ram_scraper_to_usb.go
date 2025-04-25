@@ -13,13 +13,6 @@ func CopyRamScraperToUSB() {
 
 	// Desconecto el USB
 	utils.DisconnectUSB()
-	// logs.Log.Info("Reconectando el USB...")
-	// cmd := exec.Command("bash", "-c", "echo '' | sudo tee /sys/kernel/config/usb_gadget/ram-freezer/UDC")
-	// output, err := cmd.CombinedOutput()
-	// if err != nil {
-	//	logs.Log.Error(fmt.Sprintf("Error reconectando el USB: %s", string(output)))
-	// 	return
-	// }
 
 	// Verificar si el USB está montado
 	cmd := exec.Command("bash", "-c", "mount | grep '/dev/sda1'")
