@@ -130,7 +130,7 @@ func writeChar(char uint8, hid *os.File) error {
 	}
 
 	time.Sleep(waitTime) // Sleep for a while to simulate key press duration
-	logs.Log.Info(fmt.Sprintf("Wrote char: %c, 0x%X\n", char, keycode))
+	logs.Log.Info(fmt.Sprintf("Pressing key: %c\n", char))
 
 	return nil
 }
@@ -208,7 +208,7 @@ func writeSpecialKey(key string, hid *os.File) {
 	}
 
 	time.Sleep(waitTime)
-	logs.Log.Info(fmt.Sprintf("Wrote key: %s\n", key))
+	logs.Log.Info(fmt.Sprintf("Pressing special keys: %s\n", key))
 }
 
 func main() {
