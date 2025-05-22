@@ -3,7 +3,6 @@ package workflow
 import (
 	"fmt"
 	"project-manager/internal/logs"
-	"project-manager/internal/system"
 	"project-manager/pkg/gpio"
 	"sync"
 	"time"
@@ -73,11 +72,6 @@ func (wfc *Controller) Start() {
 
 // handleButtonPress manages button press
 func (wfc *Controller) handleButtonPress() {
-	err := system.StartRun()
-	if err != nil {
-		return
-	}
-
 	logs.Log.Info("Botón presionado")
 
 	wfc.processMu.Lock()

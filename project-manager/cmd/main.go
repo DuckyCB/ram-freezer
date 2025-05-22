@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"project-manager/internal/logs"
+	"project-manager/internal/system"
 	"project-manager/internal/workflow"
 	"project-manager/pkg/utils"
 	"project-manager/utils/constants"
@@ -13,6 +14,11 @@ import (
 
 func main() {
 	logs.SetupLogger()
+
+	err := system.StartRun()
+	if err != nil {
+		return
+	}
 
 	logs.Log.Info("Starting project manager")
 

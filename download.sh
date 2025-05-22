@@ -5,7 +5,7 @@ DIR="/opt/ram-freezer"
 
 if [ -d "${DIR}" ]; then
   echo "El directorio ${DIR} existe. Actualizando..."
-  cd "${DIR}"
+  cd "${DIR}" || exit
   sudo git fetch
   sudo git reset --hard origin/master
   sudo git pull origin master

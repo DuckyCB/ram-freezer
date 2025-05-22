@@ -4,9 +4,9 @@ source /opt/ram-freezer/audit-trail/log.sh
 source /opt/ram-freezer/utils/service-utils.sh
 
 
-log_info "Eliminando project-manager..."
+log_install_info "Eliminando project-manager..."
 
 # Service
 remove_service "project-manager.service"
 
-log_info "Project manager eliminado"
+log_install_info "Project manager eliminado"
