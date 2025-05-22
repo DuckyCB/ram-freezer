@@ -34,7 +34,7 @@ function _get_log_path() {
 
     case "$log_type" in
         "install")
-            if [ -z "${RF_VERSION}" ]; then
+            if [ -z "${RF_VERSION+x}" ] || [ -z "${RF_VERSION}" ]; then
                 RF_VERSION=$(git rev-parse --short HEAD 2>/dev/null)
                 if [ -z "${RF_VERSION}" ]; then
                     RF_VERSION="unknown_version"

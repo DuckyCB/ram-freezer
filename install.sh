@@ -37,6 +37,8 @@ printf "
 printf "by: fedeabdo & DuckyCB"
 
 RF_VERSION=$(git rev-parse --short HEAD 2>/dev/null)
+readonly RF_VERSION
+export RF_VERSION
 echo "$RF_VERSION" > /opt/ram-freezer/.version
 log_install_info "Versión $RF_VERSION"
 
