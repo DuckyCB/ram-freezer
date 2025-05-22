@@ -25,7 +25,7 @@ func GetVersion() string {
 		fmt.Printf("No se pudo leer la versión del sistema")
 		return "dev"
 	}
-	return string(content)
+	return strings.TrimSpace(string(content))
 }
 
 func GetKernelVersion() string {
@@ -108,7 +108,7 @@ func GetGoVersion() string {
 }
 
 func GetBashVersion() string {
-	cmd := exec.Command("echo", "echo $BASH_VERSION")
+	cmd := exec.Command("echo", "$BASH_VERSION")
 	output, err := cmd.Output()
 	if err != nil {
 		fmt.Printf(err.Error())

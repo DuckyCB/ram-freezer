@@ -47,15 +47,15 @@ function _get_log_path() {
             if [ -f "${base_path_file}" ]; then
                 local base_path
                 base_path=$(cat "${base_path_file}")
-                log_path="${base_path}/ram-scraper.log"
+                log_path="${base_path}/ram-freezer.log"
             else
                 echo "Warn: ${base_path_file} no encontrado." >&2
-                log_path="/opt/ram-freezer/bin/ram-scraper.log"
+                log_path="/opt/ram-freezer/bin/ram-freezer.log"
             fi
             ;;
         *)
             echo "Error: Tipo de log '${log_type}' no reconocido. Use 'install' o 'general'." >&2
-            log_path="/opt/ram-freezer/bin/ram-scraper.log"
+            log_path="/opt/ram-freezer/bin/ram-freezer.log"
             ;;
     esac
 
