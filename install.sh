@@ -36,6 +36,10 @@ printf "
 
 printf "by: fedeabdo & DuckyCB"
 
+RF_VERSION=$(git rev-parse --short HEAD 2>/dev/null)
+echo "$RF_VERSION" > /opt/ram-freezer/.version
+log_info "Versión $RF_VERSION"
+
 sleep 3
 clear
 

@@ -1,9 +1,9 @@
 package constants
 
 import (
-	"hash"
 	"crypto/md5"
 	"crypto/sha256"
+	"hash"
 )
 
 var Hashes = map[string]func() hash.Hash{

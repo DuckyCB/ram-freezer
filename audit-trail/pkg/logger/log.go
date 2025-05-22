@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -32,10 +34,21 @@ type SimpleLogger struct {
 	logFile *os.File
 	logger  *log.Logger
 	console *log.Logger
+	mu      sync.Mutex
+}
+
+func getOutPath() string {
+	content, err := os.ReadFile("/opt/ram-freezer/.out")
+	if err != nil {
+		fmt.Printf("no se pudo leer la versión del sistema")
+		return "/opt/ram-freezer/bin"
+	}
+	return string(content)
 }
 
 func NewRFLogger() (*SimpleLogger, error) {
-	logDir := "/opt/ram-freezer/bin/logs"
+	logDir := getOutPath()
+	logDir = filepath.Join(logDir, "logs")
 
 	today := time.Now().In(time.FixedZone("America/Montevideo", -3*60*60)).Format("2006-01-02")
 	logFilePath := fmt.Sprintf("%s/%s.log", logDir, today)
@@ -54,11 +67,16 @@ func NewRFLogger() (*SimpleLogger, error) {
 
 func (l *SimpleLogger) Close() {
 	if l.logFile != nil {
+		l.mu.Lock()
+		defer l.mu.Unlock()
 		l.logFile.Close()
 	}
 }
 
 func (l *SimpleLogger) Log(level LogLevel, message string) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
 	_, file, line, ok := runtime.Caller(1)
 	source := "unknown"
 	if ok {
