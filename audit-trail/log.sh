@@ -88,6 +88,10 @@ function log() {
     shift 2
   done
 
+  if [[ ! -f "$path" ]]; then
+      touch "$path"
+  fi
+
   echo "$level: $message"
 
   echo "{\"timestamp\":\"$timestamp\",\"level\":\"$level\",\"message\":\"$message\",\"file\":\"$source\",\"line\":$lineno${fields}}" >> "$path"
