@@ -49,7 +49,7 @@ function _get_log_path() {
                 base_path=$(cat "${base_path_file}")
                 log_path="${base_path}/ram-scraper.log"
             else
-                echo "Error: ${base_path_file} no encontrado." >&2
+                echo "Warn: ${base_path_file} no encontrado." >&2
                 log_path="/opt/ram-freezer/bin/ram-scraper.log"
             fi
             ;;
@@ -81,7 +81,7 @@ function log() {
   #    source="bash"
   #  fi
 
-  shift 2
+  shift 3
   local fields=""
   while [[ $# -gt 0 ]]; do
     fields="$fields,\"$1\":\"$2\""
