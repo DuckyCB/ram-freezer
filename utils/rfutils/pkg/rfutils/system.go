@@ -13,7 +13,7 @@ import (
 func GetOutPath() string {
 	content, err := os.ReadFile("/opt/ram-freezer/.out")
 	if err != nil {
-		fmt.Printf("no se pudo leer la versión del sistema")
+		fmt.Printf("no se pudo leer la ubicación de salida de logs")
 		return "/opt/ram-freezer/bin"
 	}
 	return string(content)

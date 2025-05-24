@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
@@ -31,46 +30,27 @@ type LogEntry struct {
 }
 
 type SimpleLogger struct {
-	logFile *os.File
-	logger  *log.Logger
-	console *log.Logger
-	mu      sync.Mutex
+	logFilePath string
+	console     *log.Logger
+	mu          sync.Mutex
 }
 
 func getOutPath() string {
 	content, err := os.ReadFile("/opt/ram-freezer/.out")
 	if err != nil {
-		fmt.Printf("no se pudo leer la versión del sistema")
-		return "/opt/ram-freezer/bin"
+		fmt.Printf("no se pudo leer la ubicación de salida de logs. usando salida genérica.")
+		return "/opt/ram-freezer/bin/ram-freezer.log"
 	}
-	return string(content)
+	return fmt.Sprintf("%s/ram-freezer.log", strings.TrimSpace(string(content)))
 }
 
 func NewRFLogger() (*SimpleLogger, error) {
-	logDir := getOutPath()
-	logDir = filepath.Join(logDir, "logs")
-
-	today := time.Now().In(time.FixedZone("America/Montevideo", -3*60*60)).Format("2006-01-02")
-	logFilePath := fmt.Sprintf("%s/%s.log", logDir, today)
-
-	file, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return nil, fmt.Errorf("failed to open log file: %w", err)
-	}
+	logFilePath := getOutPath()
 
 	return &SimpleLogger{
-		logFile: file,
-		logger:  log.New(file, "", 0),
-		console: log.New(os.Stdout, "", 0),
+		logFilePath: logFilePath,
+		console:     log.New(os.Stdout, "", 0),
 	}, nil
-}
-
-func (l *SimpleLogger) Close() {
-	if l.logFile != nil {
-		l.mu.Lock()
-		defer l.mu.Unlock()
-		l.logFile.Close()
-	}
 }
 
 func (l *SimpleLogger) Log(level LogLevel, message string) {
@@ -101,7 +81,19 @@ func (l *SimpleLogger) Log(level LogLevel, message string) {
 	}
 
 	logOutput := string(jsonBytes)
-	l.logger.Println(logOutput)
+
+	logFile, err := os.OpenFile(l.logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error abriendo archivo de log %s: %v\n", l.logFilePath, err)
+		l.console.Println(message)
+		return
+	}
+	defer logFile.Close()
+
+	if _, err := logFile.WriteString(logOutput + "\n"); err != nil {
+		fmt.Fprintf(os.Stderr, "Error escribiendo en archivo de log: %v\n", err)
+	}
+
 	l.console.Println(message)
 }
 
