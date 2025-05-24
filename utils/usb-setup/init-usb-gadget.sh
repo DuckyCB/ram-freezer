@@ -31,10 +31,10 @@ done
 
 log_info "Iniciando usb-gadget"
 
-check_modules
-
 # TODO: capaz esto puede ir en usb-modules-setup.sh ?
 modprobe libcomposite
+
+check_modules
 
 # USB device
 cd "${USB_GADGET_PATH}"

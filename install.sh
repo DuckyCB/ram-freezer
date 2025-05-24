@@ -12,6 +12,12 @@ mkdir -p /opt/ram-freezer/bin/install
 source /opt/ram-freezer/audit-trail/log.sh
 
 
+RF_VERSION=$(git rev-parse --short HEAD 2>/dev/null)
+readonly RF_VERSION
+export RF_VERSION
+echo "$RF_VERSION" > /opt/ram-freezer/.version
+log_install_info "Versión $RF_VERSION"
+
 if [[ "$UID" -ne 0 ]]; then
   log_install_fatal "Este script requiere privilegios de administrador (root)."
 fi
@@ -35,12 +41,6 @@ printf "
 \n"
 
 printf "by: fedeabdo & DuckyCB"
-
-RF_VERSION=$(git rev-parse --short HEAD 2>/dev/null)
-readonly RF_VERSION
-export RF_VERSION
-echo "$RF_VERSION" > /opt/ram-freezer/.version
-log_install_info "Versión $RF_VERSION"
 
 sleep 3
 clear
