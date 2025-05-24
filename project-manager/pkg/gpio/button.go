@@ -74,13 +74,11 @@ func (bc *ButtonController) startMonitoringInternal() {
 	bc.pressEvents = make(chan bool)
 	bc.isRunning = true
 
-	// Goroutine para leer el estado del botón
 	go func() {
-		var lastState int = 0
+		var lastState = 0
 		var currentState int
 		var err error
 
-		// Leer el estado inicial
 		lastState, err = readGPIO(bc.pin)
 		if err != nil {
 			logs.Log.Error(err.Error())

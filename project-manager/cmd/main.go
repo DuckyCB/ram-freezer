@@ -15,21 +15,18 @@ import (
 func main() {
 	logs.SetupLogger()
 
-	err := system.StartRun()
-	if err != nil {
-		return
-	}
+	system.StartRun()
 
 	logs.Log.Info("Starting project manager")
 
 	if !utils.IsAdmin() {
-		logs.Log.Error("Es necesario ejecutar el programa como administrador")
+		logs.Log.Fatal("Es necesario ejecutar el programa como administrador")
 		return
 	}
 
 	controller, err := workflow.NewController(constants.LedPin, constants.ButtonPin)
 	if err != nil {
-		logs.Log.Error(fmt.Sprintf("Error al inicializar el sistema: %v\n", err))
+		logs.Log.Fatal(fmt.Sprintf("Error al inicializar el sistema: %v\n", err))
 		return
 	}
 	defer controller.Stop()

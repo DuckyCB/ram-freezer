@@ -98,35 +98,35 @@ function log() {
 }
 
 function log_fatal() {
-  log "general" "fatal" "$@"
+  log "general" "FATAL" "$@"
   exit 1
 }
 
 function log_error() {
-  log "general" "error" "$@"
+  log "general" "ERROR" "$@"
 }
 
 function log_warn() {
-  log "general" "warn" "$@"
+  log "general" "WARN" "$@"
 }
 
 function log_info() {
-  log "general" "info" "$@"
+  log "general" "INFO" "$@"
 }
 
 function log_install_fatal() {
-  log "install" "fatal" "$@"
+  log "install" "FATAL" "$@"
   exit 1
 }
 
 function log_install_error() {
-  log "install" "error" "$@"
+  log "install" "ERROR" "$@"
 }
 
 function log_install_warn() {
-  log "install" "warn" "$@"
+  log "install" "WARN" "$@"
 }
 
 function log_install_info() {
-  log "install" "info" "$@"
+  log "install" "INFO" "$@"
 }

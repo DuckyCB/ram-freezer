@@ -51,11 +51,12 @@ func StartRun() error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	fmt.Printf("Ejecutando '%s system'...\n", binaryPath)
+	logs.Log.Info(fmt.Sprintf("Ejecutando '%s system'...\n", binaryPath))
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("error al ejecutar el binario '%s system': %w", binaryPath, err)
+		logs.Log.Error(err.Error())
+		return err
 	}
-	fmt.Println("Ejecución del binario completada con éxito.")
+	logs.Log.Info("Ejecución del binario completada con éxito.")
 
 	return nil
 }

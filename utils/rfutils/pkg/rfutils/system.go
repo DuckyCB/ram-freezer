@@ -13,7 +13,7 @@ import (
 func GetOutPath() string {
 	content, err := os.ReadFile("/opt/ram-freezer/.out")
 	if err != nil {
-		fmt.Printf("no se pudo leer la ubicación de salida de logs")
+		fmt.Printf("no se pudo leer la ubicación de salida del sistema")
 		return "/opt/ram-freezer/bin"
 	}
 	return string(content)
@@ -108,7 +108,7 @@ func GetGoVersion() string {
 }
 
 func GetBashVersion() string {
-	cmd := exec.Command("echo", "$BASH_VERSION")
+	cmd := exec.Command("bash", "-c", "echo $BASH_VERSION")
 	output, err := cmd.Output()
 	if err != nil {
 		fmt.Printf(err.Error())

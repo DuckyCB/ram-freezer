@@ -40,10 +40,10 @@ printf "
      ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
 \n"
 
-printf "by: fedeabdo & DuckyCB"
+printf "by: fedeabdo & DuckyCB\n\n"
 
 sleep 3
-clear
+
 
 # Permissions
 log_install_info "Agregando permisos de ejecución"
