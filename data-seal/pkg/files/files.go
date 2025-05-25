@@ -52,7 +52,15 @@ func writeToSha256File(filePath, data string) error {
 
 	sha256Path := fmt.Sprintf("%s.sha256", filePath)
 
-	err := os.WriteFile(sha256Path, []byte(data), 0644)
+	file, err := os.OpenFile(sha256Path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		logs.Log.Error(err.Error())
+		return err
+	}
+
+	defer file.Close()
+
+	_, err = file.WriteString(data + "\n")
 	if err != nil {
 		logs.Log.Error(err.Error())
 		return err
@@ -68,7 +76,14 @@ func writeToMD5File(filePath, data string) error {
 
 	md5Path := fmt.Sprintf("%s.md5", filePath)
 
-	err := os.WriteFile(md5Path, []byte(data), 0644)
+	file, err := os.OpenFile(md5Path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		logs.Log.Error(err.Error())
+		return err
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(data + "\n")
 	if err != nil {
 		logs.Log.Error(err.Error())
 		return err

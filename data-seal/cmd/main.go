@@ -6,7 +6,6 @@ import (
 	"data-seal/utils/constants"
 	"flag"
 	"fmt"
-	"path/filepath"
 	"ram-freezer/utils/rfutils/pkg/rfutils"
 	"sync"
 )
@@ -52,8 +51,8 @@ func main() {
 
 		// Installation
 		version := rfutils.GetVersion()
-		versionPath := filepath.Join("/opt/ram-freezer/bin/install", version)
-		hash.Dir(versionPath)
+		installPath := fmt.Sprintf("/opt/ram-freezer/bin/install/%s.log", version)
+		hash.File(installPath)
 		// Scripts
 		hash.Dir("/opt/ram-freezer/bin/scripts")
 
