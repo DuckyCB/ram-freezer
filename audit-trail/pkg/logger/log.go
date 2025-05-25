@@ -96,7 +96,7 @@ func (l *RFLogger) Log(level LogLevel, message string) {
 		fmt.Fprintf(os.Stderr, "Error escribiendo en archivo de log: %v\n", err)
 	}
 
-	l.console.Println(message)
+	l.console.Println(fmt.Sprintf("%s: %s", level, message))
 }
 
 func (l *RFLogger) Debug(message string) {

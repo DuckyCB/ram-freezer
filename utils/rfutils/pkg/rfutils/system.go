@@ -16,7 +16,7 @@ func GetOutPath() string {
 		fmt.Printf("no se pudo leer la ubicación de salida del sistema")
 		return "/opt/ram-freezer/bin"
 	}
-	return string(content)
+	return strings.TrimSpace(string(content))
 }
 
 func GetVersion() string {
