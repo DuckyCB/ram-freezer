@@ -202,12 +202,12 @@ func writeSpecialKey(key string, hid *os.File) {
 
 	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
-		logs.Log.Error(fmt.Sprintf("Error unpressing key: %v\n", err))
+		logs.Log.Error(fmt.Sprintf("Error unpressing key: %v", err))
 		return
 	}
 
 	time.Sleep(waitTime)
-	logs.Log.Info(fmt.Sprintf("Pressing special keys: %s\n", key))
+	logs.Log.Info(fmt.Sprintf("Pressing special keys: %s", key))
 }
 
 func main() {

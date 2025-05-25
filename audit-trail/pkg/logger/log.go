@@ -88,7 +88,6 @@ func (l *RFLogger) Log(level LogLevel, message string) {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error abriendo archivo de log %s: %v\n", l.logFilePath, err)
 		l.console.Println(message)
-		return
 	}
 	defer logFile.Close()
 

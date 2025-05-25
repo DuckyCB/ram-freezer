@@ -3,7 +3,6 @@ package files
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"project-manager/internal/logs"
@@ -14,20 +13,25 @@ import (
 func copyFile(src, dst string) error {
 	in, err := os.Open(src)
 	if err != nil {
-		return fmt.Errorf("failed to open source file %s: %w", src, err)
+		logs.Log.Error(err.Error())
+		return err
 	}
 	defer in.Close()
 
 	out, err := os.Create(dst)
 	if err != nil {
-		return fmt.Errorf("failed to create destination file %s: %w", dst, err)
+		logs.Log.Error(err.Error())
+		return err
 	}
 	defer out.Close()
 
 	_, err = io.Copy(out, in)
 	if err != nil {
-		return fmt.Errorf("failed to copy file from %s to %s: %w", src, dst, err)
+		logs.Log.Error(err.Error())
+		return err
 	}
+
+	logs.Log.Info(fmt.Sprintf("%s copiado a %s", in.Name(), out.Name()))
 	return nil
 }
 
@@ -35,20 +39,24 @@ func copyFile(src, dst string) error {
 func copyDir(src, dst string) error {
 	srcInfo, err := os.Stat(src)
 	if err != nil {
-		return fmt.Errorf("failed to get source directory info %s: %w", src, err)
+		logs.Log.Error(err.Error())
+		return err
 	}
 	if !srcInfo.IsDir() {
-		return fmt.Errorf("source %s is not a directory", src)
+		logs.Log.Error(fmt.Sprintf("%s is not a directory", src))
+		return fmt.Errorf("%s is not a directory", src)
 	}
 
 	err = os.MkdirAll(dst, srcInfo.Mode())
 	if err != nil {
-		return fmt.Errorf("failed to create destination directory %s: %w", dst, err)
+		logs.Log.Error(err.Error())
+		return err
 	}
 
-	entries, err := ioutil.ReadDir(src)
+	entries, err := os.ReadDir(src)
 	if err != nil {
-		return fmt.Errorf("failed to read source directory %s: %w", src, err)
+		logs.Log.Error(err.Error())
+		return err
 	}
 
 	for _, entry := range entries {
@@ -57,11 +65,13 @@ func copyDir(src, dst string) error {
 
 		if entry.IsDir() {
 			if err := copyDir(srcPath, dstPath); err != nil {
-				return err
+				logs.Log.Error(err.Error())
+				continue
 			}
 		} else {
 			if err := copyFile(srcPath, dstPath); err != nil {
-				return err
+				logs.Log.Warn(fmt.Sprintf("El archivo %s no fue copiado", srcPath))
+				continue
 			}
 		}
 	}
@@ -84,53 +94,19 @@ func CopyToUSB() {
 	logs.Log.Info("Destination directory created: " + destinationDirOnUSB)
 
 	// Installation
-	installationPath := fmt.Sprintf("%s/install/%s.log", sourceBinDir, version)
-	installationNewPath := fmt.Sprintf("%s/%s.log", destinationDirOnUSB, version)
-	logs.Log.Info(fmt.Sprintf("Attempting to copy %s to %s", installationPath, installationPath))
-	if err := copyFile(installationPath, installationNewPath); err != nil {
-		logs.Log.Error(err.Error())
-	} else {
-		logs.Log.Info(fmt.Sprintf("Copied %s to %s", installationPath, installationNewPath))
-	}
+	copyFile(fmt.Sprintf("%s/install/%s.log", sourceBinDir, version), fmt.Sprintf("%s/%s.log", destinationDirOnUSB, version))
 
 	// Run
-	if err := copyDir(runPath, destinationDirOnUSB); err != nil {
-		logs.Log.Error(err.Error())
-	} else {
-		logs.Log.Info(fmt.Sprintf("Copies run files to %s", destinationDirOnUSB))
-	}
+	copyDir(runPath, destinationDirOnUSB)
 
 	// Scripts
-	if err := copyDir(filepath.Join(sourceBinDir, "scripts"), destinationDirOnUSB); err != nil {
-		logs.Log.Error(err.Error())
-	} else {
-		logs.Log.Info(fmt.Sprintf("Copied scripts to %s", destinationDirOnUSB))
-	}
+	copyDir(filepath.Join(sourceBinDir, "scripts"), destinationDirOnUSB)
 
 	// Binaries
-	if err := copyFile(filepath.Join(sourceBinDir, "data-seal"), filepath.Join(destinationDirOnUSB, "data-seal")); err != nil {
-		logs.Log.Error(err.Error())
-	} else {
-		logs.Log.Info(fmt.Sprintf("Copied data-seal to %s", destinationDirOnUSB))
-	}
-
-	if err := copyFile(filepath.Join(sourceBinDir, "ghost-keyboard"), filepath.Join(destinationDirOnUSB, "ghost-keyboard")); err != nil {
-		logs.Log.Error(err.Error())
-	} else {
-		logs.Log.Info(fmt.Sprintf("Copied ghost-keyboard to %s", destinationDirOnUSB))
-	}
-
-	if err := copyFile(filepath.Join(sourceBinDir, "project-manager"), filepath.Join(destinationDirOnUSB, "project-manager")); err != nil {
-		logs.Log.Error(err.Error())
-	} else {
-		logs.Log.Info(fmt.Sprintf("Copied project-manager to %s", destinationDirOnUSB))
-	}
-
-	if err := copyFile(filepath.Join(sourceBinDir, "ram-scraper"), filepath.Join(destinationDirOnUSB, "ram-scraper")); err != nil {
-		logs.Log.Error(err.Error())
-	} else {
-		logs.Log.Info(fmt.Sprintf("Copied ram-scraper to %s", destinationDirOnUSB))
-	}
+	copyFile(filepath.Join(sourceBinDir, "data-seal"), filepath.Join(destinationDirOnUSB, "data-seal"))
+	copyFile(filepath.Join(sourceBinDir, "ghost-keyboard"), filepath.Join(destinationDirOnUSB, "ghost-keyboard"))
+	copyFile(filepath.Join(sourceBinDir, "project-manager"), filepath.Join(destinationDirOnUSB, "project-manager"))
+	copyFile(filepath.Join(sourceBinDir, "ram-scraper"), filepath.Join(destinationDirOnUSB, "ram-scraper"))
 
 	// TODO: falta mover archivos que ya estan en el USB a la nueva ubicacion
 }
