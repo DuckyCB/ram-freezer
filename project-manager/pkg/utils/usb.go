@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os/exec"
 	"project-manager/internal/logs"
+	"strings"
 )
 
 // DisconnectUSB disconnects the USB device by writing to the UDC file
@@ -31,7 +32,20 @@ func ConnectUSB() {
 
 // MountUSB mounts the USB device to the specified mount point
 func MountUSB() {
-	logs.Log.Info("Montando el USB...")
+	logs.Log.Info("Intentando montar el USB...")
+
+	cmdCheck := exec.Command("mount")
+	outputCheck, errCheck := cmdCheck.CombinedOutput()
+	if errCheck != nil {
+		logs.Log.Error(fmt.Sprintf("Error checking mounts: %s", errCheck.Error()))
+		return
+	}
+
+	if strings.Contains(string(outputCheck), "/dev/sda1 on /mnt/usb") {
+		logs.Log.Info("USB is already mounted at /mnt/usb. Skipping mount operation.")
+		return
+	}
+
 	cmd := exec.Command("sudo", "mount", "/dev/sda1", "/mnt/usb/")
 	output, err := cmd.CombinedOutput()
 	if err != nil {

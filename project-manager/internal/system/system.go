@@ -44,12 +44,12 @@ func StartRun() error {
 		logs.Log.Error(err.Error())
 		return err
 	}
-	logs.Log.Info(fmt.Sprintf("Archivo '%s' creado con éxito.\n", jsonFilePath))
+	logs.Log.Info(fmt.Sprintf("Archivo '%s' creado con éxito.", jsonFilePath))
 
-	binaryPath := "/opt/ram-freezer/data-seal"
-	logs.Log.Info(fmt.Sprintf("Ejecutando '%s system'...\n", binaryPath))
+	binaryPath := "/opt/ram-freezer/bin/data-seal"
+	logs.Log.Info(fmt.Sprintf("Ejecutando '%s system'...", binaryPath))
 
-	cmd := exec.Command(binaryPath, "system")
+	cmd := exec.Command(binaryPath, "-system")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 

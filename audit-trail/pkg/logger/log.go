@@ -78,7 +78,7 @@ func (l *RFLogger) Log(level LogLevel, message string) {
 
 	jsonBytes, err := json.Marshal(entry)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error marshaling log entry: %v\n", err)
+		fmt.Fprintf(os.Stderr, "LOG_ERROR: Error marshaling log entry: %v\n", err)
 		return
 	}
 
@@ -86,13 +86,13 @@ func (l *RFLogger) Log(level LogLevel, message string) {
 
 	logFile, err := os.OpenFile(l.logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error abriendo archivo de log %s: %v\n", l.logFilePath, err)
+		fmt.Fprintf(os.Stderr, "LOG_ERROR: Error abriendo archivo de log %s: %v", l.logFilePath, err)
 		l.console.Println(message)
 	}
 	defer logFile.Close()
 
 	if _, err := logFile.WriteString(logOutput + "\n"); err != nil {
-		fmt.Fprintf(os.Stderr, "Error escribiendo en archivo de log: %v\n", err)
+		fmt.Fprintf(os.Stderr, "LOG_ERROR: Error escribiendo en archivo de log: %v", err)
 	}
 
 	l.console.Println(fmt.Sprintf("%s: %s", level, message))

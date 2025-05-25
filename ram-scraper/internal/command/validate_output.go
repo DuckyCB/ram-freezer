@@ -16,8 +16,7 @@ func bytesToGB(bytes int64) float64 {
 func ValidateOutput() {
 	config, err := utils.LoadConfig(constants.ConfigPath)
 	if err != nil {
-		logs.Log.Error(fmt.Sprintf("No se pudo cargar la configuracion: %v\n", err))
-		os.Exit(1)
+		logs.Log.Fatal(fmt.Sprintf("No se pudo cargar la configuracion: %v", err))
 	}
 	usbFolder := "/mnt/usb/"
 	stateFilePath := config.StateFile
@@ -25,12 +24,11 @@ func ValidateOutput() {
 
 	state, err := utils.LoadState(stateFilePath)
 	if err != nil {
-		logs.Log.Error(fmt.Sprintf("No se pudo cargar el estado: %v", err))
-		os.Exit(1)
+		logs.Log.Fatal(fmt.Sprintf("No se pudo cargar el estado: %v", err))
 	}
 
 	filePath := usbFolder + config.OutputFolder + config.OutputFile
-	logs.Log.Info(fmt.Sprintf("Validando el archivo %s...", filePath))
+	logs.Log.Info(fmt.Sprintf("Validando el archivo %s", filePath))
 
 	// Verificar si el archivo existe
 	fileInfo, err := os.Stat(filePath)

@@ -26,7 +26,7 @@ func main() {
 
 	controller, err := workflow.NewController(constants.LedPin, constants.ButtonPin)
 	if err != nil {
-		logs.Log.Fatal(fmt.Sprintf("Error al inicializar el sistema: %v\n", err))
+		logs.Log.Fatal(fmt.Sprintf("Error al inicializar el sistema: %v", err))
 		return
 	}
 	defer controller.Stop()

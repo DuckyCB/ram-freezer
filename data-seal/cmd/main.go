@@ -29,12 +29,8 @@ func main() {
 	}
 
 	if *filePtr != "" {
+		logs.Log.Info(fmt.Sprintf("Hashing file: %s", *filePtr))
 		hash.File(*filePtr)
-	}
-
-	if *checksumPtr {
-		logs.Log.Info("Creating checksum")
-		hash.Checksum(outPath)
 	}
 
 	if *systemPtr {
@@ -57,6 +53,12 @@ func main() {
 		hash.File(installPath)
 		// Scripts
 		hash.Dir("/opt/ram-freezer/bin/scripts")
-
 	}
+
+	if *checksumPtr {
+		logs.Log.Info("Creating checksum")
+		hash.Checksum(outPath)
+	}
+
+	logs.Log.Info("Exiting data-seal")
 }

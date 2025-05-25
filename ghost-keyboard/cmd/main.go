@@ -125,11 +125,11 @@ func writeChar(char uint8, hid *os.File) error {
 	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
 		logs.Log.Error(err.Error())
-		return fmt.Errorf("error unpressing key: %w", err)
+		return err
 	}
 
 	time.Sleep(waitTime) // Sleep for a while to simulate key press duration
-	logs.Log.Info(fmt.Sprintf("Pressing key: %c\n", char))
+	logs.Log.Info("Pressing key: " + string(char))
 
 	return nil
 }

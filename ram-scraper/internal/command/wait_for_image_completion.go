@@ -53,7 +53,7 @@ func WaitForImageCompletion(waitTime int) int {
 		} else {
 			logs.Log.Info(fmt.Sprintf("La imagen de RAM no se ha creado. Estado actual: %s", state.Status))
 		}
-		logs.Log.Info(fmt.Sprintf("Esperando %v\n", waitTimeSec))
+		logs.Log.Info(fmt.Sprintf("Esperando %v", waitTimeSec))
 		time.Sleep(waitTimeSec)
 	}
 	return 1
