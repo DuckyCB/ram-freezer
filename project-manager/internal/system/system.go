@@ -39,7 +39,7 @@ func StartRun() error {
 		return err
 	}
 
-	jsonFilePath := filepath.Join(runPath, "sistema.info")
+	jsonFilePath := filepath.Join(runPath, "system.info")
 	if err := os.WriteFile(jsonFilePath, jsonData, 0644); err != nil {
 		logs.Log.Error(err.Error())
 		return err

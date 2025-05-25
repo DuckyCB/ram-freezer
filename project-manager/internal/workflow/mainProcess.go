@@ -1,9 +1,12 @@
 package workflow
 
 import (
+	"os/exec"
 	"project-manager/internal/command"
+	"project-manager/internal/files"
 	"project-manager/internal/logs"
 	"project-manager/pkg/utils"
+	"ram-freezer/utils/rfutils/pkg/rfutils"
 	"time"
 )
 
@@ -33,7 +36,12 @@ func (wfc *Controller) runSystem() {
 	utils.DisconnectUSB()
 	utils.RemountUSB()
 
-	command.HashFiles("/mnt/usb/data/")
+	exec.Command("/opt/ram-freezer/bin/data-seal", "-dir", "/mnt/usb/data/")
+	runPath := rfutils.GetOutPath()
+	exec.Command("/opt/ram-freezer/bin/data-seal", "-file", runPath+"/ram-freezer.log")
+	exec.Command("/opt/ram-freezer/bin/data-seal", "-checksum")
+
+	files.CopyToUSB()
 
 	// TODO hasta aca
 

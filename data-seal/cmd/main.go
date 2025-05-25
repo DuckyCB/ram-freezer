@@ -49,6 +49,8 @@ func main() {
 			}(filePath)
 		}
 
+		// System info
+		hash.File(outPath + "system.info")
 		// Installation
 		version := rfutils.GetVersion()
 		installPath := fmt.Sprintf("/opt/ram-freezer/bin/install/%s.log", version)
