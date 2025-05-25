@@ -36,11 +36,12 @@ func (wfc *Controller) runSystem() {
 	utils.DisconnectUSB()
 	utils.RemountUSB()
 
+	dataSeal := "/opt/ram-freezer/bin/data-seal"
 	logs.Log.Info("Comenzando creación de hashes de archivos")
-	exec.Command("/opt/ram-freezer/bin/data-seal", "-dir", "/mnt/usb/data/")
+	exec.Command(dataSeal, "-dir", "/mnt/usb/data/")
 	runPath := rfutils.GetOutPath()
-	exec.Command("/opt/ram-freezer/bin/data-seal", "-file", runPath+"/ram-freezer.log")
-	exec.Command("/opt/ram-freezer/bin/data-seal", "-checksum")
+	exec.Command(dataSeal, "-file", runPath+"/ram-freezer.log")
+	exec.Command(dataSeal, "-checksum")
 
 	files.CopyToUSB()
 

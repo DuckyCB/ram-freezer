@@ -129,7 +129,6 @@ func writeChar(char uint8, hid *os.File) error {
 	}
 
 	time.Sleep(waitTime) // Sleep for a while to simulate key press duration
-	logs.Log.Info("Pressing key: " + string(char))
 
 	return nil
 }
@@ -207,11 +206,12 @@ func writeSpecialKey(key string, hid *os.File) {
 	}
 
 	time.Sleep(waitTime)
-	logs.Log.Info(fmt.Sprintf("Pressing special keys: %s", key))
 }
 
 func main() {
 	logs.SetupLogger()
+
+	logs.Log.Info("Starting Ghost-keyboard")
 
 	filePath := flag.String("script", "", "script file to use")
 	flag.Parse()
@@ -228,6 +228,7 @@ func main() {
 	}
 	defer file.Close()
 
+	logs.Log.Info("Attempting to write the script " + *filePath)
 	scanner := bufio.NewScanner(file)
 	err = processFile(*scanner)
 	if err != nil {
