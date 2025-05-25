@@ -10,7 +10,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"ram-freezer/utils/rfutils/pkg/rfutils"
 	"strings"
 	"sync"
 )
@@ -35,8 +34,10 @@ func hashFile(filePath string, hash hash.Hash) (string, error) {
 
 func File(filePath string) error {
 	if filePath == "" {
+		logs.Log.Error("File path is empty")
 		return fmt.Errorf("file is empty")
 	}
+
 	logs.Log.Info(fmt.Sprintf("Hashing file: %s", filePath))
 
 	for hashName, hashObj := range constants.Hashes {
@@ -44,20 +45,16 @@ func File(filePath string) error {
 
 		hashValue, err := hashFile(filePath, hashObj())
 
-		logs.Log.Info(fmt.Sprintf("Hash %s para %s: %s", hashName, filePath, hashValue))
-
-		if err != nil {
+		if err == nil {
+			logs.Log.Info(fmt.Sprintf("Hash %s para %s: %s", hashName, filePath, hashValue))
+		} else {
 			logs.Log.Error(fmt.Sprintf("Error calculando %s para %s: %v", hashName, filePath, err))
 			continue
 		}
 
-		hashFilePath := fmt.Sprintf("%s.%s", filePath, hashName)
-
-		logs.Log.Info(fmt.Sprintf("Escribiendo hash %s en %s", hashName, hashFilePath))
-
-		err = files.WriteToFile(hashFilePath, hashValue)
+		err = files.WriteToFile(filepath.Base(filePath), hashValue, hashName)
 		if err != nil {
-			logs.Log.Error(fmt.Sprintf("Error escribiendo archivo de hash %s: %v", hashName, err))
+			return err
 		}
 	}
 	return nil
@@ -106,11 +103,19 @@ func Dir(dirPath string) {
 	return
 }
 
-// Checksum TODO: terminar
-func Checksum(dir string) (string, error) {
-	version := rfutils.GetVersion()
+func Checksum(outPath string) {
+	for hashName, hashFunc := range constants.Hashes {
+		hashValue, err := hashFile(fmt.Sprintf("%s/file-hashes.%s", outPath, hashName), hashFunc())
 
-	return version, nil
+		if err == nil {
+			logs.Log.Info(fmt.Sprintf("CHECKSUM %s: %s", hashName, hashValue))
+		} else {
+			logs.Log.Error(fmt.Sprintf("Error calculando CHECKSUM %s", hashName))
+			continue
+		}
+
+		files.WriteChecksum(hashValue, hashName)
+	}
 }
 
 func IsHashFile(path string) bool {

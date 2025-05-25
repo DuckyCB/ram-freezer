@@ -13,6 +13,8 @@ import (
 
 type LogLevel string
 
+const RFC3339Micro = "2006-01-02T15:04:05.000000Z"
+
 const (
 	Debug LogLevel = "DEBUG"
 	Info  LogLevel = "INFO"
@@ -29,7 +31,7 @@ type LogEntry struct {
 	Line      int      `json:"line"`
 }
 
-type SimpleLogger struct {
+type RFLogger struct {
 	logFilePath string
 	console     *log.Logger
 	mu          sync.Mutex
@@ -44,16 +46,16 @@ func getOutPath() string {
 	return fmt.Sprintf("%s/ram-freezer.log", strings.TrimSpace(string(content)))
 }
 
-func NewRFLogger() (*SimpleLogger, error) {
+func NewRFLogger() (*RFLogger, error) {
 	logFilePath := getOutPath()
 
-	return &SimpleLogger{
+	return &RFLogger{
 		logFilePath: logFilePath,
 		console:     log.New(os.Stdout, "", 0),
 	}, nil
 }
 
-func (l *SimpleLogger) Log(level LogLevel, message string) {
+func (l *RFLogger) Log(level LogLevel, message string) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
@@ -67,7 +69,7 @@ func (l *SimpleLogger) Log(level LogLevel, message string) {
 	}
 
 	entry := LogEntry{
-		Timestamp: time.Now().UTC().Format(time.RFC3339Nano),
+		Timestamp: time.Now().UTC().Format(RFC3339Micro),
 		Level:     level,
 		Message:   message,
 		Source:    source,
@@ -97,22 +99,22 @@ func (l *SimpleLogger) Log(level LogLevel, message string) {
 	l.console.Println(message)
 }
 
-func (l *SimpleLogger) Debug(message string) {
+func (l *RFLogger) Debug(message string) {
 	l.Log(Debug, message)
 }
 
-func (l *SimpleLogger) Info(message string) {
+func (l *RFLogger) Info(message string) {
 	l.Log(Info, message)
 }
 
-func (l *SimpleLogger) Warn(message string) {
+func (l *RFLogger) Warn(message string) {
 	l.Log(Warn, message)
 }
 
-func (l *SimpleLogger) Error(message string) {
+func (l *RFLogger) Error(message string) {
 	l.Log(Error, message)
 }
 
-func (l *SimpleLogger) Fatal(message string) {
+func (l *RFLogger) Fatal(message string) {
 	l.Log(Fatal, message)
 }

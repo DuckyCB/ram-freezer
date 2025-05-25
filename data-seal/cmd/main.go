@@ -2,12 +2,13 @@ package main
 
 import (
 	"data-seal/internal/logs"
-	"data-seal/pkg/files"
 	"data-seal/pkg/hash"
+	"data-seal/utils/constants"
 	"flag"
 	"fmt"
 	"path/filepath"
 	"ram-freezer/utils/rfutils/pkg/rfutils"
+	"sync"
 )
 
 func main() {
@@ -34,19 +35,27 @@ func main() {
 
 	if *checksumPtr {
 		logs.Log.Info("Creating checksum")
-
-		checksumHash, err := hash.Checksum(outPath)
-		if err != nil {
-			logs.Log.Error(err.Error())
-			return
-		}
-
-		logs.Log.Info(fmt.Sprintf("El hash encadenado es %s", checksumHash))
-
-		err = files.WriteToFile(filepath.Join(outPath, "CHECKSUM"), checksumHash)
+		hash.Checksum(outPath)
 	}
 
 	if *systemPtr {
 		logs.Log.Info("Creating system hash")
+		var wg sync.WaitGroup
+
+		for _, filePath := range constants.SystemFiles {
+			wg.Add(1)
+			go func(filePath string) {
+				defer wg.Done()
+				hash.File(filePath)
+			}(filePath)
+		}
+
+		// Installation
+		version := rfutils.GetVersion()
+		versionPath := filepath.Join("/opt/ram-freezer/bin/install", version)
+		hash.Dir(versionPath)
+		// Scripts
+		hash.Dir("/opt/ram-freezer/bin/scripts")
+
 	}
 }

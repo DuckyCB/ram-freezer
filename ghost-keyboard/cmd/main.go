@@ -80,7 +80,6 @@ func processFile(scanner bufio.Scanner) error {
 				i += endIdx + 1
 			} else {
 				err = writeChar(char, hid)
-				// TODO: handle err
 				if err != nil {
 					logs.Log.Error(err.Error())
 				}

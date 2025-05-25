@@ -9,7 +9,6 @@ import (
 func RunRamScraper() {
 	logs.Log.Info("Ejecutando ram-scraper...")
 
-	// TODO: el pendrive paso a llamarse USB_VAULT, si esto se rompe es por eso
 	cmd := exec.Command("/opt/ram-freezer/bin/ghost-keyboard", "-script", "/opt/ram-freezer/bin/scripts/windows_run_ram_scraper")
 
 	output, err := cmd.CombinedOutput()

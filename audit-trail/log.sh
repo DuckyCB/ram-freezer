@@ -75,7 +75,7 @@ function log() {
   local level=$2
   local message=$3
   local timestamp
-  timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+  timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S.%6NZ")
 
   #  if [ -z "$source" ]; then
   #    source="bash"
@@ -114,6 +114,10 @@ function log_info() {
   log "general" "INFO" "$@"
 }
 
+function log_debug() {
+  log "general" "DEBUG" "$@"
+}
+
 function log_install_fatal() {
   log "install" "FATAL" "$@"
   exit 1
@@ -129,4 +133,8 @@ function log_install_warn() {
 
 function log_install_info() {
   log "install" "INFO" "$@"
+}
+
+function log_install_debug() {
+  log "install" "DEBUG" "$@"
 }
