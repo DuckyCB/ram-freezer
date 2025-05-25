@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"project-manager/internal/logs"
 	"project-manager/internal/system"
+	"project-manager/internal/utils/constants"
 	"project-manager/internal/workflow"
 	"project-manager/pkg/utils"
-	"project-manager/utils/constants"
 	"syscall"
 )
 

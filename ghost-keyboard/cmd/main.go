@@ -235,4 +235,6 @@ func main() {
 		logs.Log.Error(fmt.Sprintf("Error processing file %s: %v", *filePath, err))
 		return
 	}
+
+	logs.Log.Info("Exiting Ghost-keyboard")
 }

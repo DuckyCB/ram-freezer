@@ -1,6 +1,7 @@
 package workflow
 
 import (
+	"os"
 	"os/exec"
 	"project-manager/internal/command"
 	"project-manager/internal/files"
@@ -38,10 +39,28 @@ func (wfc *Controller) runSystem() {
 
 	dataSeal := "/opt/ram-freezer/bin/data-seal"
 	logs.Log.Info("Comenzando creación de hashes de archivos")
-	exec.Command(dataSeal, "-dir", "/mnt/usb/data/")
+
+	dataCmd := exec.Command(dataSeal, "-dir", "/mnt/usb/data/")
+	dataCmd.Stdout = os.Stdout
+	dataCmd.Stderr = os.Stderr
+	if err := dataCmd.Run(); err != nil {
+		logs.Log.Error(err.Error())
+	}
+
 	runPath := rfutils.GetOutPath()
-	exec.Command(dataSeal, "-file", runPath+"/ram-freezer.log")
-	exec.Command(dataSeal, "-checksum")
+	logsCmd := exec.Command(dataSeal, "-file", runPath+"/ram-freezer.log")
+	logsCmd.Stdout = os.Stdout
+	logsCmd.Stderr = os.Stderr
+	if err := logsCmd.Run(); err != nil {
+		logs.Log.Error(err.Error())
+	}
+
+	checksumCmd := exec.Command(dataSeal, "-checksum")
+	checksumCmd.Stdout = os.Stdout
+	checksumCmd.Stderr = os.Stderr
+	if err := checksumCmd.Run(); err != nil {
+		logs.Log.Error(err.Error())
+	}
 
 	files.CopyToUSB()
 

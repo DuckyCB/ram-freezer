@@ -2,8 +2,8 @@ package main
 
 import (
 	"data-seal/internal/logs"
+	"data-seal/internal/utils/constants"
 	"data-seal/pkg/hash"
-	"data-seal/utils/constants"
 	"flag"
 	"fmt"
 	"ram-freezer/utils/rfutils/pkg/rfutils"

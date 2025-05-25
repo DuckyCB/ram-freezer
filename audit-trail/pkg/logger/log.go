@@ -60,6 +60,9 @@ func (l *RFLogger) Log(level LogLevel, message string) {
 	defer l.mu.Unlock()
 
 	_, file, line, ok := runtime.Caller(1)
+	if file == "log.go" {
+		_, file, line, ok = runtime.Caller(2)
+	}
 	source := "unknown"
 	if ok {
 		parts := strings.Split(file, "/")
@@ -87,7 +90,6 @@ func (l *RFLogger) Log(level LogLevel, message string) {
 	logFile, err := os.OpenFile(l.logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "LOG_ERROR: Error abriendo archivo de log %s: %v", l.logFilePath, err)
-		l.console.Println(message)
 	}
 	defer logFile.Close()
 

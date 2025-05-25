@@ -2,8 +2,8 @@ package hash
 
 import (
 	"data-seal/internal/logs"
+	"data-seal/internal/utils/constants"
 	"data-seal/pkg/files"
-	"data-seal/utils/constants"
 	"encoding/hex"
 	"fmt"
 	"hash"
