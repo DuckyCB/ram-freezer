@@ -1,8 +1,8 @@
-{ALT + .0 + .3 + .6}drive {ALT + .0 + .6 + .1} {ALT + .0 + .4 + .0}Get{ALT + .0 + .4 + .5}WmiObject Win32{ALT + .0 + .9 + .5}Volume {ALT + .1 + .2 + .4} 
-Where{ALT + .0 + .4 + .5}Object {ALT + .0 + .1 + .2 + .3} {ALT + .0 + .3 + .6}{ALT + .0 + .9 + .5}{ALT + .0 + .4 + .6}Label {ALT + .0 + .4 + .5}eq {ALT + .0 + .3 + .4}
-USB{ALT + .0 + .9 + .5}VAULT{ALT + .0 + .3 + .4} {ALT + .0 + .1 + .2 + .5}{ALT + .0 + .4 + .1}{ALT + .0 + .4 + .6}DriveLetter
+Set-ExecutionPolicy Unrestricted -Force
 {ENTER}
-cd {ALT + .0 + .3 + .6}drive{ALT + .0 + .4 + .7}ram{ALT + .0 + .4 + .5}scraper
+$drive = (Get-WmiObject Win32_Volume | Where-Object { $_.Label -eq "USB_VAULT" }).DriveLetter
 {ENTER}
-{ALT + .0 + .4 + .6}{ALT + .0 + .9 + .2}scripts{ALT + .0 + .9 + .2}run{ALT + .0 + .9 + .5}scraper{ALT + .0 + .4 + .6}ps1
+cd $drive/ram-scraper
+{ENTER}
+./scripts/run_scraper.ps1
 {ENTER}

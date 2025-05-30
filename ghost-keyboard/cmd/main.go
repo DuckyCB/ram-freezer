@@ -7,6 +7,7 @@ import (
 	"os"
 	"ram-freezer/ghost-keyboard/internal/keycodes"
 	"ram-freezer/ghost-keyboard/internal/logs"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -44,8 +45,19 @@ func processFile(scanner bufio.Scanner) error {
 	}
 	defer hid.Close()
 
+	keys := make([]string, 0, len(keycodes.WindowsSpecialKeys))
+	for k := range keycodes.WindowsSpecialKeys {
+		keys = append(keys, regexp.QuoteMeta(k))
+	}
+	regexPattern := strings.Join(keys, "|")
+	re := regexp.MustCompile(regexPattern)
+
 	for scanner.Scan() {
-		line := scanner.Text()
+		newLine := scanner.Text()
+
+		line := re.ReplaceAllStringFunc(newLine, func(s string) string {
+			return keycodes.WindowsSpecialKeys[s]
+		})
 
 		if strings.HasPrefix(line, "wait") {
 			parts := strings.SplitN(line, " ", 2)

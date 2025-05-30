@@ -47,8 +47,7 @@ elif [ "$(blkid -o value -s TYPE "${USB_DRIVE_PATH}")" == "exfat" ]; then
     log_info "Renombrando dispositivo de almacenamiento a ${USB_STORAGE_DEVICE_NAME}"
     exfatlabel "${USB_DRIVE_PATH}" "${USB_STORAGE_DEVICE_NAME}"
 else
-    log_error "Formato de sistema de archivos no soportado. Solo FAT32 y exfat son soportados."
-    exit 1
+    log_fatal "Formato de sistema de archivos no soportado. Solo FAT32 y exfat son soportados."
 fi
 
 ## Mount the USB drive
