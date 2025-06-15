@@ -39,6 +39,8 @@ printf "by: fedeabdo & DuckyCB"
 sleep 3
 clear
 
+cd /opt/ram-freezer/
+
 # Permissions
 log_info "Agregando permisos de ejecución"
 chmod +x /opt/ram-freezer/check.sh
