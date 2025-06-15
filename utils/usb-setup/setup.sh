@@ -7,7 +7,7 @@ source /opt/ram-freezer/audit-trail/log.sh
 source /opt/ram-freezer/utils/usb-setup/usb-gadget.sh
 
 
-log_info "Configurando Gadget USB..."
+log_install_info "Configurando Gadget USB..."
 
 # Exec permissions
 ## USB
@@ -25,7 +25,7 @@ bash "${USB_SETUP_PATH}/usb-modules-setup.sh"
 
 # remove old device
 if [ -d "${USB_DEVICE_PATH}" ]; then
-    log_info "Removing old gadget."
+    log_install_info "Removing old gadget."
     bash "${USB_SETUP_PATH}/remove.sh"
 fi
 
@@ -38,4 +38,4 @@ systemctl daemon-reload
 systemctl enable usb-gadget.service
 
 
-log_info "Gadget USB configurado"
+log_install_info "Gadget USB configurado"

@@ -47,7 +47,7 @@
 ### Instalar y actualizar sistema
 
 ```shell
-  curl -s -o- https://raw.githubusercontent.com/DuckyCB/ram-freezer/refs/heads/master/download.sh | sudo bash
+curl -s -o- https://raw.githubusercontent.com/DuckyCB/ram-freezer/refs/heads/master/download.sh | sudo bash
 ```
 
 ## Como se usa

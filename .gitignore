@@ -1,6 +1,8 @@
 .idea
 
 .env
+.version
+.out
 
 # Out
 **/bin

@@ -1,7 +1,7 @@
 {META + r}
-wait 3
+wait 4
 powershell
 {CTRL + SHIFT + ENTER}
-wait 5
+wait 7
 {LEFT_ARROW}
 {ENTER}

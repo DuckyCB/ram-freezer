@@ -7,6 +7,7 @@ import (
 	"os"
 	"ram-freezer/ghost-keyboard/internal/keycodes"
 	"ram-freezer/ghost-keyboard/internal/logs"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -44,8 +45,19 @@ func processFile(scanner bufio.Scanner) error {
 	}
 	defer hid.Close()
 
+	keys := make([]string, 0, len(keycodes.WindowsSpecialKeys))
+	for k := range keycodes.WindowsSpecialKeys {
+		keys = append(keys, regexp.QuoteMeta(k))
+	}
+	regexPattern := strings.Join(keys, "|")
+	re := regexp.MustCompile(regexPattern)
+
 	for scanner.Scan() {
-		line := scanner.Text()
+		newLine := scanner.Text()
+
+		line := re.ReplaceAllStringFunc(newLine, func(s string) string {
+			return keycodes.WindowsSpecialKeys[s]
+		})
 
 		if strings.HasPrefix(line, "wait") {
 			parts := strings.SplitN(line, " ", 2)
@@ -80,7 +92,6 @@ func processFile(scanner bufio.Scanner) error {
 				i += endIdx + 1
 			} else {
 				err = writeChar(char, hid)
-				// TODO: handle err
 				if err != nil {
 					logs.Log.Error(err.Error())
 				}
@@ -126,11 +137,10 @@ func writeChar(char uint8, hid *os.File) error {
 	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
 		logs.Log.Error(err.Error())
-		return fmt.Errorf("error unpressing key: %w", err)
+		return err
 	}
 
 	time.Sleep(waitTime) // Sleep for a while to simulate key press duration
-	logs.Log.Info(fmt.Sprintf("Pressing key: %c\n", char))
 
 	return nil
 }
@@ -203,16 +213,17 @@ func writeSpecialKey(key string, hid *os.File) {
 
 	_, err = hid.Write(keycodes.Empty)
 	if err != nil {
-		logs.Log.Error(fmt.Sprintf("Error unpressing key: %v\n", err))
+		logs.Log.Error(fmt.Sprintf("Error unpressing key: %v", err))
 		return
 	}
 
 	time.Sleep(waitTime)
-	logs.Log.Info(fmt.Sprintf("Pressing special keys: %s\n", key))
 }
 
 func main() {
 	logs.SetupLogger()
+
+	logs.Log.Info("Starting Ghost-keyboard")
 
 	filePath := flag.String("script", "", "script file to use")
 	flag.Parse()
@@ -229,10 +240,13 @@ func main() {
 	}
 	defer file.Close()
 
+	logs.Log.Info("Attempting to write the script " + *filePath)
 	scanner := bufio.NewScanner(file)
 	err = processFile(*scanner)
 	if err != nil {
 		logs.Log.Error(fmt.Sprintf("Error processing file %s: %v", *filePath, err))
 		return
 	}
+
+	logs.Log.Info("Exiting Ghost-keyboard")
 }

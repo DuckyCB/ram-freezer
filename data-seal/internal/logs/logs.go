@@ -5,7 +5,7 @@ import (
 	"ram-freezer/audit-trail/pkg/logger"
 )
 
-var Log *logger.SimpleLogger
+var Log *logger.RFLogger
 
 func SetupLogger() {
 	var err error
