@@ -8,6 +8,9 @@ set -e
 set -u
 
 clear
+
+cd /opt/ram-freezer/
+
 mkdir -p /opt/ram-freezer/bin/install
 source /opt/ram-freezer/audit-trail/log.sh
 
@@ -43,9 +46,6 @@ printf "
 printf "by: fedeabdo & DuckyCB\n\n"
 
 sleep 3
-
-
-cd /opt/ram-freezer/
 
 # Permissions
 log_install_info "Agregando permisos de ejecución"
