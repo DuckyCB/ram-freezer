@@ -52,12 +52,23 @@ func processFile(scanner bufio.Scanner) error {
 	regexPattern := strings.Join(keys, "|")
 	re := regexp.MustCompile(regexPattern)
 
+	
 	for scanner.Scan() {
-		newLine := scanner.Text()
+		var line string
 
-		line := re.ReplaceAllStringFunc(newLine, func(s string) string {
-			return keycodes.WindowsSpecialKeys[s]
-		})
+		newLine := scanner.Text()
+		firstChar := newLine[0]
+		lastChar := newLine[len(newLine)-1]
+		if firstChar == '{' && lastChar == '}' {	
+			// Si la línea es una tecla especial completa, la procesamos directamente
+			line = newLine
+		} else {
+			// Si no, reemplazamos las teclas especiales con sus códigos
+		
+			line = re.ReplaceAllStringFunc(newLine, func(s string) string {
+				return keycodes.WindowsSpecialKeys[s]
+			})
+		}
 
 		if strings.HasPrefix(line, "wait") {
 			parts := strings.SplitN(line, " ", 2)
